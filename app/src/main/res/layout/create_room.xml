@@ -6,10 +6,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
 
         <include
             android:id="@+id/custom_header_include"
@@ -93,8 +96,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.26"
                 app:layout_constraintStart_toEndOf="@+id/rta4dj3gt7p"
-                app:layout_constraintTop_toTopOf="parent">
-            </EditText>
+                app:layout_constraintTop_toTopOf="parent"></EditText>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
