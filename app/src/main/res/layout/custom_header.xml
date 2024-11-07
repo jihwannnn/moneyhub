@@ -15,14 +15,13 @@
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="97dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
         android:text="hub"
         android:textColor="#6ED1D3"
         android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_marginRight="50dp"
-        />
+        android:textStyle="bold" />
 
 
 

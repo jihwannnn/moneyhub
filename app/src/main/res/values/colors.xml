@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="moneyCyanRegular">#CC6ED1D3</color>
+    <color name="moneyCyanThick">#FF6ED1D3</color>
+    <color name="moneyCyanThin">#806ED1D3</color>
+    <color name="moneyYellowRegular">#CCFFE36E</color>
+    <color name="moneyYellowThick">#FFFFE36E</color>
+    <color name="moneyYellowThin">#80FFE36E</color>
+    <color name="moneyGreenRegular">#CCCAFF6E</color>
+    <color name="moneyGreenThick">#FFCAFF6E</color>
+    <color name="moneyGreenThin">#80CAFF6E</color>
+    <color name="moneyBlue">#435FFF</color>
+    <color name="moneyRed">#9C0003</color>
+    <color name="moneyGrey">#E3E3E3</color>
 </resources>
