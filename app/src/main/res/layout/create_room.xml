@@ -1,4 +1,4 @@
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,162 +6,110 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ScrollView
-        android:clipToPadding="false"
-        android:id="@+id/raj0hzffn35b"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF"
-        android:paddingTop="48dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <include
+            android:id="@+id/custom_header_include"
+            layout="@layout/custom_header"></include>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rwulmjdm442"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="236dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/r6gd0ntwrhza"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="18dp"
-                android:layout_marginHorizontal="68dp"
-                android:orientation="horizontal">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="money"
-                    android:textColor="#FFE36E"
-                    android:textSize="40sp"
-                    android:textStyle="bold" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rcd2czfcwgqn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="39dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/cr20bffe36eb0"
+            android:elevation="4dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="23dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/r2q551lhv7ib">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="hub"
-                    android:textColor="#6ED1D3"
-                    android:textSize="40sp"
-                    android:textStyle="bold" />
-
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/ro8h7w216p4"-->
-<!--                    android:layout_width="200dp"-->
-<!--                    android:layout_height="39dp"-->
-<!--                    android:src="@mipmap/ic_launcher"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    />-->
-
-
-                <View
-                    android:layout_width="22dp"
-                    android:layout_height="6dp"
-                    android:layout_weight="1"
-                    />
-
-                <ImageView
-                    android:id="@+id/rlyelz8l3ob"
-                    android:layout_width="43dp"
-                    android:layout_height="43dp"
-                    android:src="@drawable/mypage"
-                    android:scaleType="fitXY"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/rwulmjdm442"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#000000"
-                android:layout_marginBottom="23dp"
-                android:orientation="vertical">
-            </LinearLayout>
             <TextView
-                android:id="@+id/rpukn3o5jt6"
+                android:id="@+id/r5utuogl2s85"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="141dp"
+                android:layout_marginEnd="140dp"
+                android:text="Start"
                 android:textColor="#000000"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="32dp"
-                android:layout_marginStart="34dp"
-                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/r2q551lhv7ib"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="34dp"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/cr20be8e8e899"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingVertical="12dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="11dp"
+            app:layout_constraintTop_toBottomOf="@+id/rpukn3o5jt6"
+            tools:layout_editor_absoluteX="34dp">
+
+            <ImageView
+                android:id="@+id/rta4dj3gt7p"
+                android:layout_width="41dp"
+                android:layout_height="50dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/group"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <EditText
                 android:layout_width="wrap_content"
-                android:text="모임 이름"
-                />
-            <LinearLayout
-                android:id="@+id/r2q551lhv7ib"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:background="@drawable/cr20be8e8e899"
-                android:paddingVertical="12dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="11dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginHorizontal="34dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="17dp"
+                android:autofillHints="Enter your group name here"
+                android:hint="Enter your group name here"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.26"
+                app:layout_constraintStart_toEndOf="@+id/rta4dj3gt7p"
+                app:layout_constraintTop_toTopOf="parent">
+            </EditText>
 
-                <ImageView
-                    android:id="@+id/rta4dj3gt7p"
-                    android:layout_width="41dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/group"
-                    android:scaleType="fitXY"
-                    />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <EditText
-                    android:id="@+id/groupEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="모임이름"
-                    android:inputType="textEmailAddress"
-                    android:textColor="#000000"
-                    android:textSize="20sp" />
+        <TextView
+            android:id="@+id/rpukn3o5jt6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="82dp"
+            android:text="모임 이름"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-
-
-                <LinearLayout
-                    android:id="@+id/rpdbebaurxfb"
-                    android:layout_width="74dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/small_but"
-                    android:paddingVertical="10dp"
-                    android:elevation="4dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/rzff31h4ep8c"
-                        android:textColor="#000000"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="중복확인"
-                        />
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/rcd2czfcwgqn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:background="@drawable/cr20bffe36eb0"
-                android:paddingVertical="23dp"
-                android:layout_marginHorizontal="39dp"
-                android:elevation="4dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/r5utuogl2s85"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Start"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
