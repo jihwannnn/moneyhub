@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
     android:orientation="vertical"
+    android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -55,19 +56,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <!--            <LinearLayout-->
-        <!--                android:id="@+id/rzf548dkiiod"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="58dp"-->
-        <!--                android:layout_marginHorizontal="59dp"-->
-        <!--                android:layout_marginBottom="33dp"-->
-
-        <!--                android:orientation="vertical"-->
-        <!--                android:gravity="center"> &lt;!&ndash; 텍스트를 중앙에 배치 &ndash;&gt;-->
-
-        <!--            </LinearLayout>-->
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/r6rx0kt0rki2"
             android:layout_width="match_parent"
@@ -81,14 +69,6 @@
             android:paddingHorizontal="17dp"
             android:paddingVertical="19dp">
 
-            <!--                <TextView-->
-            <!--                    android:id="@+id/rl6lim8eg5w"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_weight="1"-->
-            <!--                    android:text="이메일"-->
-            <!--                    android:textColor="#000000"-->
-            <!--                    android:textSize="20sp" />-->
 
             <ImageView
                 android:id="@+id/r6i78x1t4c1f"
@@ -251,7 +231,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/r7447wwg9ma"
+            android:id="@+id/button_open_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="39dp"
