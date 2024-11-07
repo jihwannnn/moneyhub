@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/attrs.xml -->
+<resources>
+    <declare-styleable name="CustomGreyFormView">
+        <attr name="customIcon" format="reference" /> <!-- drawable 리소스 참고 -->
+        <attr name="customHint" format="string" />    <!-- 문자열 참고 -->
+    </declare-styleable>
+</resources>

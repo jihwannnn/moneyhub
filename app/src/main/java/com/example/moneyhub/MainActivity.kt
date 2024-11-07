@@ -29,5 +29,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+
+        val formViewEmail = findViewById<CustomGreyFormView>(R.id.emailForm)
+        formViewEmail.setIcon(R.drawable.email)  // 아이콘 설정
+        formViewEmail.setHint("이메일")       // 힌트 설정
+
+        val formViewPassword = findViewById<CustomGreyFormView>(R.id.passwordForm)
+        formViewPassword.setIcon(R.drawable.password)  // 아이콘 설정
+        formViewPassword.setHint("비밀번호")       // 힌트 설정
     }
 }

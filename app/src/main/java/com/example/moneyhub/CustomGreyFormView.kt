@@ -12,6 +12,28 @@ class CustomGreyFormView @JvmOverloads constructor(
     private val binding: ViewCustomGreyFormBinding =
         ViewCustomGreyFormBinding.inflate(LayoutInflater.from(context), this, true)
 
+    init {
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.CustomGreyFormView,
+            0, 0
+        ).apply {
+            try {
+                val iconResId = getResourceId(R.styleable.CustomGreyFormView_customIcon, -1)
+                if (iconResId != -1) {
+                    binding.iconOfGreyForm.setImageResource(iconResId)
+                }
+
+                val hintText = getString(R.styleable.CustomGreyFormView_customHint)
+                if (hintText != null) {
+                    binding.editTextOfGreyForm.hint = hintText
+                }
+            } finally {
+                recycle()
+            }
+        }
+    }
+
     fun setIcon(resourceId: Int) {
         binding.iconOfGreyForm.setImageResource(resourceId)
     }
