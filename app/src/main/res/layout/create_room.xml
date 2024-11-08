@@ -15,7 +15,8 @@
 
         <include
             android:id="@+id/custom_header_include"
-            layout="@layout/custom_header"></include>
+            layout="@layout/custom_header"
+            app:layout_constraintTop_toTopOf="parent"></include>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rwulmjdm442"
