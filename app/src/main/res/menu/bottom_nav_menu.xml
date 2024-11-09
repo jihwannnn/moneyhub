@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/icon_home_on"
+        android:title="Home" />
+    <item
+        android:id="@+id/navigation_vote"
+        android:icon="@drawable/icon_vote_off"
+        android:title="Vote" />
+    <item
+        android:id="@+id/navigation_analysis"
+        android:icon="@drawable/icon_analysis_off"
+        android:title="Analysis" />
+    <item
+        android:id="@+id/navigation_members"
+        android:icon="@drawable/icon_members_off"
+        android:title="Members" />
+</menu>

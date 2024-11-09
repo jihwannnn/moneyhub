@@ -16,7 +16,7 @@
         <include
             android:id="@+id/custom_header_include"
             layout="@layout/custom_header"
-            app:layout_constraintTop_toTopOf="parent"></include>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rwulmjdm442"
@@ -32,7 +32,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rcd2czfcwgqn"
+            android:id="@+id/button_open_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="39dp"

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">MoneyHub</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="home_fragment_label">Home Fragment</string>
+    <string name="vote_fragment_label">Vote Fragment</string>
+    <string name="analysis_fragment_label">Analysis Fragment</string>
+    <string name="members_fragment_label">Members Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
