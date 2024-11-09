@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/AnalysisFragment"
         android:name="com.example.moneyhub.AnalysisFragment"
-        android:label="@string/vote_fragment_label"
+        android:label="@string/analysis_fragment_label"
         tools:layout="@layout/fragment_analysis" >
 
         <action
@@ -56,7 +56,7 @@
     <fragment
         android:id="@+id/MembersFragment"
         android:name="com.example.moneyhub.MembersFragment"
-        android:label="@string/vote_fragment_label"
+        android:label="@string/members_fragment_label"
         tools:layout="@layout/fragment_members" >
 
         <action
