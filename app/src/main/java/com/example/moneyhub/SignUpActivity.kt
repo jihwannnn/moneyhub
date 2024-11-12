@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,5 +45,23 @@ class SignUpActivity : AppCompatActivity() {
 //        val formViewPassword = findViewById<CustomGreyFormView>(R.id.passwordForm)
 //        formViewPassword.setIcon(R.drawable.password)  // 아이콘 설정
 //        formViewPassword.setHint("비밀번호")       // 힌트 설정
+
+        // SignUp
+        val auth: FirebaseAuth= FirebaseAuth.getInstance()
+
+        fun signUp(email: String, password: String) {
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // success in SignUp
+                        val user = auth.currentUser
+                        Toast.makeText(this, "Signup Successful: ${user?.email}", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // fail in SignUp
+                        Toast.makeText(this, "Signup Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
     }
 }
