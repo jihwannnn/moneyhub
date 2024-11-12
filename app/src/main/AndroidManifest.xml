@@ -12,9 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31">
-        <activity
-            android:name=".VotingPage"
-            android:exported="false" />
+
         <activity
             android:name=".MainPage"
             android:exported="false" />
@@ -32,6 +30,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateActivity" />
+
+        <activity
+            android:name=".SignUpActivity" />
+
     </application>
 
 </manifest>

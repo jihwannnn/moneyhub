@@ -30,6 +30,14 @@ class LogInActivity : AppCompatActivity() {
 
         }
 
+
+        val button_open_signup:ConstraintLayout = findViewById(R.id.button_open_signup)
+        button_open_signup.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+
+        }
+
         val formViewEmail = findViewById<CustomGreyFormView>(R.id.emailForm)
         formViewEmail.setIcon(R.drawable.email)  // 아이콘 설정
         formViewEmail.setHint("이메일")       // 힌트 설정
