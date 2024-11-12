@@ -15,10 +15,11 @@ class SignUpActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_sign_up)
 
+
         // 'include'된 레이아웃의 버튼 텍스트 변경
-        val buttonText = findViewById<TextView>(R.id.custom_button_include)
-            .findViewById<TextView>(R.id.custom_button)
-        buttonText.text = "새로운 버튼 텍스트"
+//        val buttonText = findViewById<TextView>(R.id.custom_button_include)
+//            .findViewById<TextView>(R.id.custom_button)
+//        buttonText.text = "새로운 버튼 텍스트"
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.signup)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -28,8 +29,8 @@ class SignUpActivity : AppCompatActivity() {
 
 
 
-        val custom_button: ConstraintLayout = findViewById(R.id.custom_button)
-        custom_button.setOnClickListener {
+        val custom_button_include: ConstraintLayout = findViewById(R.id.custom_button_include)
+        custom_button_include.setOnClickListener {
             val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
 
