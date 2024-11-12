@@ -27,5 +27,38 @@ class MainPage : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.bottom_navigation)
         navView.setupWithNavController(navController)
 
+        // OnDestinationChangedListener 추가
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.HomeFragment -> {
+                    // HomeFragment에 도착했을 때 아이콘을 설정
+                    navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_on)
+                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_off)
+                    navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_off)
+                    navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_off)
+                }
+                R.id.VoteFragment -> {
+                    // VoteFragment에 도착했을 때 아이콘을 설정
+                    navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_off)
+                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_on)
+                    navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_off)
+                    navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_off)
+                }
+                R.id.AnalysisFragment -> {
+                    // AnalysisFragment에 도착했을 때 아이콘을 설정
+                    navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_off)
+                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_off)
+                    navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_on)
+                    navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_off)
+                }
+                R.id.MembersFragment -> {
+                    // MembersFragment에 도착했을 때 아이콘을 설정
+                    navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_off)
+                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_off)
+                    navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_off)
+                    navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_on)
+                }
+            }
+        }
     }
 }

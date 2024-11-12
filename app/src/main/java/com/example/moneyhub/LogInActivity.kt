@@ -14,7 +14,7 @@ class LogInActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         // login.xml 레이아웃을 설정
-        setContentView(R.layout.login)
+        setContentView(R.layout.activity_login)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
