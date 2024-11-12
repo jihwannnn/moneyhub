@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "405764769732",
+    "project_id": "moneyhub-b4ee4",
+    "storage_bucket": "moneyhub-b4ee4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405764769732:android:fcecb5a424fafda5b20691",
+        "android_client_info": {
+          "package_name": "com.example.moneyhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8F9iFUkQiaf2fhbmm2IJ5h-l31bNcE58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
