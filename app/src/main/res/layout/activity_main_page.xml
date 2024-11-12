@@ -32,6 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@null"
+        app:itemIconSize="24dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
