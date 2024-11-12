@@ -164,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="39dp"
                 android:layout_marginBottom="33dp"
-                android:background="@drawable/cr20bffe36eb0"
+                android:background="@drawable/yellow"
                 android:elevation="4dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"

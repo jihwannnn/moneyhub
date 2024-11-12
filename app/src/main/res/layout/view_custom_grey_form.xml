@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_weight="1"
-        android:hint="이메일"
+        android:hint="입력할 정보"
         android:inputType="textEmailAddress"
         android:textColor="#000000"
         android:textSize="20sp"
