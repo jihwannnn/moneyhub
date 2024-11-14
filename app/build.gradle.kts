@@ -1,14 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
-    // Add the Google services Gradle plugin
-    id("com.google.gms.google-services")
 }
+
+// Add the Google services Gradle plugin
+apply(plugin = "com.google.gms.google-services")
 
 android {
     namespace = "com.example.moneyhub"
     compileSdk = 34
+
+    viewBinding {
+        enable = true
+    }
 
     defaultConfig {
         applicationId = "com.example.moneyhub"
