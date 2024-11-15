@@ -16,9 +16,16 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:tabIndicatorHeight="0dp"
+        android:layout_marginHorizontal="30dp"
+        android:background="@drawable/tab_layout_background"
+        app:tabIndicator="@drawable/tab_layout_fg"
+        app:tabIndicatorHeight="38dp"
+        app:tabIndicatorGravity="center"
+        app:tabIndicatorColor="@color/moneyCyanThick"
         app:tabRippleColor="@null"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:tabPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp">
+    </com.google.android.material.tabs.TabLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

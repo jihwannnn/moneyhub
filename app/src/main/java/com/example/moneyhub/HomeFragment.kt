@@ -60,6 +60,15 @@ class HomeFragment : Fragment() {
             tab.customView = createTabView(position)
         }.attach()
 
+        // Remove padding for each tab to eliminate space between border and items
+        binding.tabLayout.apply {
+            for (i in 0 until tabCount) {
+                val tab = getTabAt(i)
+                val view = (tab?.view as? ViewGroup)
+                view?.setPadding(0, 0, 0, 0)
+            }
+        }
+
         // set the initially selected tap background
         setInitialTabState()
 
