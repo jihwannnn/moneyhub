@@ -8,6 +8,11 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="menu_home">Home</string>
+    <string name="menu_vote">Vote</string>
+    <string name="menu_analysis">Analysis</string>
+    <string name="menu_members">Members</string>
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

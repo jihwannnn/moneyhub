@@ -2,6 +2,14 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MoneyHub" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/moneyCyanThick</item>
+        <item name="colorPrimaryVariant">@color/moneyCyanRegular</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/moneyYellowThick</item>
+        <item name="colorSecondaryVariant">@color/moneyYellowRegular</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
