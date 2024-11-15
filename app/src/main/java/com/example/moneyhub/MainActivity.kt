@@ -3,23 +3,25 @@ package com.example.moneyhub
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.moneyhub.databinding.ActivityMainPageBinding
+import com.example.moneyhub.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainPageBinding
+    private lateinit var binding: ActivityMainBinding
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         // Initializing ViewBinding
-        binding = ActivityMainPageBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // custom_header_include에만 WindowInsets 적용
@@ -34,24 +36,28 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
-        // OnDestinationChangedListener 추가
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            mainViewModel.updateCurrentDestination(destination.id)
+        }
+
+        mainViewModel.currentDestination.observe(this) {destinationId ->
             binding.bottomNavigation.menu.apply {
                 findItem(R.id.HomeFragment).setIcon(
-                    if (destination.id == R.id.HomeFragment) R.drawable.icon_home_on else R.drawable.icon_home_off
+                    if (destinationId == R.id.HomeFragment) R.drawable.icon_home_on else R.drawable.icon_home_off
                 )
                 findItem(R.id.VoteFragment).setIcon(
-                    if (destination.id == R.id.VoteFragment) R.drawable.icon_vote_on else R.drawable.icon_vote_off
+                    if (destinationId == R.id.VoteFragment) R.drawable.icon_vote_on else R.drawable.icon_vote_off
                 )
                 findItem(R.id.AnalysisFragment).setIcon(
-                    if (destination.id == R.id.AnalysisFragment) R.drawable.icon_analysis_on else R.drawable.icon_analysis_off
+                    if (destinationId == R.id.AnalysisFragment) R.drawable.icon_analysis_on else R.drawable.icon_analysis_off
                 )
                 findItem(R.id.MembersFragment).setIcon(
-                    if (destination.id == R.id.MembersFragment) R.drawable.icon_members_on else R.drawable.icon_members_off
+                    if (destinationId == R.id.MembersFragment) R.drawable.icon_members_on else R.drawable.icon_members_off
                 )
             }
         }
 
+        // clickEvent on mypage button at the header
         binding.customHeaderInclude.imageViewMyPage.setOnClickListener {
             val intent = Intent(this, MyPageActivity::class.java)
             startActivity(intent)

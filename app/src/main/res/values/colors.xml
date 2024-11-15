@@ -13,5 +13,6 @@
     <color name="moneyGreenThin">#80CAFF6E</color>
     <color name="moneyBlue">#435FFF</color>
     <color name="moneyRed">#9C0003</color>
-    <color name="moneyGrey">#E3E3E3</color>
+    <color name="moneyGreyBackground">#E3E3E3</color>
+    <color name="moneyGrey">#959595</color>
 </resources>
