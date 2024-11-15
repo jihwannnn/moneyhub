@@ -8,18 +8,37 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 
 class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_sign_up)
+        setupButtons()
+        setupClickListeners()
+    }
 
+    private fun setupButtons() {
+        // 정보수정 버튼 설정
+        findViewById<ConstraintLayout>(R.id.custom_button_include).apply {
+            setBackgroundResource(R.drawable.yellow)
+            findViewById<TextView>(R.id.btnText).apply {
+                text = "Sign Up"
+                setTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+        }
+        }
+    private fun setupClickListeners() {
+        // 정보수정 버튼 클릭 리스너
+        findViewById<ConstraintLayout>(R.id.custom_button_include).setOnClickListener {
+            // 정보수정 처리
+        }
 
-        // 'include'된 레이아웃의 버튼 텍스트 변경
-//        val buttonText = findViewById<TextView>(R.id.custom_button_include)
-//            .findViewById<TextView>(R.id.custom_button)
-//        buttonText.text = "새로운 버튼 텍스트"
+//        // 'include'된 레이아웃에서 버튼 텍스트 변경
+//        val customButtonLayout = findViewById<ConstraintLayout>(R.id.custom_button_include) // include된 레이아웃
+//        val buttonText = customButtonLayout.findViewById<TextView>(R.id.custom_button) // custom_button.xml 내의 TextView
+//        buttonText.text = "새로운 버튼 텍스트"  // 텍스트 변경
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.signup)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

@@ -1,8 +1,15 @@
 package com.example.moneyhub
 
+import android.content.Context
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
@@ -12,6 +19,25 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        //MP - 09. Android Permission
+        val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+        Log.d("ITM", "Connected: ${networkInfo?.isConnected}")
+
+        val perm= ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION")
+        if(perm== PERMISSION_GRANTED) {
+            val locationManager= getSystemService(LOCATION_SERVICE) as LocationManager
+                    Log.d("ITM","${locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)}")
+        }
+        else{
+            val permRationale= shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
+            Log.d("ITM","$permRationale")
+        }
+
+
+
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main_page)

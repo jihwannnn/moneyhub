@@ -25,7 +25,7 @@ class LogInActivity : AppCompatActivity() {
         }
         val button_open_create:ConstraintLayout = findViewById(R.id.button_open_create)
         button_open_create.setOnClickListener {
-            val intent = Intent(this, CreateActivity::class.java)
+            val intent = Intent(this, MyPage::class.java)
             startActivity(intent)
 
         }
