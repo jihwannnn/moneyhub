@@ -89,6 +89,10 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
 
+    // RecyclerView
+    implementation("androidx.recyclerview:recyclerview:1.2.1") // 최신 버전으로 업데이트 가능
+
+
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
 }
