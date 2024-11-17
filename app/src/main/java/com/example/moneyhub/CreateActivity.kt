@@ -21,7 +21,7 @@ class CreateActivity : AppCompatActivity() {
 
         val button_open_main: ConstraintLayout = findViewById(R.id.button_open_main)
         button_open_main.setOnClickListener {
-            val intent = Intent(this, MainPage::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
 
         }

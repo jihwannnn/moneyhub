@@ -24,7 +24,7 @@ class LogInActivity : AppCompatActivity() {
         // check if it is already done login
         if (auth.currentUser != null) {
             // if it is already done login, go to the main activity
-            val intent = Intent(this, MainPage::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()    // set so that it does not come back when going back by finishing LogInActivity
             return
@@ -71,7 +71,7 @@ class LogInActivity : AppCompatActivity() {
                         // success in LogIn
                         val user = auth.currentUser
                         Toast.makeText(this, "Login Successful: ${user?.email}", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, MainPage::class.java)
+                        val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()    // finishing LogInActivity
                     } else {

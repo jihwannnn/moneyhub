@@ -1,14 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
-    // Add the Google services Gradle plugin
-    id("com.google.gms.google-services")
 }
+
+// Add the Google services Gradle plugin
+apply(plugin = "com.google.gms.google-services")
 
 android {
     namespace = "com.example.moneyhub"
     compileSdk = 34
+
+    viewBinding {
+        enable = true
+    }
 
     defaultConfig {
         applicationId = "com.example.moneyhub"
@@ -84,6 +88,10 @@ dependencies {
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
+
+    // RecyclerView
+    implementation("androidx.recyclerview:recyclerview:1.2.1") // 최신 버전으로 업데이트 가능
+
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
