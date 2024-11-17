@@ -25,15 +25,15 @@ class MainPage : AppCompatActivity() {
         val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
         Log.d("ITM", "Connected: ${networkInfo?.isConnected}")
 
-        val perm= ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION")
-        if(perm== PERMISSION_GRANTED) {
-            val locationManager= getSystemService(LOCATION_SERVICE) as LocationManager
-                    Log.d("ITM","${locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)}")
-        }
-        else{
-            val permRationale= shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
-            Log.d("ITM","$permRationale")
-        }
+//        val perm= ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION")
+//        if(perm== PERMISSION_GRANTED) {
+//            val locationManager= getSystemService(LOCATION_SERVICE) as LocationManager
+//                    Log.d("ITM","${locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)}")
+//        }
+//        else{
+//            val permRationale= shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
+//            Log.d("ITM","$permRationale")
+//        }
 
 
 
