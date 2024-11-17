@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-<!--    gps permission-->
+    <!-- gps permission -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -15,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31">
-
+        <activity
+            android:name=".MeetingListView"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -23,8 +24,8 @@
         <activity
             android:name=".MyPageActivity"
             android:exported="false"
-            android:theme="@style/Theme.MoneyHub"
-            android:screenOrientation="sensorPortrait" />
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.MoneyHub" />
         <activity
             android:name=".LogInActivity"
             android:exported="true"
@@ -35,13 +36,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateActivity"
-            android:screenOrientation="sensorPortrait"/>
-
+        <activity
+            android:name=".CreateActivity"
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".SignUpActivity"
-            android:screenOrientation="sensorPortrait"/>
-
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>

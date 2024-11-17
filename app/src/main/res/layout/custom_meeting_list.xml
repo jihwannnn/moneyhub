@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/meetingListContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/meetingItem1"
+        layout="@layout/custom_meeting_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <include
+        android:id="@+id/meetingItem2"
+        layout="@layout/custom_meeting_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/meetingItem1" />
+
+    <include
+        android:id="@+id/meetingItem3"
+        layout="@layout/custom_meeting_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/meetingItem2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
