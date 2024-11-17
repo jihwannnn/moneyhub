@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneyhub.databinding.FragmentBudgetBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +22,9 @@ class BudgetFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var binding: FragmentBudgetBinding
+
+    private lateinit var recyclerViewAdapter: TransactionRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +39,39 @@ class BudgetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_budget, container, false)
+        binding = FragmentBudgetBinding.inflate(inflater, container, false)
+
+        initRecyclerView()
+        return binding.root
+    }
+
+    private fun initRecyclerView() {
+        // 더미 데이터 생성
+        val budgetData = listOf(
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "간식 사업 지출", "학생 복지 |", -120000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "희진이 간식비", "희진이 복지 |", -7700.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "지환이 지각비", "지환이 복지 |", 10000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
+        )
+
+        recyclerViewAdapter = TransactionRecyclerAdapter(budgetData, true)
+
+        binding.recyclerViewBudget.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = recyclerViewAdapter
+        }
     }
 
     companion object {

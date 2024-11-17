@@ -5,11 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.databinding.FragmentHistoryBinding
-import com.example.moneyhub.databinding.FragmentHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,25 +26,25 @@ class HistoryFragment : Fragment() {
     lateinit var binding: FragmentHistoryBinding
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: HistoryRecyclerAdapter
+    private lateinit var adapter: TransactionRecyclerAdapter
 
-    private val sampleData = listOf(
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "간식 사업 지출", "학생 복지 |", -120000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "희진이 간식비", "희진이 복지 |", -7700.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "지환이 노래방", "지환이 복지 |", -10000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-        HistoryRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
+    private val historyData = listOf(
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "간식 사업 지출", "학생 복지 |", -120000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "희진이 간식비", "희진이 복지 |", -7700.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "지환이 노래방", "지환이 복지 |", -10000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "정기 회비", "그 외 category |", 100000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+        TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +67,7 @@ class HistoryFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // adapter setting
-        adapter = HistoryRecyclerAdapter(sampleData)
+        adapter = TransactionRecyclerAdapter(historyData, false)
         recyclerView.adapter = adapter
 
         return binding.root

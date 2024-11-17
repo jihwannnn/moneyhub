@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moneyhub.databinding.FragmentCalendarBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +21,7 @@ class CalendarFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var binding: FragmentCalendarBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,16 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calendar, container, false)
+        binding = FragmentCalendarBinding.inflate(inflater, container, false)
+
+        // initializing CalendarView
+        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            // 날짜 선택 시 실행되는 코드
+            val selectedDate = "$year-${month + 1}-$dayOfMonth"
+            // 예: 선택된 날짜를 로그로 출력
+            println("Selected Date: $selectedDate")
+        }
+        return binding.root
     }
 
     companion object {
