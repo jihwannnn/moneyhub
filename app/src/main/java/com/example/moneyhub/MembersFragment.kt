@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
+import com.example.moneyhub.adapter.MemberAdapter
 import com.example.moneyhub.databinding.FragmentAnalysisBinding
 import com.example.moneyhub.databinding.FragmentHomeBinding
 import com.example.moneyhub.databinding.FragmentMembersBinding
@@ -63,4 +65,21 @@ class MembersFragment : Fragment() {
                 }
             }
     }
+
+    private lateinit var memberAdapter: MemberAdapter  // 어댑터 선언
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()  // RecyclerView 설정
+    }
+
+    // RecyclerView 초기화 및 설정을 위한 함수
+    private fun setupRecyclerView() {
+        memberAdapter = MemberAdapter()
+        binding.memberList.apply {
+            adapter = memberAdapter  // 어댑터 연결
+            layoutManager = LinearLayoutManager(context)  // 레이아웃 매니저 설정
+        }
+    }
+
 }

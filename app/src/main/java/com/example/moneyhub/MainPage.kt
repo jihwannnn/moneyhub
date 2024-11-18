@@ -84,6 +84,8 @@ class MainPage : AppCompatActivity() {
                     navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_off)
                     navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_on)
                 }
+
+
             }
         }
     }
