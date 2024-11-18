@@ -11,7 +11,7 @@ import com.example.moneyhub.adapter.MemberAdapter
 import com.example.moneyhub.databinding.FragmentAnalysisBinding
 import com.example.moneyhub.databinding.FragmentHomeBinding
 import com.example.moneyhub.databinding.FragmentMembersBinding
-import com.example.moneyhub.databinding.FragmentVoteBinding
+import com.example.moneyhub.databinding.FragmentBoardBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
