@@ -58,7 +58,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -91,6 +90,13 @@ dependencies {
 
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.2.1") // 최신 버전으로 업데이트 가능
+
+    // third party liabrary
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // MPAndroidChart를 Version Catalog 스타일로 변경
+    implementation(libs.mpandroidchart)
+
 
 
     // Add the dependencies for any other desired Firebase products
