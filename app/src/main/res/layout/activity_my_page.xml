@@ -39,6 +39,7 @@
         layout="@layout/custom_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         app:layout_constraintTop_toBottomOf="@id/tvName" />
 
     <EditText
@@ -49,7 +50,7 @@
         android:layout_marginTop="13dp"
         android:hint="참여할 모임 링크 입력"
         android:padding="16dp"
-        android:elevation="4dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnEditInfo" />
@@ -59,6 +60,7 @@
         layout="@layout/custom_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         app:layout_constraintTop_toBottomOf="@id/etMeetingLink" />
 
     <include
