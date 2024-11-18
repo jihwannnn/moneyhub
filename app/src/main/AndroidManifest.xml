@@ -4,6 +4,17 @@
     <!-- gps permission -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!-- 갤러리 권한 추가 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"/>
+
+    <!-- Android 13 이상 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- Android 12 이하 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,6 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31">
+        <activity
+            android:name=".RegisterDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".CameraActivity"
             android:exported="false" />

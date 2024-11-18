@@ -9,16 +9,24 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TransactionRecyclerAdapter(
     private val items: List<TransactionRecyclerDataClass>,
-    private val isForBudget: Boolean
+    private val isForBudget: Boolean,
+    private val onItemClick: () -> Unit = {}  // 기본값 설정
 ) : RecyclerView.Adapter<TransactionRecyclerAdapter.TransactionViewHolder>() {
 
     // ViewHolder: 아이템 뷰를 저장하는 클래스
-    class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.item_icon)
         val title: TextView = itemView.findViewById(R.id.item_title)
         val category: TextView = itemView.findViewById(R.id.item_category)
         val transaction: TextView = itemView.findViewById(R.id.item_transaction)
+
+        init {
+            itemView.setOnClickListener {
+                onItemClick.invoke()
+            }
+        }
     }
+
 
     // onCreateViewHolder: 새로운 뷰 홀더를 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {

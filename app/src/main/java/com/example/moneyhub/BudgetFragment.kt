@@ -1,5 +1,6 @@
 package com.example.moneyhub
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -66,12 +67,19 @@ class BudgetFragment : Fragment() {
             TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
         )
 
-        recyclerViewAdapter = TransactionRecyclerAdapter(budgetData, true)
+
+// 클릭 리스너를 람다로 전달
+        recyclerViewAdapter = TransactionRecyclerAdapter(budgetData, isForBudget = true) {
+            // CameraActivity로 이동
+            val intent = Intent(requireContext(), CameraActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.recyclerViewBudget.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerViewAdapter
         }
+
     }
 
     companion object {
