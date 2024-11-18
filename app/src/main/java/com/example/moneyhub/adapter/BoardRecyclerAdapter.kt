@@ -13,6 +13,7 @@ import com.example.moneyhub.data.model.BoardItem
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.Duration
+import kotlin.math.min
 
 class BoardRecyclerAdapter (private val items: List<BoardItem>) :
     RecyclerView.Adapter<BoardRecyclerAdapter.PostViewHolder>() {
@@ -35,7 +36,7 @@ class BoardRecyclerAdapter (private val items: List<BoardItem>) :
 
         holder.title.text = item.title
         holder.content.text = item.content
-        holder.timeAgo.text = getTimeAgo(item.timestamp)
+        holder.timeAgo.text = getTimeAgo(item.timestamp, holder.itemView.context)
         holder.commentCount.text = "${item.commentCount}"
 
         // 이미지 처리
@@ -56,14 +57,23 @@ class BoardRecyclerAdapter (private val items: List<BoardItem>) :
 
     override fun getItemCount(): Int = items.size
 
-    fun getTimeAgo(postTime: LocalDateTime): String {
+    fun getTimeAgo(postTime: LocalDateTime, context: android.content.Context): String {
         val now = LocalDateTime.now()
         val duration = Duration.between(postTime, now)
 
         return when {
-            duration.toMinutes() < 60 -> "${duration.toMinutes()}분 전"
-            duration.toHours() < 24 -> "${duration.toHours()}시간 전"
-            duration.toDays() < 7 -> "${duration.toDays()}일 전"
+            duration.toMinutes() < 60 -> {
+                val minutes = duration.toMinutes().toInt()
+                context.resources.getQuantityString(R.plurals.time_minutes_ago, minutes, minutes)
+            }
+            duration.toHours() < 24 -> {
+                val hours = duration.toHours().toInt()
+                context.resources.getQuantityString(R.plurals.time_hours_ago, hours, hours)
+            }
+            duration.toDays() < 7 -> {
+                val days = duration.toDays().toInt()
+                context.resources.getQuantityString(R.plurals.time_days_ago, days, days)
+            }
             else -> postTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
         }
     }
