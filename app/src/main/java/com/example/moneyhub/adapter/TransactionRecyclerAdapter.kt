@@ -7,10 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
-import com.example.moneyhub.data.model.TransactionRecyclerDataClass
+import com.example.moneyhub.data.model.TransactionItem
 
 class TransactionRecyclerAdapter(
-    private val items: List<TransactionRecyclerDataClass>,
+    private val items: List<TransactionItem>,
     private val isForBudget: Boolean,
     private val onItemClick: () -> Unit = {}  // 기본값 설정
 ) : RecyclerView.Adapter<TransactionRecyclerAdapter.TransactionViewHolder>() {

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.activity.CameraActivity
 import com.example.moneyhub.adapter.TransactionRecyclerAdapter
-import com.example.moneyhub.data.model.TransactionRecyclerDataClass
+import com.example.moneyhub.data.model.TransactionItem
 import com.example.moneyhub.databinding.FragmentBudgetBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -52,22 +52,22 @@ class BudgetFragment : Fragment() {
     private fun initRecyclerView() {
         // 더미 데이터 생성
         val budgetData = listOf(
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "간식 사업 지출", "학생 복지 |", -120000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "희진이 간식비", "희진이 복지 |", -7700.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "지환이 지각비", "지환이 복지 |", 10000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
+            TransactionItem(R.drawable.icon_food_category, "간식 사업 지출", "학생 복지 |", -120000.0),
+            TransactionItem(R.drawable.icon_food_category, "희진이 간식비", "희진이 복지 |", -7700.0),
+            TransactionItem(R.drawable.icon_food_category, "지환이 지각비", "지환이 복지 |", 10000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionItem(R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
         )
 
 

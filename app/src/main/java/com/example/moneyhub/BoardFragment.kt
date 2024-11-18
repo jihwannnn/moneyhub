@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.moneyhub.adapter.BoardRecyclerAdapter
+import com.example.moneyhub.data.model.BoardItem
 import com.example.moneyhub.databinding.FragmentBoardBinding
+import java.time.LocalDateTime
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +40,17 @@ class BoardFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentBoardBinding.inflate(inflater, container, false)
+
+        val postList = listOf(
+            BoardItem(1, "Post Title 1", "This is the first post.", LocalDateTime.now().minusMinutes(30), 5, "https://example.com/image1.jpg"),
+            BoardItem(2, "Post Title 2", "This is the second post.", LocalDateTime.now().minusHours(2), 3, null), // 이미지 없음
+            BoardItem(3, "Post Title 3", "This is the third post.", LocalDateTime.now().minusDays(5), 10, "https://example.com/image2.jpg"),
+            BoardItem(4, "Post Title 4", "This is the fourth post.", LocalDateTime.now().minusDays(10), 0, null) // 이미지 없음
+        )
+
+        val adapter = BoardRecyclerAdapter(postList) // Adapter Creation
+        binding.recyclerViewBoard.adapter = adapter
+        binding.recyclerViewBoard.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
         return binding.root
     }
