@@ -1,4 +1,4 @@
-package com.example.moneyhub
+package com.example.moneyhub.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moneyhub.R
+import com.example.moneyhub.data.model.TransactionRecyclerDataClass
 
 class TransactionRecyclerAdapter(
     private val items: List<TransactionRecyclerDataClass>,

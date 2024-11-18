@@ -1,14 +1,12 @@
 package com.example.moneyhub
 
 import android.os.Bundle
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.moneyhub.R
+import com.example.moneyhub.adapter.HomePagerAdapter
 import com.example.moneyhub.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

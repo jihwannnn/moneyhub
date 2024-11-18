@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
 import com.example.moneyhub.databinding.CustomMemberItemBinding
-import com.example.moneyhub.model.Member
+import com.example.moneyhub.data.model.Member
 
 // RecyclerView에 데이터를 바인딩하기 위한 어댑터 클래스
 class MemberAdapter : RecyclerView.Adapter<MemberAdapter.ViewHolder>() {

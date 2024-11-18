@@ -1,20 +1,17 @@
-package com.example.moneyhub
+package com.example.moneyhub.activity
 
 import android.content.Context
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.moneyhub.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainPage : AppCompatActivity() {

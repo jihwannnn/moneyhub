@@ -1,4 +1,4 @@
-package com.example.moneyhub
+package com.example.moneyhub.activity
 
 import android.Manifest
 import android.content.Intent
@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityCameraBinding
 
 class CameraActivity : AppCompatActivity() {

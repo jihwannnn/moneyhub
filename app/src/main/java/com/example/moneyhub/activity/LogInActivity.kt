@@ -1,4 +1,4 @@
-package com.example.moneyhub
+package com.example.moneyhub.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.moneyhub.CustomGreyFormView
+import com.example.moneyhub.R
 import com.google.firebase.auth.FirebaseAuth
 
 class LogInActivity : AppCompatActivity() {

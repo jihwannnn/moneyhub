@@ -1,4 +1,4 @@
-package com.example.moneyhub
+package com.example.moneyhub.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.google.firebase.auth.FirebaseAuth
+import com.example.moneyhub.R
 
 class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

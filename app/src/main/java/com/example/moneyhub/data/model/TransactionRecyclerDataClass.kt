@@ -1,4 +1,4 @@
-package com.example.moneyhub
+package com.example.moneyhub.data.model
 
 data class TransactionRecyclerDataClass(
     val icon: Int,           // 아이콘 이미지 리소스 ID (예: R.drawable.icon_image

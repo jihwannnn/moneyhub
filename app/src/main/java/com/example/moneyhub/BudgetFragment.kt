@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneyhub.activity.CameraActivity
+import com.example.moneyhub.adapter.TransactionRecyclerAdapter
+import com.example.moneyhub.data.model.TransactionRecyclerDataClass
 import com.example.moneyhub.databinding.FragmentBudgetBinding
 
 // TODO: Rename parameter arguments, choose names that match

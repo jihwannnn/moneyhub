@@ -1,10 +1,11 @@
-package com.example.moneyhub
+package com.example.moneyhub.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityMyPageBinding
 
 class MyPageActivity : AppCompatActivity() {

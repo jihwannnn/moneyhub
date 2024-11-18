@@ -26,25 +26,25 @@
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterDetailsActivity"
+            android:name=".activity.RegisterDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".CameraActivity"
+            android:name=".activity.CameraActivity"
             android:exported="false" />
         <activity
-            android:name=".MeetingListView"
+            android:name=".view.MeetingListView"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".MyPageActivity"
+            android:name=".activity.MyPageActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.MoneyHub" />
         <activity
-            android:name=".LogInActivity"
+            android:name=".activity.LogInActivity"
             android:exported="true"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
@@ -54,10 +54,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateActivity"
+            android:name=".activity.CreateActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".activity.SignUpActivity"
             android:screenOrientation="sensorPortrait" />
     </application>
 

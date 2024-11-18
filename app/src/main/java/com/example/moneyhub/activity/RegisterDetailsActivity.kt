@@ -1,10 +1,8 @@
-package com.example.moneyhub
+package com.example.moneyhub.activity
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityRegisterDetailsBinding
 
 class RegisterDetailsActivity : AppCompatActivity() {
