@@ -13,7 +13,7 @@
 
         <action
             android:id="@+id/action_HomeFragment_to_VoteFragment"
-            app:destination="@id/VoteFragment" />
+            app:destination="@id/BoardFragment" />
         <action
             android:id="@+id/action_HomeFragment_to_AnalysisFragment"
             app:destination="@id/AnalysisFragment" />
@@ -22,10 +22,10 @@
             app:destination="@id/MembersFragment" />
     </fragment>
     <fragment
-        android:id="@+id/VoteFragment"
-        android:name="com.example.moneyhub.VoteFragment"
+        android:id="@+id/BoardFragment"
+        android:name="com.example.moneyhub.BoardFragment"
         android:label="@string/vote_fragment_label"
-        tools:layout="@layout/fragment_vote" >
+        tools:layout="@layout/fragment_board" >
 
         <action
             android:id="@+id/action_VoteFragment_to_HomeFragment"
@@ -48,7 +48,7 @@
             app:destination="@id/HomeFragment" />
         <action
             android:id="@+id/action_AnalysisFragment_to_VoteFragment"
-            app:destination="@id/VoteFragment" />
+            app:destination="@id/BoardFragment" />
         <action
             android:id="@+id/action_AnalysisFragment_to_MembersFragment"
             app:destination="@id/MembersFragment" />
@@ -64,7 +64,7 @@
             app:destination="@id/HomeFragment" />
         <action
             android:id="@+id/action_MembersFragment_to_VoteFragment"
-            app:destination="@id/VoteFragment" />
+            app:destination="@id/BoardFragment" />
         <action
             android:id="@+id/action_MembersFragment_to_AnalysisFragment"
             app:destination="@id/AnalysisFragment" />

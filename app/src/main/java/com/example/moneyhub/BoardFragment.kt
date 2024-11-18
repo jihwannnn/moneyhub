@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.moneyhub.R
-import com.example.moneyhub.databinding.FragmentAnalysisBinding
-import com.example.moneyhub.databinding.FragmentHomeBinding
-import com.example.moneyhub.databinding.FragmentVoteBinding
+import com.example.moneyhub.databinding.FragmentBoardBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,11 +17,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class VoteFragment : Fragment() {
+class BoardFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var binding:FragmentVoteBinding
+    lateinit var binding:FragmentBoardBinding
 
     override fun onCreate(savedInstnaceState: Bundle?) {
         super.onCreate(savedInstnaceState)
@@ -39,7 +36,8 @@ class VoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentVoteBinding.inflate(inflater, container, false)
+        binding = FragmentBoardBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 

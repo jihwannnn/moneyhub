@@ -5,8 +5,8 @@
         android:icon="@drawable/icon_home_on"
         android:title="@string/menu_home" />
     <item
-        android:id="@+id/VoteFragment"
-        android:icon="@drawable/icon_vote_off"
+        android:id="@+id/BoardFragment"
+        android:icon="@drawable/icon_board_off"
         android:title="@string/menu_vote" />
     <item
         android:id="@+id/AnalysisFragment"

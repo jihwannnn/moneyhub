@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
                 findItem(R.id.HomeFragment).setIcon(
                     if (destinationId == R.id.HomeFragment) R.drawable.icon_home_on else R.drawable.icon_home_off
                 )
-                findItem(R.id.VoteFragment).setIcon(
-                    if (destinationId == R.id.VoteFragment) R.drawable.icon_vote_on else R.drawable.icon_vote_off
+                findItem(R.id.BoardFragment).setIcon(
+                    if (destinationId == R.id.BoardFragment) R.drawable.icon_board_on else R.drawable.icon_board_off
                 )
                 findItem(R.id.AnalysisFragment).setIcon(
                     if (destinationId == R.id.AnalysisFragment) R.drawable.icon_analysis_on else R.drawable.icon_analysis_off

@@ -59,28 +59,28 @@ class MainPage : AppCompatActivity() {
                 R.id.HomeFragment -> {
                     // HomeFragment에 도착했을 때 아이콘을 설정
                     navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_on)
-                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_off)
+                    navView.menu.findItem(R.id.BoardFragment).setIcon(R.drawable.icon_board_off)
                     navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_off)
                     navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_off)
                 }
-                R.id.VoteFragment -> {
+                R.id.BoardFragment -> {
                     // VoteFragment에 도착했을 때 아이콘을 설정
                     navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_off)
-                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_on)
+                    navView.menu.findItem(R.id.BoardFragment).setIcon(R.drawable.icon_board_on)
                     navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_off)
                     navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_off)
                 }
                 R.id.AnalysisFragment -> {
                     // AnalysisFragment에 도착했을 때 아이콘을 설정
                     navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_off)
-                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_off)
+                    navView.menu.findItem(R.id.BoardFragment).setIcon(R.drawable.icon_board_off)
                     navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_on)
                     navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_off)
                 }
                 R.id.MembersFragment -> {
                     // MembersFragment에 도착했을 때 아이콘을 설정
                     navView.menu.findItem(R.id.HomeFragment).setIcon(R.drawable.icon_home_off)
-                    navView.menu.findItem(R.id.VoteFragment).setIcon(R.drawable.icon_vote_off)
+                    navView.menu.findItem(R.id.BoardFragment).setIcon(R.drawable.icon_board_off)
                     navView.menu.findItem(R.id.AnalysisFragment).setIcon(R.drawable.icon_analysis_off)
                     navView.menu.findItem(R.id.MembersFragment).setIcon(R.drawable.icon_members_on)
                 }
