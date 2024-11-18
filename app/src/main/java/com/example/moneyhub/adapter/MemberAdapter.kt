@@ -1,7 +1,9 @@
 package com.example.moneyhub.adapter
 
+import android.content.res.ColorStateList // 버튼 배경색 지정에 필요
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat // 색상 리소스 접근에 필요
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
 import com.example.moneyhub.databinding.CustomMemberItemBinding
@@ -42,24 +44,20 @@ class MemberAdapter : RecyclerView.Adapter<MemberAdapter.ViewHolder>() {
         private val binding: CustomMemberItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        // 멤버 데이터를 뷰에 바인딩
         fun bind(member: Member) {
             with(binding) {
+                // 이름 설정
                 tvMemberName.text = member.name
+
+                // 상태 버튼 설정
                 btnStatus.apply {
                     text = member.status
-                    // 로그 추가
-                    println("멤버 상태: ${member.status}")
-                    setBackgroundResource(
+                    // 상태에 따라 버튼 배경색 동적 변경
+                    backgroundTintList = ColorStateList.valueOf(
                         when (member.status) {
-                            "매니저" -> {
-                                println("매니저 배경 적용")
-                                R.drawable.emerald
-                            }
-
-                            else -> {
-                                println("회색 배경 적용")
-                                R.drawable.gray
-                            }
+                            "매니저" -> ContextCompat.getColor(context, R.color.moneyCyanRegular)
+                            else -> ContextCompat.getColor(context, R.color.moneyGrey)
                         }
                     )
                 }
