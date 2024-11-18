@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:customHint="id"
+                app:customHint="Email"
                 app:customIcon="@drawable/group" />
 
             <com.example.moneyhub.CustomGreyFormView
