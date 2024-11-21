@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.moneyhub.CustomGreyFormView
 import com.example.moneyhub.R
+import com.example.moneyhub.activity.signup.SignUpActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class LogInActivity : AppCompatActivity() {
