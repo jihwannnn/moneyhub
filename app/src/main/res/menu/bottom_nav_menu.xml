@@ -7,7 +7,7 @@
     <item
         android:id="@+id/BoardFragment"
         android:icon="@drawable/icon_board_off"
-        android:title="@string/menu_vote" />
+        android:title="@string/menu_board" />
     <item
         android:id="@+id/AnalysisFragment"
         android:icon="@drawable/icon_analysis_off"
