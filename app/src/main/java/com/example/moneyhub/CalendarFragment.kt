@@ -5,66 +5,116 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneyhub.adapter.TransactionRecyclerAdapter
+import com.example.moneyhub.data.model.TransactionRecyclerDataClass
 import com.example.moneyhub.databinding.FragmentCalendarBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CalendarFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CalendarFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    lateinit var binding: FragmentCalendarBinding
+    private lateinit var binding: FragmentCalendarBinding
+    private lateinit var adapter: TransactionRecyclerAdapter
+    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // 캘린더 샘플 데이터
+    private val calendarData = listOf(
+        TransactionRecyclerDataClass(
+            date = "2024-11-01",
+            icon = R.drawable.icon_food_category,
+            title = "간식 사업 지출",
+            category = "학생 복지",
+            transaction = -120000.0
+        ),
+        TransactionRecyclerDataClass(
+            date = "2024-11-04",
+            icon = R.drawable.icon_food_category,
+            title = "희진이 간식비",
+            category = "희진이 복지",
+            transaction = -7700.0
+        ),
+        TransactionRecyclerDataClass(
+            date = "2024-11-08",
+            icon = R.drawable.icon_food_category,
+            title = "지환이 노래방",
+            category = "지환이 복지",
+            transaction = -10000.0
+        ),
+        TransactionRecyclerDataClass(
+            date = "2024-11-10",
+            icon = R.drawable.icon_food_category,
+            title = "정기 회비",
+            category = "수입",
+            transaction = 100000.0
+        )
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = FragmentCalendarBinding.inflate(inflater, container, false)
-
-        // initializing CalendarView
-        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            // 날짜 선택 시 실행되는 코드
-            val selectedDate = "$year-${month + 1}-$dayOfMonth"
-            // 예: 선택된 날짜를 로그로 출력
-            println("Selected Date: $selectedDate")
-        }
         return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CalendarFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CalendarFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        setupCalendarView()
+        updateMonthlyTotals()
+    }
+
+    private fun setupRecyclerView() {
+        adapter = TransactionRecyclerAdapter(calendarData, true)
+        binding.transactionList.apply {
+            adapter = this@CalendarFragment.adapter
+            layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private fun setupCalendarView() {
+        // 각 날짜별 거래 금액 계산
+        val dailyTotals = mutableMapOf<String, Double>()
+        calendarData.forEach { transaction ->
+            dailyTotals[transaction.date] = (dailyTotals[transaction.date] ?: 0.0) + transaction.transaction
+        }
+
+        // 날짜 선택 리스너 설정
+        binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
+
+            // 선택된 날짜의 거래 내역 필터링 및 RecyclerView 업데이트
+            val transactionsForDate = calendarData.filter { it.date == selectedDate }
+            adapter = TransactionRecyclerAdapter(transactionsForDate, true)
+            binding.transactionList.adapter = adapter
+
+            // 선택된 날짜의 총액을 표시할 TextView 업데이트
+            val totalForDate = dailyTotals[selectedDate] ?: 0.0
+            binding.selectedDateAmount.text = if (totalForDate != 0.0) {
+                String.format("%.0f원", totalForDate)
+            } else ""
+        }
+    }
+
+    private fun updateMonthlyTotals() {
+        var income = 0.0
+        var expense = 0.0
+
+        calendarData.forEach { transaction ->
+            if (transaction.transaction > 0) {
+                income += transaction.transaction
+            } else {
+                expense += -transaction.transaction
             }
+        }
+
+        // Income과 Expense TextView 업데이트
+        binding.textViewIncome.text = String.format("$ %.0f", income)
+        binding.textViewExpense.text = String.format("$ %.0f", expense)
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = CalendarFragment()
     }
 }
