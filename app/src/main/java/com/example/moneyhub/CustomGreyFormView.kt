@@ -42,4 +42,8 @@ class CustomGreyFormView @JvmOverloads constructor(
         binding.editTextOfGreyForm.hint = text
     }
 
+    fun getText(): String {
+        return binding.editTextOfGreyForm.text.toString()
+    }
+
 }

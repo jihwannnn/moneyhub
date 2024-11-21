@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    alias(libs.plugins.hilt)
 }
 
 // Add the Google services Gradle plugin
@@ -10,9 +12,6 @@ android {
     namespace = "com.example.moneyhub"
     compileSdk = 34
 
-    viewBinding {
-        enable = true
-    }
 
     defaultConfig {
         applicationId = "com.example.moneyhub"
@@ -105,6 +104,14 @@ dependencies {
 
     // MPAndroidChart를 Version Catalog 스타일로 변경
     implementation(libs.mpandroidchart)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // AndroidX Lifecycle
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.runtime)
 
 
 

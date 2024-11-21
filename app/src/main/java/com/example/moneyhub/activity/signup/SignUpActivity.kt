@@ -9,13 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.moneyhub.R
 import com.example.moneyhub.activity.LogInActivity
 import com.example.moneyhub.common.UiState
-import com.example.moneyhub.data.repository.TestSignUpRepository
 import com.example.moneyhub.databinding.ActivitySignUpBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
     private val viewModel: SignUpViewModel by viewModels()
@@ -28,7 +28,7 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupSystemBars()
-        setupUI()
+        setupSignUpButton()
         observeViewModel()
     }
 
@@ -40,101 +40,58 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupUI() {
+    private fun setupSignUpButton() {
+        binding.customButtonInclude.root.setOnClickListener {
+            // Get values from forms
+            val name = binding.nameForm.getText()
+            val email = binding.idForm.getText()
+            val phone = binding.phonenumberForm.getText()
+            val password = binding.passwordForm.getText()
+            val passwordCheck = binding.passwordFormCheck.getText()
 
-        with(binding) {
-            nameForm.apply {
-                setIcon(R.drawable.group)
-                setHint("Name")
-            }
+            // Update ViewModel
+            viewModel.updateName(name)()
+            viewModel.updateEmail(email)()
+            viewModel.updatePhone(phone)()
+            viewModel.updatePassword(password)()
+            viewModel.updatePasswordCheck(passwordCheck)()
 
-            idForm.apply {
-                setIcon(R.drawable.group)
-                setHint("Email")
-            }
-
-            phonenumberForm.apply {
-                setIcon(R.drawable.group)
-                setHint("phone number")
-            }
-
-            passwordForm.apply {
-                setIcon(R.drawable.group)
-                setHint("password")
-            }
-
-            passwordFormCheck.apply {
-                setIcon(R.drawable.group)
-                setHint("password check")
-            }
-
-            customButtonInclude.root.setOnClickListener {
-                viewModel.signUp()
-            }
+            // Trigger sign up
+            viewModel.signUp()
         }
     }
 
+
     private fun observeViewModel() {
         lifecycleScope.launch {
-
-//            // 에러 메시지 관찰
-//            launch {
-//                viewModel.errorMessage.collect { message ->
-//                    message?.let { showError(it) }
-//                }
-//            }
-//
-//            // 각 필드의 상태 관찰
-//            launch {
-//                viewModel.name.collect { name ->
-//                    binding.nameForm.setText(name)
-//                }
-//            }
-//
-//            launch {
-//                viewModel.email.collect { email ->
-//                    binding.idForm.setText(email)
-//                }
-//            }
-//
-//            launch {
-//                viewModel.phone.collect { phone ->
-//                    binding.phonenumberForm.setText(phone)
-//                }
-//            }
-//
-//            launch {
-//                viewModel.password.collect { password ->
-//                    binding.passwordForm.setText(password)
-//                }
-//            }
-//
-//            launch {
-//                viewModel.passwordCheck.collect { passwordCheck ->
-//                    binding.passwordFormCheck.setText(passwordCheck)
-//                }
-//            }
-
             viewModel.uiState.collect { state ->
                 when (state) {
-                    UiState.LOADING -> return@collect //showLoading(true)
+                    UiState.LOADING -> {
+                        // Show loading indicator if needed
+                    }
                     UiState.SUCCESS -> {
-                        // showLoading(false)
+                        Toast.makeText(this@SignUpActivity, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@SignUpActivity, LogInActivity::class.java))
                         finish()
                     }
-                    UiState.ERROR -> return@collect // showError(false)
-                    UiState.INITIAL -> { }
+                    UiState.ERROR -> {
+                        // Error handling will be done through errorMessage flow
+                    }
+                    else -> {
+                        // Handle other states if needed
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.errorMessage.collect { message ->
+                message?.let {
+                    Toast.makeText(this@SignUpActivity, it, Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-//    private fun showLoading(show: Boolean) {
-//        // binding.progressBar.isVisible = show
-//    }
-//
-//    private fun showError(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//    }
+
 }
