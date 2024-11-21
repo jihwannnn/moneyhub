@@ -26,6 +26,9 @@
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31">
         <activity
+            android:name=".activity.PostOnBoardActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.RegisterDetailsActivity"
             android:exported="false" />
         <activity
