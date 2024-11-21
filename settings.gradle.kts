@@ -27,6 +27,8 @@ dependencyResolutionManagement {
     }
 }
 
+
+
 rootProject.name = "MoneyHub"
 include(":app")
 

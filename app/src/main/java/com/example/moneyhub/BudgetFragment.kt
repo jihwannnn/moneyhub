@@ -52,22 +52,22 @@ class BudgetFragment : Fragment() {
     private fun initRecyclerView() {
         // 더미 데이터 생성
         val budgetData = listOf(
-            TransactionRecyclerDataClass("2024-11-10", R.drawable.icon_food_category, "간식 사업 지출", "학생 복지 |", -120000.0),
-            TransactionRecyclerDataClass("2024-11-10", R.drawable.icon_food_category, "희진이 간식비", "희진이 복지 |", -7700.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "지환이 지각비", "지환이 복지 |", 10000.0),
+            TransactionRecyclerDataClass("2024-11-01", R.drawable.icon_food_category, "간식 사업 지출 (예정)", "학생 복지 |", -120000.0),
+            TransactionRecyclerDataClass("2024-11-02", R.drawable.icon_food_category, "희진이 간식비 (예정)", "희진이 복지 |", -7700.0),
+            TransactionRecyclerDataClass("2024-11-03",R.drawable.icon_food_category, "지환이 지각비 (예정)", "지환이 복지 |", 10000.0),
+            TransactionRecyclerDataClass("2024-11-03",R.drawable.icon_food_category, "그 외 Title (예정)", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-03",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-05",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
             TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
             TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
             TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
-            TransactionRecyclerDataClass("2024-11-10",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
+            TransactionRecyclerDataClass("2024-11-11",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-12",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-13",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-14",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-15",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-20",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0),
+            TransactionRecyclerDataClass("2024-11-20",R.drawable.icon_food_category, "그 외 Title", "그 외 category |", -1000.0)
         )
 
 

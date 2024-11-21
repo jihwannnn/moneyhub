@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.adapter.TransactionRecyclerAdapter
 import com.example.moneyhub.data.model.TransactionRecyclerDataClass
 import com.example.moneyhub.databinding.FragmentCalendarBinding
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarFragment : Fragment() {
+    private val db = FirebaseFirestore.getInstance()
     private lateinit var binding: FragmentCalendarBinding
     private lateinit var adapter: TransactionRecyclerAdapter
-    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     // 캘린더 샘플 데이터
     private val calendarData = listOf(
@@ -26,6 +27,15 @@ class CalendarFragment : Fragment() {
             category = "학생 복지",
             transaction = -120000.0
         ),
+
+        TransactionRecyclerDataClass(
+            date = "2024-11-01",
+            icon = R.drawable.icon_food_category,
+            title = "학생 회비",
+            category = "회비 납부",
+            transaction = 220000.0
+        ),
+
         TransactionRecyclerDataClass(
             date = "2024-11-04",
             icon = R.drawable.icon_food_category,
@@ -40,12 +50,35 @@ class CalendarFragment : Fragment() {
             category = "지환이 복지",
             transaction = -10000.0
         ),
+
         TransactionRecyclerDataClass(
             date = "2024-11-10",
             icon = R.drawable.icon_food_category,
             title = "정기 회비",
             category = "수입",
             transaction = 100000.0
+        ),
+        TransactionRecyclerDataClass(
+            date = "2024-11-18",
+            icon = R.drawable.icon_food_category,
+            title = "지환이 노래방",
+            category = "지환이 복지",
+            transaction = -10000.0
+        ),
+        TransactionRecyclerDataClass(
+            date = "2024-11-21",
+            icon = R.drawable.icon_food_category,
+            title = "지환이 노래방",
+            category = "지환이 복지",
+            transaction = -10000.0
+        ),
+
+        TransactionRecyclerDataClass(
+            date = "2024-11-28",
+            icon = R.drawable.icon_food_category,
+            title = "지환이 노래방",
+            category = "지환이 복지",
+            transaction = -10000.0
         )
     )
 
@@ -64,8 +97,9 @@ class CalendarFragment : Fragment() {
         updateMonthlyTotals()
     }
 
+    // RecyclerView 초기화 및 설정
     private fun setupRecyclerView() {
-        adapter = TransactionRecyclerAdapter(calendarData, true)
+        adapter = TransactionRecyclerAdapter(calendarData, true, true)
         binding.transactionList.apply {
             adapter = this@CalendarFragment.adapter
             layoutManager = LinearLayoutManager(context)
@@ -73,44 +107,47 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setupCalendarView() {
-        // 각 날짜별 거래 금액 계산
-        val dailyTotals = mutableMapOf<String, Double>()
+        val dailyTotals = mutableMapOf<String, Pair<Double, Double>>() // 날짜별 <수입, 지출> 맵
+
+        // 각 날짜의 수입/지출 총액 계산
         calendarData.forEach { transaction ->
-            dailyTotals[transaction.date] = (dailyTotals[transaction.date] ?: 0.0) + transaction.transaction
+            val currentPair = dailyTotals[transaction.date] ?: Pair(0.0, 0.0)
+            dailyTotals[transaction.date] = if (transaction.transaction > 0) {
+                Pair(currentPair.first + transaction.transaction, currentPair.second)
+            } else {
+                Pair(currentPair.first, currentPair.second - transaction.transaction)
+            }
         }
 
-        // 날짜 선택 리스너 설정
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
 
-            // 선택된 날짜의 거래 내역 필터링 및 RecyclerView 업데이트
+            // 선택된 날짜의 거래 내역 필터링
             val transactionsForDate = calendarData.filter { it.date == selectedDate }
-            adapter = TransactionRecyclerAdapter(transactionsForDate, true)
+            adapter = TransactionRecyclerAdapter(transactionsForDate, true, true)
             binding.transactionList.adapter = adapter
 
-            // 선택된 날짜의 총액을 표시할 TextView 업데이트
-            val totalForDate = dailyTotals[selectedDate] ?: 0.0
-            binding.selectedDateAmount.text = if (totalForDate != 0.0) {
-                String.format("%.0f원", totalForDate)
-            } else ""
+            // 선택된 날짜의 수입/지출 표시
+            val totals = dailyTotals[selectedDate] ?: Pair(0.0, 0.0)
+            binding.selectedDateIncome.text = if (totals.first > 0) "+${totals.first.toInt()}" else ""
+            binding.selectedDateExpense.text = if (totals.second > 0) "-${totals.second.toInt()}" else ""
         }
     }
 
     private fun updateMonthlyTotals() {
-        var income = 0.0
-        var expense = 0.0
+        var monthlyIncome = 0.0
+        var monthlyExpense = 0.0
 
         calendarData.forEach { transaction ->
             if (transaction.transaction > 0) {
-                income += transaction.transaction
+                monthlyIncome += transaction.transaction
             } else {
-                expense += -transaction.transaction
+                monthlyExpense += -transaction.transaction
             }
         }
 
-        // Income과 Expense TextView 업데이트
-        binding.textViewIncome.text = String.format("$ %.0f", income)
-        binding.textViewExpense.text = String.format("$ %.0f", expense)
+        binding.textViewIncome.text = String.format("$ %.0f", monthlyIncome)
+        binding.textViewExpense.text = String.format("$ %.0f", monthlyExpense)
     }
 
     companion object {

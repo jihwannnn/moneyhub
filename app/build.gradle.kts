@@ -92,10 +92,6 @@ dependencies {
 
 
 
-    // 캘린더에 일별 지출 표시
-    implementation("com.kizitonwose.calendar:compose:2.5.0")
-
-
 
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
