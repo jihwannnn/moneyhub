@@ -16,6 +16,7 @@
         android:maxSdkVersion="32"/>
 
     <application
+        android:name=".MoneyHub"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -60,7 +61,7 @@
             android:name=".activity.CreateActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".activity.SignUpActivity"
+            android:name=".activity.signup.SignUpActivity"
             android:screenOrientation="sensorPortrait" />
     </application>
 

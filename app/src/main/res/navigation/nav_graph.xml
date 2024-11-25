@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/HomeFragment"
-        android:name="com.example.moneyhub.HomeFragment"
+        android:name="com.example.moneyhub.fragments.HomeFragment"
         android:label="@string/home_fragment_label"
         tools:layout="@layout/fragment_home" >
 
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/BoardFragment"
-        android:name="com.example.moneyhub.BoardFragment"
+        android:name="com.example.moneyhub.fragments.BoardFragment"
         android:label="@string/vote_fragment_label"
         tools:layout="@layout/fragment_board" >
 
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/AnalysisFragment"
-        android:name="com.example.moneyhub.AnalysisFragment"
+        android:name="com.example.moneyhub.fragments.AnalysisFragment"
         android:label="@string/analysis_fragment_label"
         tools:layout="@layout/fragment_analysis" >
 
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/MembersFragment"
-        android:name="com.example.moneyhub.MembersFragment"
+        android:name="com.example.moneyhub.fragments.MembersFragment"
         android:label="@string/members_fragment_label"
         tools:layout="@layout/fragment_members" >
 

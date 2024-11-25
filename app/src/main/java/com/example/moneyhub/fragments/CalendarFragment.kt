@@ -1,17 +1,16 @@
-package com.example.moneyhub
+package com.example.moneyhub.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneyhub.R
 import com.example.moneyhub.adapter.TransactionRecyclerAdapter
 import com.example.moneyhub.data.model.TransactionRecyclerDataClass
 import com.example.moneyhub.databinding.FragmentCalendarBinding
 import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.*
 
 class CalendarFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()

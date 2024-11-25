@@ -1,8 +1,9 @@
-package com.example.moneyhub
+package com.example.moneyhub.ui.customs
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ViewCustomGreyFormBinding
 
 class CustomGreyFormView @JvmOverloads constructor(
@@ -40,6 +41,10 @@ class CustomGreyFormView @JvmOverloads constructor(
 
     fun setHint(text: String) {
         binding.editTextOfGreyForm.hint = text
+    }
+
+    fun getText(): String {
+        return binding.editTextOfGreyForm.text.toString()
     }
 
 }
