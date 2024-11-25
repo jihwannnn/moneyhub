@@ -36,14 +36,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.example.moneyhub.CustomGreyFormView
+            <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/emailForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:customHint="Enter your group name here"
                 app:customIcon="@drawable/group" />
 
-            <com.example.moneyhub.CustomGreyFormView
+            <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/passwordForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

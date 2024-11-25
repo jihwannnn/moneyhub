@@ -1,4 +1,4 @@
-package com.example.moneyhub
+package com.example.moneyhub.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.adapter.MemberAdapter
 import com.example.moneyhub.data.model.Member
 import com.example.moneyhub.databinding.FragmentMembersBinding
-import com.google.firebase.auth.FirebaseAuth // Firebase 인증 추가
-import com.google.firebase.firestore.FirebaseFirestore // Firestore 추가
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MembersFragment : Fragment() {
     private lateinit var binding: FragmentMembersBinding

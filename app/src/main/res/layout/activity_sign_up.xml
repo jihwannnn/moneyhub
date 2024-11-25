@@ -25,7 +25,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <com.example.moneyhub.CustomGreyFormView
+            <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/nameForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 app:customHint="Name"
                 app:customIcon="@drawable/group" />
 
-            <com.example.moneyhub.CustomGreyFormView
+            <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/idForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 app:customHint="Email"
                 app:customIcon="@drawable/group" />
 
-            <com.example.moneyhub.CustomGreyFormView
+            <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/phonenumberForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                 app:customHint="phone number"
                 app:customIcon="@drawable/group" />
 
-            <com.example.moneyhub.CustomGreyFormView
+            <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/passwordForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 app:customHint="password"
                 app:customIcon="@drawable/group" />
 
-            <com.example.moneyhub.CustomGreyFormView
+            <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/passwordFormCheck"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

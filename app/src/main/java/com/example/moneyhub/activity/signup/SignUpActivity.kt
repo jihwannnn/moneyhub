@@ -15,6 +15,7 @@ import com.example.moneyhub.databinding.ActivitySignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+// Activity를 hilt component로
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
