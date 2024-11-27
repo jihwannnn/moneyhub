@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.model
+package com.example.moneyhub.model
 
 data class TransactionRecyclerDataClass(
     val date: String,        // 날짜 (예: "2024-11-19")

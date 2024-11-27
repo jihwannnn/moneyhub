@@ -1,6 +1,6 @@
 package com.example.moneyhub.data.repository.transaction
 
-import com.example.moneyhub.data.model.Transaction
+import com.example.moneyhub.model.Transaction
 import javax.inject.Inject
 
 class TestTransactionRepository @Inject constructor() : TransactionRepository {

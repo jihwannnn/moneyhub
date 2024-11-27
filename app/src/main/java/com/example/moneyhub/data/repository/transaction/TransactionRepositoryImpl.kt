@@ -2,7 +2,7 @@ package com.example.moneyhub.data.repository.transaction
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.moneyhub.data.model.Transaction
+import com.example.moneyhub.model.Transaction
 
 class TransactionRepositoryImpl : TransactionRepository {
     private val auth = FirebaseAuth.getInstance()

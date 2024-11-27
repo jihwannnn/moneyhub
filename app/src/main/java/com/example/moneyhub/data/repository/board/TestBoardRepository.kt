@@ -1,7 +1,7 @@
 package com.example.moneyhub.data.repository.board
 
-import com.example.moneyhub.data.model.Comment
-import com.example.moneyhub.data.model.Post
+import com.example.moneyhub.model.Comment
+import com.example.moneyhub.model.Post
 import javax.inject.Inject
 
 class TestBoardRepository @Inject constructor() : BoardRepository {

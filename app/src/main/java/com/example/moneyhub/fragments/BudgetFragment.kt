@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.CameraActivity
 import com.example.moneyhub.adapter.TransactionRecyclerAdapter
-import com.example.moneyhub.data.model.TransactionRecyclerDataClass
+import com.example.moneyhub.model.TransactionRecyclerDataClass
 import com.example.moneyhub.databinding.FragmentBudgetBinding
 
 private const val ARG_PARAM1 = "param1"

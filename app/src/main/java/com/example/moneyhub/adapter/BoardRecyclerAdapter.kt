@@ -1,6 +1,5 @@
 package com.example.moneyhub.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.moneyhub.R
-import com.example.moneyhub.data.model.BoardItem
+import com.example.moneyhub.model.BoardItem
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.Duration
-import kotlin.math.min
 
 class BoardRecyclerAdapter (private val items: List<BoardItem>) :
     RecyclerView.Adapter<BoardRecyclerAdapter.PostViewHolder>() {

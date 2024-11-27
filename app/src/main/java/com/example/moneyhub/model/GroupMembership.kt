@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.model
+package com.example.moneyhub.model
 
 data class GroupMembership(
     val uid: String = "",        // 사용자 ID

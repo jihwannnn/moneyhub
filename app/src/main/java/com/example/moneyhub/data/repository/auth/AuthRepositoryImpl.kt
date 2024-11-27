@@ -1,16 +1,13 @@
 package com.example.moneyhub.data.repository.auth
 
+import com.example.moneyhub.model.CurrentUser
+import com.example.moneyhub.model.Role
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FieldValue
+import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
-
-// data/repository/AuthRepositoryImpl.kt
-// sign up repoImpl
 
 class AuthRepositoryImpl : AuthRepository {
     private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
 
     override suspend fun signUp(
         name: String,
@@ -19,21 +16,15 @@ class AuthRepositoryImpl : AuthRepository {
         password: String
     ): Result<Unit> {
         return try {
-
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
 
+            // Update user profile with additional information
             authResult.user?.let { user ->
-                val userData = hashMapOf(
-                    "name" to name,
-                    "email" to email,
-                    "phone" to phone,
-                    "createdAt" to FieldValue.serverTimestamp()
-                )
-
-                db.collection("users")
-                    .document(user.uid)
-                    .set(userData)
-                    .await()
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = name
+                }
+                user.updateProfile(profileUpdates).await()
+                // user.updatePhoneNumber(phone).await()
             }
 
             Result.success(Unit)
@@ -45,16 +36,47 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun signIn(
         email: String,
         password: String
-    ): Result<Unit> {
-        TODO()
+    ): Result<CurrentUser> {
+        return try {
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            val user = authResult.user
+
+            if (user != null) {
+                val currentUser = CurrentUser(
+                    id = user.uid,
+                    name = user.displayName ?: "",
+                    currentGid = "",  // 기본값 사용
+                    currentGname = "", // 기본값 사용
+                    role = Role.REGULAR // 기본값 사용
+                )
+                Result.success(currentUser)
+            } else {
+                Result.failure(Exception("로그인 실패: 사용자 정보를 찾을 수 없습니다"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
+
     override suspend fun signOut(): Result<Unit> {
-        TODO()
+        return try {
+            auth.signOut()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
+
     override suspend fun deleteAccount(): Result<Unit> {
-        TODO()
+        return try {
+            auth.currentUser?.delete()?.await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
-    override suspend fun getCurrentUser(): String? { // uid 반환
-        TODO()
+
+    override suspend fun getCurrentUser(): String? {
+        return auth.currentUser?.uid
     }
 }

@@ -1,6 +1,8 @@
 package com.example.moneyhub.ui.customs
 import android.content.Context
+import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.moneyhub.R
@@ -12,6 +14,8 @@ class CustomGreyFormView @JvmOverloads constructor(
 
     private val binding: ViewCustomGreyFormBinding =
         ViewCustomGreyFormBinding.inflate(LayoutInflater.from(context), this, true)
+
+    val editText = binding.editTextOfGreyForm
 
     init {
         context.theme.obtainStyledAttributes(
@@ -41,10 +45,10 @@ class CustomGreyFormView @JvmOverloads constructor(
 
     fun setHint(text: String) {
         binding.editTextOfGreyForm.hint = text
+        Log.d("CustomGreyFormView", "Text set to: $text")
     }
 
     fun getText(): String {
         return binding.editTextOfGreyForm.text.toString()
     }
-
 }

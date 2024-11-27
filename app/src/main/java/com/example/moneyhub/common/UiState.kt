@@ -1,9 +1,7 @@
 package com.example.moneyhub.common
 
-// common/UiState.kt
-enum class UiState {
-    INITIAL,
-    LOADING,
-    SUCCESS,
-    ERROR
-}
+data class UiState(
+    val isLoading: Boolean = false,
+    val isSuccess: Boolean = false,
+    val error: String? = null
+)

@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.model
+package com.example.moneyhub.model
 
 data class Post(
     val pid: String = "",           // 게시글 ID

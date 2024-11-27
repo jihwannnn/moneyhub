@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.model
+package com.example.moneyhub.model
 
 enum class Role {
     OWNER,     // 소유자
@@ -6,7 +6,7 @@ enum class Role {
     REGULAR;   // 일반
 
     companion object {
-        fun fromName(name: String): Role{
+        fun fromName(name: String): Role {
             return valueOf(name.uppercase())
         }
     }

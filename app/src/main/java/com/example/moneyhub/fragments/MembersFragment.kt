@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.adapter.MemberAdapter
-import com.example.moneyhub.data.model.Member
+import com.example.moneyhub.model.Member
 import com.example.moneyhub.databinding.FragmentMembersBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

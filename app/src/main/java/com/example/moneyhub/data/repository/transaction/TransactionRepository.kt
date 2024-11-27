@@ -1,6 +1,6 @@
 package com.example.moneyhub.data.repository.transaction
 
-import com.example.moneyhub.data.model.Transaction
+import com.example.moneyhub.model.Transaction
 
 interface TransactionRepository {
     suspend fun addTransaction(gid: String, transaction: Transaction): Result<String> // tid 반환

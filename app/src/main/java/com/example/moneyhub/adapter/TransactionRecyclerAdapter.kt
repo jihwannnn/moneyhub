@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
-import com.example.moneyhub.data.model.TransactionRecyclerDataClass
+import com.example.moneyhub.model.TransactionRecyclerDataClass
 import java.util.Calendar
 import java.util.Locale
 

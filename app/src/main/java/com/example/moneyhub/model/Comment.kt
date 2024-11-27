@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.model
+package com.example.moneyhub.model
 
 data class Comment(
     val cid: String = "",           // 댓글 ID

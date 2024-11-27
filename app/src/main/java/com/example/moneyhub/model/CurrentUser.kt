@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.model
+package com.example.moneyhub.model
 
 // 현재 사용자 정보 클래스
 data class CurrentUser (

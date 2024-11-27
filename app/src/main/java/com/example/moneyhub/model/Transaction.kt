@@ -1,8 +1,4 @@
-package com.example.moneyhub.data.model
-
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+package com.example.moneyhub.model
 
 data class Transaction(
     val tid: String = "",           // 내역/예산 ID

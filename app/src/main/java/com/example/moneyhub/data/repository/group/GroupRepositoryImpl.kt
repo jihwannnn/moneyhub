@@ -3,9 +3,9 @@ package com.example.moneyhub.data.repository.group
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.moneyhub.data.model.Group
-import com.example.moneyhub.data.model.Member
-import com.example.moneyhub.data.model.Role
+import com.example.moneyhub.model.Group
+import com.example.moneyhub.model.Member
+import com.example.moneyhub.model.Role
 
 class GroupRepositoryImpl : GroupRepository {
     private val auth = FirebaseAuth.getInstance()

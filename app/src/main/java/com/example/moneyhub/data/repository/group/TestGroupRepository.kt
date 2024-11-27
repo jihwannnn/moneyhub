@@ -1,9 +1,9 @@
 package com.example.moneyhub.data.repository.group
 
 
-import com.example.moneyhub.data.model.Group
-import com.example.moneyhub.data.model.Member
-import com.example.moneyhub.data.model.Role
+import com.example.moneyhub.model.Group
+import com.example.moneyhub.model.Member
+import com.example.moneyhub.model.Role
 import javax.inject.Inject
 
 class TestGroupRepository @Inject constructor() : GroupRepository {

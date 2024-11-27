@@ -2,8 +2,8 @@ package com.example.moneyhub.data.repository.board
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.moneyhub.data.model.Comment
-import com.example.moneyhub.data.model.Post
+import com.example.moneyhub.model.Comment
+import com.example.moneyhub.model.Post
 
 class BoardRepositoryImpl : BoardRepository {
     private val auth = FirebaseAuth.getInstance()

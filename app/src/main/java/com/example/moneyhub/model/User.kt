@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.model
+package com.example.moneyhub.model
 
 class User(
     val uid: String = "",  // uid
@@ -12,7 +12,7 @@ class User(
     }
 
     companion object{
-        fun fromMap(map: Map<String, Any?>): User{
+        fun fromMap(map: Map<String, Any?>): User {
             return User(
                 uid = map["uid"] as? String ?: "",
                 groups = map["groups"] as? Map<String, String> ?: emptyMap()

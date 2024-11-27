@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.moneyhub.fragments.HomeFragment
 import com.example.moneyhub.adapter.BoardRecyclerAdapter
-import com.example.moneyhub.data.model.BoardItem
+import com.example.moneyhub.model.BoardItem
 import com.example.moneyhub.databinding.FragmentBoardBinding
 import java.time.LocalDateTime
 

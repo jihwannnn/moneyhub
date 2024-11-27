@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.adapter.TransactionRecyclerAdapter
-import com.example.moneyhub.data.model.TransactionRecyclerDataClass
+import com.example.moneyhub.model.TransactionRecyclerDataClass
 import com.example.moneyhub.databinding.FragmentCalendarBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
