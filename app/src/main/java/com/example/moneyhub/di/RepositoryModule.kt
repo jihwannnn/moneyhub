@@ -1,7 +1,8 @@
 package com.example.moneyhub.di
 
-import com.example.moneyhub.data.repository.SignUpRepository
-import com.example.moneyhub.data.repository.TestSignUpRepository
+
+import com.example.moneyhub.data.repository.AuthRepository
+import com.example.moneyhub.data.repository.TestAuthRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,6 +15,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindSignUpRepository(
-        signUpRepository: TestSignUpRepository
-    ): SignUpRepository
+        signUpRepository: TestAuthRepository
+    ): AuthRepository
 }

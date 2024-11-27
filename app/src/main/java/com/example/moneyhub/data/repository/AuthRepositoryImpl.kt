@@ -1,15 +1,14 @@
 package com.example.moneyhub.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.tasks.await
 
-// data/repository/SignUpRepositoryImpl.kt
+// data/repository/AuthRepositoryImpl.kt
 // sign up repoImpl
 
-class SignUpRepositoryImpl : SignUpRepository {
+class AuthRepositoryImpl : AuthRepository {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
@@ -41,5 +40,21 @@ class SignUpRepositoryImpl : SignUpRepository {
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun signIn(
+        email: String,
+        password: String
+    ): Result<Unit> {
+        TODO()
+    }
+    override suspend fun signOut(): Result<Unit> {
+        TODO()
+    }
+    override suspend fun deleteAccount(): Result<Unit> {
+        TODO()
+    }
+    override suspend fun getCurrentUser(): String? { // uid 반환
+        TODO()
     }
 }

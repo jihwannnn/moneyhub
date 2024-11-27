@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.common.UiState
-import com.example.moneyhub.data.repository.SignUpRepository
+import com.example.moneyhub.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val repository: SignUpRepository,
+    private val repository: AuthRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
