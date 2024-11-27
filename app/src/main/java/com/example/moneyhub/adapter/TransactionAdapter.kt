@@ -8,16 +8,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
-import com.example.moneyhub.data.model.TransactionRecyclerDataClass
+import com.example.moneyhub.data.model.TransactionItem
 import java.util.Calendar
 import java.util.Locale
 
-class TransactionRecyclerAdapter(
-    private val items: List<TransactionRecyclerDataClass>,
+class TransactionAdapter(
+    private val items: List<TransactionItem>,
     private val isForBudget: Boolean,
     private val isForCalendar: Boolean = false,  // 새로운 파라미터 추가, 기본값은 false
     private val onItemClick: () -> Unit = {}
-) : RecyclerView.Adapter<TransactionRecyclerAdapter.TransactionViewHolder>() {
+) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     // ViewHolder: 아이템 뷰를 저장하는 클래스
     inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

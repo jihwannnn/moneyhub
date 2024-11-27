@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.CameraActivity
-import com.example.moneyhub.adapter.TransactionRecyclerAdapter
+import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.data.model.TransactionRecyclerDataClass
 import com.example.moneyhub.databinding.FragmentBudgetBinding
 
@@ -27,7 +27,7 @@ class BudgetFragment : Fragment() {
     private var param2: String? = null
     lateinit var binding: FragmentBudgetBinding
 
-    private lateinit var recyclerViewAdapter: TransactionRecyclerAdapter
+    private lateinit var recyclerViewAdapter: TransactionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,7 +167,7 @@ class BudgetFragment : Fragment() {
 
 
 // 클릭 리스너를 람다로 전달
-        recyclerViewAdapter = TransactionRecyclerAdapter(budgetData, isForBudget = true) {
+        recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) {
             // CameraActivity로 이동
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivity(intent)
