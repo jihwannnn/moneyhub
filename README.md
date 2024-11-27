@@ -9,37 +9,48 @@ com/
 └── example/
     └── moneyhub/
         ├── activity/
+        │   │
         │   ├── login/
         │   │   ├── LoginActivity.kt
         │   │   └── LoginViewModel.kt
+        │   │
         │   ├── signup/
         │   │   ├── SignUpActivity.kt
         │   │   └── SignUpViewModel.kt
+        │   │
         │   ├── main/
         │   │   ├── MainActivity.kt
         │   │   └── MainViewModel.kt
+        │   │
         │   ├── mypage/
         │   │   ├── MyPageActivity.kt
         │   │   └── MyPageViewModel.kt
+        │   │
         │   ├── board/
         │   │   ├── PostOnBoardActivity.kt
         │   │   └── PostOnBoardViewModel.kt
+        │   │
         │   ├── create/
         │   │   ├── CreateActivity.kt
         │   │   └── CreateViewModel.kt
+        │   │
         │   ├── camera/
         │   │   ├── CameraActivity.kt
         │   │   └── CameraViewModel.kt
+        │   │
         │   └── register/
         │       ├── RegisterDetailsActivity.kt
         │       └── RegisterDetailsViewModel.kt
+        │
         ├── adapter/
         │   ├── BoardRecyclerAdapter.kt
         │   ├── HomePagerAdapter.kt
         │   ├── MemberAdapter.kt
         │   └── TransactionRecyclerAdapter.kt
+        │
         ├── common/
         │   └── UiState.kt
+        │
         ├── data/
         │   ├── model/
         │   │   ├── Post.kt
@@ -49,25 +60,31 @@ com/
         │   │   ├── Role.kt (enum)
         │   │   ├── Transaction.kt
         │   │   └── User.kt
+        │   │
         │   └── repository/
         │       ├── auth/
         │       │   ├── AuthRepository.kt
         │       │   ├── AuthRepositoryImpl.kt
         │       │   └── TestAuthRepository.kt
+        │       │
         │       ├── group/
         │       │   ├── GroupRepository.kt
         │       │   ├── GroupRepositoryImpl.kt
         │       │   └── TestGroupRepository.kt
+        │       │
         │       ├── board/
         │       │   ├── BoardRepository.kt
         │       │   ├── BoardRepositoryImpl.kt
         │       │   └── TestBoardRepository.kt
+        │       │
         │       └── transcation/
         │           ├── TransactionRepository.kt
         │           ├── TransactionRepositoryImpl.kt
         │           └── TestTransactionRepository.kt
+        │
         ├── di/
         │   └── RepositoryModule.kt
+        │
         ├── fragments/
         │   ├── AnalysisFragment.kt
         │   ├── BoardFragment.kt
@@ -76,9 +93,11 @@ com/
         │   ├── HistoryFragment.kt
         │   ├── HomeFragment.kt
         │   └── MembersFragment.kt
+        │
         └── ui/
             ├── customs/
             │   └── CustomGreyFormView.kt
+            │
             └── theme/
                 ├── Color.kt
                 ├── Theme.kt
