@@ -1,6 +1,6 @@
 package com.example.moneyhub.model
 
-// 현재 사용자 정보 클래스
+// jh 현재 사용자 정보, 액티비티간에 전달될 클래스
 data class CurrentUser (
     val id: String = "",        // uid
     val name: String = "",    // 이름

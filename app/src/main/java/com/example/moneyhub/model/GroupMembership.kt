@@ -1,5 +1,6 @@
 package com.example.moneyhub.model
 
+// jh 그룹의 멤버들 정보 (role 포함)
 data class GroupMembership(
     val uid: String = "",        // 사용자 ID
     val gid: String = "",       // 그룹 ID

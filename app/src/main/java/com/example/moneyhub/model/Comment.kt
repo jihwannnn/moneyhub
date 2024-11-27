@@ -1,5 +1,6 @@
 package com.example.moneyhub.model
 
+// jh 댓글 정보
 data class Comment(
     val cid: String = "",           // 댓글 ID
     val pid: String = "",           // 게시글 ID

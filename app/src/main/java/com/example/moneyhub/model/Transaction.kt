@@ -1,5 +1,6 @@
 package com.example.moneyhub.model
 
+// 내역 및 예산에 쓸 클래스, 구분은 verified로 할 예정
 data class Transaction(
     val tid: String = "",           // 내역/예산 ID
     val gid: String = "",           // 그룹 ID

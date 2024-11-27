@@ -1,5 +1,6 @@
 package com.example.moneyhub.model
 
+// jh 그룹 기본 정보
 data class Group(
     val gid: String = "",           // 그룹 ID
     val name: String = "",          // 그룹 이름

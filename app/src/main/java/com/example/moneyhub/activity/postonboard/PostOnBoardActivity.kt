@@ -11,24 +11,20 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityPostOnBoardBinding
 import android.net.Uri
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.example.moneyhub.common.UiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PostOnBoardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostOnBoardBinding
     private val viewModel: PostOnBoardViewModel by viewModels()
+    private var imageUri = ""
 
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let { viewModel.updateImageUri(it.toString()) }
+            imageUri = uri?.toString() ?: ""
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,23 +57,17 @@ class PostOnBoardActivity : AppCompatActivity() {
                 pickImage.launch("image/*")
             }
 
-            // 제목 및 내용 업데이트
-            etTitle.doOnTextChanged { text, _, _, _ ->
-                viewModel?.updateTitle(text?.toString() ?: "")
-            }
-
-            // 제목 및 내용 업데이트
-            etContent.doOnTextChanged { text, _, _, _ ->
-                viewModel?.updateContent(text?.toString() ?: "")
-            }
 
             // 게시 버튼
             customButtonIncludePost.customButton.setOnClickListener {
                 // Example authorId and authorName. Replace with actual user data.
                 viewModel?.post(
+                    title = etTitle.text.toString(),
+                    content = etContent.text.toString(),
                     authorId = "user123",
                     authorName = "John Doe",
-                    groupId = "group456"
+                    groupId = "group456",
+                    imageUri = imageUri
                 )
             }
         }
@@ -85,35 +75,15 @@ class PostOnBoardActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         // UI 상태 관찰
-        viewModel.uiState
-            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { state ->
-                when (state) {
-                    UiState.LOADING -> showLoading()
-                    UiState.SUCCESS -> handleSuccess()
-                    UiState.ERROR -> handleError()
-                    else -> Unit
+        lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                when {
+                    state.isLoading -> showLoading()
+                    state.isSuccess -> handleSuccess()
+                    state.error != null -> handleError(state.error)
                 }
             }
-            .launchIn(lifecycleScope)
-
-        // 에러 메시지 관찰
-        viewModel.errorMessage
-            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { message ->
-                message?.let {
-                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                }
-            }
-            .launchIn(lifecycleScope)
-
-        // 이미지 미리보기 업데이트
-        viewModel.imageUri
-            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { uri ->
-                binding.ivPreview.setImageURI(uri?.let { Uri.parse(it) })
-            }
-            .launchIn(lifecycleScope)
+        }
     }
 
     private fun showLoading() {
@@ -125,7 +95,7 @@ class PostOnBoardActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun handleError() {
-        Toast.makeText(this, "게시물 업로드 실패.", Toast.LENGTH_SHORT).show()
+    private fun handleError(error: String?) {
+        Toast.makeText(this, error ?: "게시물 업로드 실패.", Toast.LENGTH_SHORT).show()
     }
 }

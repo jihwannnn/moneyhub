@@ -4,10 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.common.UiState
-import com.example.moneyhub.data.model.Post
+import com.example.moneyhub.model.Post
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,70 +20,66 @@ class PostOnBoardViewModel @Inject constructor(
 ) : ViewModel() {
 
     // UI state
-    private val _uiState = MutableStateFlow(UiState.INITIAL)
+    private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage = _errorMessage.asStateFlow()
 
-    // Form States
-    private val _title = savedStateHandle.getStateFlow("title", "")
-    val title = _title
 
-    private val _content = savedStateHandle.getStateFlow("content", "")
-    val content = _content
-
-    private val _imageUri = savedStateHandle.getStateFlow<String?>("imageUri", null)
-    val imageUri = _imageUri
-
-    // Update Functions
-    fun updateTitle(title: String) {
-        savedStateHandle["title"] = title
-    }
-
-    fun updateContent(content: String) {
-        savedStateHandle["content"] = content
-    }
-
-    fun updateImageUri(value: String?) {
-        savedStateHandle["imageUri"] = value
-    }
 
     // Post submission logic
-    fun post(authorId: String, authorName: String, groupId: String) {
-        if (!validateInputs()) return
+    fun post(title: String, content: String, authorId: String, authorName: String, groupId: String, imageUri: String) {
+        if (!validateInputs(title, content)) return
 
         viewModelScope.launch {
-            _uiState.value = UiState.LOADING
+            _uiState.update { it.copy(isLoading = true) }
 
             val post = Post(
                 pid = System.currentTimeMillis().toString(), // Unique ID
                 gid = groupId,
-                title = title.value,
+                title = title,
+                content = content,
                 authorId = authorId,
                 authorName = authorName,
-                imageUrl = imageUri.value,
+                imageUrl = imageUri,
                 commentCount = 0,
                 createdAt = System.currentTimeMillis()
             )
 
-            repository.createPost(post).onSuccess {
-                _uiState.value = UiState.SUCCESS
-            }.onFailure { error ->
-                _uiState.value = UiState.ERROR
-                _errorMessage.value = error.message
+            try{
+                repository.createPost(post).fold(
+                    onSuccess = {
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            isSuccess = true,
+                            error = null
+                        ) }
+                    },
+                    onFailure = { throwable ->
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            error = throwable.message
+                        ) }
+                    }
+                )
+            } catch (e: Exception) {
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    error = e.message
+                ) }
             }
+
+
         }
     }
 
-    private fun validateInputs(): Boolean = when {
-        title.value.isBlank() -> {
-            _errorMessage.value = "제목을 입력해주세요"
+    private fun validateInputs(title: String, content: String): Boolean = when {
+        title.isBlank() -> {
+            _uiState.update { it.copy(error = "제목을 입력해주세요" ) }
             false
         }
 
-        content.value.isBlank() -> {
-            _errorMessage.value = "내용을 입력해주세요"
+        content.isBlank() -> {
+            _uiState.update { it.copy(error = "내용을 입력해주세요" ) }
             false
         }
 

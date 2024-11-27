@@ -1,5 +1,6 @@
 package com.example.moneyhub.model
 
+// 유저가 속해있는 그룹에 대한 정보
 class User(
     val uid: String = "",  // uid
     val groups: Map<String, String> = emptyMap()  // 유저가 가입한 그룹 map<id, name>

@@ -1,6 +1,6 @@
 package com.example.moneyhub.activity.postonboard
 
-import com.example.moneyhub.data.model.Post
+import com.example.moneyhub.model.Post
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
