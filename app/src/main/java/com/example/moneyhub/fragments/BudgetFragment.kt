@@ -168,7 +168,7 @@ class BudgetFragment : Fragment() {
 
 // 클릭 리스너를 람다로 전달
         recyclerViewAdapter = TransactionRecyclerAdapter(budgetData, isForBudget = true) {
-            // CameraActivity로 이동
+            // CameraActiDLvity로 이동
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivity(intent)
         }
