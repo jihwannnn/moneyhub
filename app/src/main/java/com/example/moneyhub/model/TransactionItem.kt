@@ -1,6 +1,6 @@
 package com.example.moneyhub.model
 
-data class TransactionRecyclerDataClass(
+data class TransactionItem(
     val date: String,        // 날짜 (예: "2024-11-19")
 
     val icon: Int,           // 아이콘 이미지 리소스 ID (예: R.drawable.icon_image

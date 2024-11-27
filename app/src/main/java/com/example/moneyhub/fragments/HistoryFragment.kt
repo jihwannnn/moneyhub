@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
-import com.example.moneyhub.adapter.TransactionRecyclerAdapter
-import com.example.moneyhub.model.TransactionRecyclerDataClass
+import com.example.moneyhub.adapter.TransactionAdapter
+import com.example.moneyhub.data.model.TransactionItem
 import com.example.moneyhub.databinding.FragmentHistoryBinding
 
 private const val ARG_PARAM1 = "param1"
@@ -27,115 +27,115 @@ class HistoryFragment : Fragment() {
     lateinit var binding: FragmentHistoryBinding
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: TransactionRecyclerAdapter
+    private lateinit var adapter: TransactionAdapter
 
     private val historyData = listOf(
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "간식 사업 지출",
             "학생 복지 |",
             -120000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "희진이 간식비",
             "희진이 복지 |",
             -7700.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "지환이 노래방",
             "지환이 복지 |",
             -10000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "정기 회비",
             "그 외 category |",
             100000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
             "그 외 category |",
             -1000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
@@ -164,7 +164,7 @@ class HistoryFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // adapter setting
-        adapter = TransactionRecyclerAdapter(historyData, false)
+        adapter = TransactionAdapter(historyData, false)
         recyclerView.adapter = adapter
 
         return binding.root

@@ -3,6 +3,8 @@ package com.example.moneyhub.di
 
 import com.example.moneyhub.data.repository.auth.AuthRepository
 import com.example.moneyhub.data.repository.auth.TestAuthRepository
+import com.example.moneyhub.activity.postonboard.PostRepository
+import com.example.moneyhub.activity.postonboard.PostRepository1
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -18,4 +20,10 @@ abstract class RepositoryModule {
     abstract fun bindAuthRepository(
         authRepository: TestAuthRepository
     ): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPostRepository(
+        postRepository: PostRepository1
+    ): PostRepository
 }

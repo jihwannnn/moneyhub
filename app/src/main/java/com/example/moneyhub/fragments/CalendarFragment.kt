@@ -7,19 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
-import com.example.moneyhub.adapter.TransactionRecyclerAdapter
-import com.example.moneyhub.model.TransactionRecyclerDataClass
+import com.example.moneyhub.adapter.TransactionAdapter
+import com.example.moneyhub.data.model.TransactionItem
 import com.example.moneyhub.databinding.FragmentCalendarBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CalendarFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private lateinit var binding: FragmentCalendarBinding
-    private lateinit var adapter: TransactionRecyclerAdapter
+    private lateinit var adapter: TransactionAdapter
 
     // 캘린더 샘플 데이터
     private val calendarData = listOf(
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-01",
             icon = R.drawable.icon_food_category,
             title = "간식 사업 지출",
@@ -27,7 +27,7 @@ class CalendarFragment : Fragment() {
             transaction = -120000.0
         ),
 
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-01",
             icon = R.drawable.icon_food_category,
             title = "학생 회비",
@@ -35,14 +35,14 @@ class CalendarFragment : Fragment() {
             transaction = 220000.0
         ),
 
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-04",
             icon = R.drawable.icon_food_category,
             title = "희진이 간식비",
             category = "희진이 복지",
             transaction = -7700.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-08",
             icon = R.drawable.icon_food_category,
             title = "지환이 노래방",
@@ -50,21 +50,21 @@ class CalendarFragment : Fragment() {
             transaction = -10000.0
         ),
 
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-10",
             icon = R.drawable.icon_food_category,
             title = "정기 회비",
             category = "수입",
             transaction = 100000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-18",
             icon = R.drawable.icon_food_category,
             title = "지환이 노래방",
             category = "지환이 복지",
             transaction = -10000.0
         ),
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-21",
             icon = R.drawable.icon_food_category,
             title = "지환이 노래방",
@@ -72,7 +72,7 @@ class CalendarFragment : Fragment() {
             transaction = -10000.0
         ),
 
-        TransactionRecyclerDataClass(
+        TransactionItem(
             date = "2024-11-28",
             icon = R.drawable.icon_food_category,
             title = "지환이 노래방",
@@ -98,7 +98,7 @@ class CalendarFragment : Fragment() {
 
     // RecyclerView 초기화 및 설정
     private fun setupRecyclerView() {
-        adapter = TransactionRecyclerAdapter(calendarData, true, true)
+        adapter = TransactionAdapter(calendarData, true, true)
         binding.transactionList.apply {
             adapter = this@CalendarFragment.adapter
             layoutManager = LinearLayoutManager(context)
@@ -123,7 +123,7 @@ class CalendarFragment : Fragment() {
 
             // 선택된 날짜의 거래 내역 필터링
             val transactionsForDate = calendarData.filter { it.date == selectedDate }
-            adapter = TransactionRecyclerAdapter(transactionsForDate, true, true)
+            adapter = TransactionAdapter(transactionsForDate, true, true)
             binding.transactionList.adapter = adapter
 
             // 선택된 날짜의 수입/지출 표시

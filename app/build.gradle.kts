@@ -38,6 +38,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        dataBinding = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -112,7 +113,6 @@ dependencies {
     // AndroidX Lifecycle
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.runtime)
-
 
 
 

@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.CameraActivity
-import com.example.moneyhub.adapter.TransactionRecyclerAdapter
-import com.example.moneyhub.model.TransactionRecyclerDataClass
+import com.example.moneyhub.adapter.TransactionAdapter
+import com.example.moneyhub.data.model.TransactionItem
 import com.example.moneyhub.databinding.FragmentBudgetBinding
 
 private const val ARG_PARAM1 = "param1"
@@ -27,7 +27,7 @@ class BudgetFragment : Fragment() {
     private var param2: String? = null
     lateinit var binding: FragmentBudgetBinding
 
-    private lateinit var recyclerViewAdapter: TransactionRecyclerAdapter
+    private lateinit var recyclerViewAdapter: TransactionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,112 +51,112 @@ class BudgetFragment : Fragment() {
     private fun initRecyclerView() {
         // 더미 데이터 생성
         val budgetData = listOf(
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-01",
                 R.drawable.icon_food_category,
                 "간식 사업 지출 (예정)",
                 "학생 복지 |",
                 -120000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-02",
                 R.drawable.icon_food_category,
                 "희진이 간식비 (예정)",
                 "희진이 복지 |",
                 -7700.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-03",
                 R.drawable.icon_food_category,
                 "지환이 지각비 (예정)",
                 "지환이 복지 |",
                 10000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-03",
                 R.drawable.icon_food_category,
                 "그 외 Title (예정)",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-03",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-05",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-10",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-10",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-10",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-11",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-12",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-13",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-14",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-15",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-20",
                 R.drawable.icon_food_category,
                 "그 외 Title",
                 "그 외 category |",
                 -1000.0
             ),
-            TransactionRecyclerDataClass(
+            TransactionItem(
                 "2024-11-20",
                 R.drawable.icon_food_category,
                 "그 외 Title",
@@ -167,7 +167,7 @@ class BudgetFragment : Fragment() {
 
 
 // 클릭 리스너를 람다로 전달
-        recyclerViewAdapter = TransactionRecyclerAdapter(budgetData, isForBudget = true) {
+        recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) {
             // CameraActivity로 이동
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivity(intent)
