@@ -27,9 +27,33 @@ class RegisterDetailsActivity : AppCompatActivity() {
         binding = ActivityRegisterDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 전달받은 데이터 처리
+        getTransactionData()
+
         // UI 요소들 설정
         setupView()
         setupCategorySpinner()
+    }
+
+    // Intent로부터 데이터를 받아서 화면에 설정하는 함수
+    private fun getTransactionData() {
+        // Intent에서 데이터 가져오기
+        val date = intent.getStringExtra("date")
+        val title = intent.getStringExtra("title")
+        val category = intent.getStringExtra("category")
+        val amount = intent.getDoubleExtra("amount", 0.0)
+
+        // 가져온 데이터를 EditText에 설정
+        binding.apply {
+            detailTitle.setText(title)
+            detailAmount.setText(amount.toString())
+
+            // 카테고리에서 | 기호 이전의 실제 카테고리명만 추출
+            val cleanCategory = category?.split("|")?.get(0)?.trim()
+            // 해당하는 카테고리의 위치를 찾아 스피너에서 선택
+            val categoryPosition = categories.indexOfFirst { it == cleanCategory }.takeIf { it != -1 } ?: 0
+            categorySpinner.setSelection(categoryPosition)
+        }
     }
 
     private fun setupView() {
