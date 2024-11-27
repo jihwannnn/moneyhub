@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.repository
+package com.example.moneyhub.data.repository.auth
 
 interface AuthRepository {
     suspend fun signIn(email: String, password: String): Result<Unit>

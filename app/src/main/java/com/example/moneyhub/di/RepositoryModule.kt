@@ -1,8 +1,8 @@
 package com.example.moneyhub.di
 
 
-import com.example.moneyhub.data.repository.AuthRepository
-import com.example.moneyhub.data.repository.TestAuthRepository
+import com.example.moneyhub.data.repository.auth.AuthRepository
+import com.example.moneyhub.data.repository.auth.TestAuthRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

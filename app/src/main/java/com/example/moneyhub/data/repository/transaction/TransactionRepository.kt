@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.repository
+package com.example.moneyhub.data.repository.transaction
 
 import com.example.moneyhub.data.model.Transaction
 

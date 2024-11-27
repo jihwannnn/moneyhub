@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.repository
+package com.example.moneyhub.data.repository.auth
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

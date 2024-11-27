@@ -50,18 +50,22 @@ com/
         │   │   ├── Transaction.kt
         │   │   └── User.kt
         │   └── repository/
-        │       ├── AuthRepository.kt
-        │       ├── AuthRepositoryImpl.kt
-        │       ├── TestAuthRepository.kt
-        │       ├── GroupRepository.kt
-        │       ├── GroupRepositoryImpl.kt
-        │       ├── TestGroupRepository.kt
-        │       ├── TransactionRepository.kt
-        │       ├── TransactionRepositoryImpl.kt
-        │       ├── TestTransactionRepository.kt
-        │       ├── BoardRepository.kt
-        │       ├── BoardRepositoryImpl.kt
-        │       └── TestBoardRepository.kt
+        │       ├── auth/
+        │       │   ├── AuthRepository.kt
+        │       │   ├── AuthRepositoryImpl.kt
+        │       │   └── TestAuthRepository.kt
+        │       ├── group/
+        │       │   ├── GroupRepository.kt
+        │       │   ├── GroupRepositoryImpl.kt
+        │       │   └── TestGroupRepository.kt
+        │       ├── board/
+        │       │   ├── BoardRepository.kt
+        │       │   ├── BoardRepositoryImpl.kt
+        │       │   └── TestBoardRepository.kt
+        │       └── transcation/
+        │           ├── TransactionRepository.kt
+        │           ├── TransactionRepositoryImpl.kt
+        │           └── TestTransactionRepository.kt
         ├── di/
         │   └── RepositoryModule.kt
         ├── fragments/
