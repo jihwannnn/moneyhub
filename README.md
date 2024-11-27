@@ -97,7 +97,7 @@ com/
 │       ├── memberCount: Number
 │       └── createdAt: Timestamp
 │
-├── group_members/ # 그룹 멤버 데이터
+├── members_group/ # 그룹 멤버 데이터
 │   └── {gid}/
 │       └── members/
 │           └── {uid}/
@@ -106,39 +106,43 @@ com/
 │               ├── role: String (OWNER/MANAGER/REGULAR)
 │               └── joinedAt: Timestamp
 │
-├── transactions/ # 내역/예산 데이터
+├── transactions_group/ # 내역/예산 데이터
 │   └── {gid}/
-│       └── {tid}/
-│           ├── name: String
-│           ├── category: String
-│           ├── type: Boolean (수입:true/지출:false)
-│           ├── amount: Number
-│           ├── content: String
-│           ├── payDateEx: Timestamp (예상 결제일)
-│           ├── payDate: Timestamp (실제 결제일)
-│           ├── verified: Boolean (내역:true/예산:false)
-│           ├── receiptUrl: String?
-│           ├── authorId: String
-│           ├── authorName: String
-│           └── createdAt: Timestamp
+│       └── transactions/
+│           └── {tid}/
+│               ├── name: String
+│               ├── category: String
+│               ├── type: Boolean (수입:true/지출:false)
+│               ├── amount: Number
+│               ├── content: String
+│               ├── payDateEx: Timestamp (예상 결제일)
+│               ├── payDate: Timestamp (실제 결제일)
+│               ├── verified: Boolean (내역:true/예산:false)
+│               ├── receiptUrl: String?
+│               ├── authorId: String
+│               ├── authorName: String
+│               └── createdAt: Timestamp
 │
-├── posts/ # 게시글 데이터
+├── posts_group/ # 게시글 데이터
 │   └── {gid}/
-│       └── {pid}/
-│           ├── title: String
-│           ├── content: String
-│           ├── authorId: String
-│           ├── authorName: String
-│           ├── commentCount: Number
-│           └── createdAt: Timestamp
+│       └── posts/
+│           └── {pid}/
+│               ├── title: String
+│               ├── content: String
+│               ├── authorId: String
+│               ├── authorName: String
+│               ├── commentCount: Number
+│               └── createdAt: Timestamp
 │
-└── comments/ # 댓글 데이터
+└── comments_group/ # 댓글 데이터
     └── {gid}/
-        └── {pid}/
-            └── {cid}/
-                ├── content: String
-                ├── authorId: String
-                ├── authorName: String
-                ├── replyTo: String?
-                └── createdAt: Timestamp
+        └── comments_post/
+            └── {pid}/
+                └── comments/
+                    └── {cid}/
+                        ├── content: String
+                        ├── authorId: String
+                        ├── authorName: String
+                        ├── replyTo: String?
+                        └── createdAt: Timestamp
 ```
