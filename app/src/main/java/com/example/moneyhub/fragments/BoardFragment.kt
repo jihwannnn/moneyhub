@@ -1,10 +1,12 @@
 package com.example.moneyhub.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.moneyhub.activity.postonboard.PostOnBoardActivity
 import com.example.moneyhub.fragments.HomeFragment
 import com.example.moneyhub.adapter.BoardRecyclerAdapter
 import com.example.moneyhub.data.model.BoardItem
@@ -40,6 +42,11 @@ class BoardFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentBoardBinding.inflate(inflater, container, false)
+
+        binding.fabPost.setOnClickListener{
+            val intent = Intent(context, PostOnBoardActivity::class.java)
+            startActivity(intent)
+        }
 
         val postList = listOf(
             BoardItem(
