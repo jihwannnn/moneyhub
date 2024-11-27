@@ -39,7 +39,16 @@ class MyPageActivity : AppCompatActivity() {
             root.setBackgroundResource(R.drawable.yellow)
             btnText.apply {
                 text = "정보수정"
-                setTextColor(ContextCompat.getColor(context, R.color.white))
+//                setTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+        }
+
+        // 로그아웃 버튼
+        with(binding.btnLogOut) {
+            root.setBackgroundResource(R.drawable.gray)
+            btnText.apply {
+                text = "로그아웃"
+//                setTextColor(ContextCompat.getColor(context, R.color.white))
             }
         }
 
@@ -48,7 +57,7 @@ class MyPageActivity : AppCompatActivity() {
             root.setBackgroundResource(R.drawable.emerald)
             btnText.apply {
                 text = "방만들기"
-                setTextColor(ContextCompat.getColor(context, R.color.white))
+//                setTextColor(ContextCompat.getColor(context, R.color.white))
             }
         }
     }

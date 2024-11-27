@@ -18,6 +18,12 @@ import com.example.moneyhub.databinding.ActivityCameraBinding
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
 
+    // 거래 내역 데이터를 저장할 변수들
+    private var date: String? = null
+    private var title: String? = null
+    private var category: String? = null
+    private var amount: Double = 0.0
+
     // 갤러리 실행 결과 처리
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -38,8 +44,27 @@ class CameraActivity : AppCompatActivity() {
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Intent로부터 데이터 받기
+        getTransactionData()
+
         setupButtons()
         setupImageContainer()
+    }
+
+    private fun getTransactionData() {
+        // Intent에서 데이터 추출
+        date = intent.getStringExtra("date")
+        title = intent.getStringExtra("title")
+        category = intent.getStringExtra("category")
+        amount = intent.getDoubleExtra("amount", 0.0)
+
+        // 디버깅 용도: 받은 데이터를 화면에 표시
+        binding.tvTransactionInfo.text = """
+            날짜: $date
+            제목: $title
+            카테고리: $category
+            금액: $amount
+        """.trimIndent()
     }
 
     private fun setupButtons() {
@@ -57,7 +82,14 @@ class CameraActivity : AppCompatActivity() {
             root.setBackgroundResource(R.drawable.emerald)
             linkBtnText.text = "Register details"
             root.setOnClickListener {
-                startActivity(Intent(this@CameraActivity, RegisterDetailsActivity::class.java))
+                // RegisterDetailsActivity로 데이터 전달
+                val intent = Intent(this@CameraActivity, RegisterDetailsActivity::class.java).apply {
+                    putExtra("date", date)
+                    putExtra("title", title)
+                    putExtra("category", category)
+                    putExtra("amount", amount)
+                }
+                startActivity(intent)
             }
         }
     }

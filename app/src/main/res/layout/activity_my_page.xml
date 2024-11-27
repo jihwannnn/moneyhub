@@ -34,13 +34,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivProfile" />
 
+
     <include
         android:id="@+id/btnEditInfo"
         layout="@layout/custom_button"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/btnLogOut"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="15dp"
         app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+    <include
+        android:id="@+id/btnLogOut"
+        layout="@layout/custom_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnEditInfo"
+        android:layout_margin="15dp"
+        app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+
+
 
     <EditText
         android:id="@+id/etMeetingLink"
@@ -53,7 +69,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnEditInfo" />
+        app:layout_constraintTop_toBottomOf="@id/btnLogOut" />
 
     <include
         android:id="@+id/btnCreateRoom"
