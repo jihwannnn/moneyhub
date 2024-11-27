@@ -124,7 +124,6 @@ com/
 │   └── {gid}/
 │       └── members/
 │           └── {uid}/
-│               ├── userId: String
 │               ├── userName: String
 │               ├── role: String (OWNER/MANAGER/REGULAR)
 │               └── joinedAt: Timestamp
@@ -135,12 +134,12 @@ com/
 │           └── {tid}/
 │               ├── name: String
 │               ├── category: String
-│               ├── type: Boolean (수입:true/지출:false)
+│               ├── type: Boolean
 │               ├── amount: Number
 │               ├── content: String
-│               ├── payDateEx: Timestamp (예상 결제일)
-│               ├── payDate: Timestamp (실제 결제일)
-│               ├── verified: Boolean (내역:true/예산:false)
+│               ├── payDateEx: Timestamp
+│               ├── payDate: Timestamp
+│               ├── verified: Boolean
 │               ├── receiptUrl: String?
 │               ├── authorId: String
 │               ├── authorName: String
@@ -154,6 +153,7 @@ com/
 │               ├── content: String
 │               ├── authorId: String
 │               ├── authorName: String
+│               ├── imageUrl: String?
 │               ├── commentCount: Number
 │               └── createdAt: Timestamp
 │
