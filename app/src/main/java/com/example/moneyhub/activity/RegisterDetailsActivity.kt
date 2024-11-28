@@ -1,6 +1,14 @@
 package com.example.moneyhub.activity
 
+// 현재 시스템의 날짜와 시간을 가져오는 클래스 --> 자동으로 날짜를 입력해 거래 내역 생성을 하기 위해
+import java.util.Date
+
+// 지역 설정을 처리하는 클래스, 날짜 형식이나 숫자 표기 등의 지역화에 사용한다.
+import java.util.Locale
+
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,6 +17,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityRegisterDetailsBinding
+import com.example.moneyhub.model.TransactionItem
 
 class RegisterDetailsActivity : AppCompatActivity() {
     // ViewBinding 객체를 담을 변수
@@ -67,6 +76,47 @@ class RegisterDetailsActivity : AppCompatActivity() {
         binding.btnAddCategory.setOnClickListener {
             showAddCategoryDialog()  // 카테고리 추가 다이얼로그 표시
         }
+
+        // 거래 내역 상세 등록 페이지에서 register 버튼을 누르면, 자동으로 등록되도록 클릭 리스너 설정
+        binding.btnRegister.setOnClickListener{
+            // 유저가 입력한 값을 가져온다
+            // TransactionItem Data Class에 맞게
+            val title = binding.detailTitle.text.toString()
+            val amount = binding.detailAmount.text.toString().toDoubleOrNull() ?:0.0
+            val category = binding.categorySpinner.selectedItem.toString()
+
+            // 현재 시스템의 날짜를 "yyyy-MM-dd" 형식으로 자동 입력
+            val currentDate = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+            //TransactionItem 생성
+            val newTransaction = TransactionItem(
+                // 현재 시간을 id로 사용
+                id = System.currentTimeMillis(),
+                date = currentDate,
+                icon = R.drawable.icon_food_category,
+                title = title,
+                category = "$category |",
+                amount = amount
+            )
+
+            // 데이터를 BudgetFragement로 전달
+            val intent = Intent().apply{
+                putExtra("title",title)
+                putExtra("amount", amount)
+                putExtra("category",category)
+                putExtra("date", currentDate)
+            }
+            // 이전 액티비티인 BudgetFragement로 데이터를 전달하는 역할을 한다.
+            // Result.OK --> 작업이 성공적으로 완료되었음을 알림
+            // intent: 전달할 데이터를 담은 객체
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
+
+
+
+
+
     }
 
     private fun setupCategorySpinner() {
