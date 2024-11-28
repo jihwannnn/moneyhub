@@ -53,23 +53,21 @@ class CameraActivity : AppCompatActivity() {
 
     // view model에 옮겨야 할 것
     private fun getTransactionData() {
-        // Intent에서 거래 ID 가져오기
-        val transactionId = intent.getLongExtra("transaction_id", -1)
-        val date = intent.getStringExtra("transaction_date") ?: ""
-        val title = intent.getStringExtra("transaction_title") ?: ""
-        val category = intent.getStringExtra("transaction_category") ?: ""
-        val amount = intent.getDoubleExtra("transaction_amount", 0.0)
+        // 데이터 받기
+        date = intent.getStringExtra("transaction_date")
+        title = intent.getStringExtra("transaction_title")
+        category = intent.getStringExtra("transaction_category")
+        amount = intent.getDoubleExtra("transaction_amount", 0.0)
 
-
+        // 텍스트뷰 표시
         binding.tvTransactionInfo.text = """
-       거래 ID: $transactionId
+       거래 ID: ${intent.getLongExtra("transaction_id", -1)}
        날짜: $date 
        제목: $title
        카테고리: $category
        금액: $amount
    """.trimIndent()
     }
-
     private fun setupButtons() {
         // Open Camera 버튼 설정
         binding.btnOpenCamera.apply {
