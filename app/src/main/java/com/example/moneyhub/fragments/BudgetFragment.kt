@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.CameraActivity
+import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentBudgetBinding
 import com.example.moneyhub.model.TransactionItem
@@ -16,21 +17,15 @@ import com.example.moneyhub.model.TransactionItem
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BudgetFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BudgetFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var binding: FragmentBudgetBinding
-
+    private lateinit var binding: FragmentBudgetBinding
     private lateinit var recyclerViewAdapter: TransactionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadBudgets()
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -38,138 +33,44 @@ class BudgetFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = FragmentBudgetBinding.inflate(inflater, container, false)
-
         initRecyclerView()
+
+        // 거래 내역 + 버튼 리스너 추가
+        binding.btnAddBudget.setOnClickListener{
+            val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
+            startActivity(intent)
+        }
+
+
         return binding.root
     }
 
     private fun initRecyclerView() {
-        // 더미 데이터 생성
-        val budgetData = listOf(
-            TransactionItem(
-                "2024-11-01",
-                R.drawable.icon_food_category,
-                "간식 사업 지출 (예정)",
-                "학생 복지 |",
-                -120000.0
-            ),
-            TransactionItem(
-                "2024-11-02",
-                R.drawable.icon_food_category,
-                "희진이 간식비 (예정)",
-                "희진이 복지 |",
-                -7700.0
-            ),
-            TransactionItem(
-                "2024-11-03",
-                R.drawable.icon_food_category,
-                "지환이 지각비 (예정)",
-                "지환이 복지 |",
-                10000.0
-            ),
-            TransactionItem(
-                "2024-11-03",
-                R.drawable.icon_food_category,
-                "그 외 Title (예정)",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-03",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-05",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-10",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-10",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-10",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-11",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-12",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-13",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-14",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-15",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-20",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            ),
-            TransactionItem(
-                "2024-11-20",
-                R.drawable.icon_food_category,
-                "그 외 Title",
-                "그 외 category |",
-                -1000.0
-            )
+        val budgetData = mutableListOf(
+            TransactionItem(0, "2024-11-01", R.drawable.icon_food_category,
+                "간식 사업 지출 (예정)", "학생 복지 |", -120000.0),
+            TransactionItem(1, "2024-11-02", R.drawable.icon_food_category,
+                "희진이 간식비 (예정)", "희진이 복지 |", -7700.0),
+            TransactionItem(2, "2024-11-03", R.drawable.icon_food_category,
+                "지환이 지각비 (예정)", "지환이 복지 |", 10000.0),
+            TransactionItem(3, "2024-11-03", R.drawable.icon_food_category,
+                "그 외 Title (예정)", "그 외 category |", -1000.0)
         )
 
+        recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) { transactionItem ->
+            val intent = Intent(requireContext(), CameraActivity::class.java).apply {
+                putExtra("transaction_id", transactionItem.id) //id 전달
+                putExtra("transaction_date", transactionItem.date) //id 전달
+                putExtra("transaction_title", transactionItem.title) //id 전달
+                putExtra("transaction_category", transactionItem.category) //id 전달
+                putExtra("transaction_amount", transactionItem.amount) //id 전달
 
-// 클릭 리스너를 람다로 전달
-        recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) {
-            // CameraActivity로 이동
-            val intent = Intent(requireContext(), CameraActivity::class.java)
+            }
             startActivity(intent)
         }
 
@@ -177,19 +78,13 @@ class BudgetFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerViewAdapter
         }
+    }
 
+    private fun loadBudgets() {
+        // TODO: Firestore에서 예산 데이터 가져오기
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BudgetFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             BudgetFragment().apply {

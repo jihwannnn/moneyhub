@@ -1,5 +1,6 @@
 package com.example.moneyhub.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
+import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.model.TransactionItem
 import com.example.moneyhub.databinding.FragmentHistoryBinding
@@ -29,8 +31,9 @@ class HistoryFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TransactionAdapter
 
-    private val historyData = listOf(
+    private val historyData = mutableListOf(
         TransactionItem(
+            11,
             "2024-11-10",
             R.drawable.icon_food_category,
             "간식 사업 지출",
@@ -38,27 +41,7 @@ class HistoryFragment : Fragment() {
             -120000.0
         ),
         TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "희진이 간식비",
-            "희진이 복지 |",
-            -7700.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "지환이 노래방",
-            "지환이 복지 |",
-            -10000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "정기 회비",
-            "그 외 category |",
-            100000.0
-        ),
-        TransactionItem(
+            12,
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
@@ -66,76 +49,7 @@ class HistoryFragment : Fragment() {
             -1000.0
         ),
         TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
-        ),
-        TransactionItem(
+            13,
             "2024-11-10",
             R.drawable.icon_food_category,
             "그 외 Title",
@@ -166,6 +80,12 @@ class HistoryFragment : Fragment() {
         // adapter setting
         adapter = TransactionAdapter(historyData, false)
         recyclerView.adapter = adapter
+
+        // 버튼 클릭 리스너 추가
+        binding.btnAddHistory.setOnClickListener {
+            val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
+            startActivity(intent)
+        }
 
         return binding.root
     }

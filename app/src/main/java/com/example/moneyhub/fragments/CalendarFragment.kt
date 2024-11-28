@@ -20,64 +20,20 @@ class CalendarFragment : Fragment() {
     // 캘린더 샘플 데이터
     private val calendarData = listOf(
         TransactionItem(
-            date = "2024-11-01",
-            icon = R.drawable.icon_food_category,
-            title = "간식 사업 지출",
-            category = "학생 복지",
-            transaction = -120000.0
-        ),
-
-        TransactionItem(
-            date = "2024-11-01",
-            icon = R.drawable.icon_food_category,
-            title = "학생 회비",
-            category = "회비 납부",
-            transaction = 220000.0
-        ),
-
-        TransactionItem(
+            id = 31,
             date = "2024-11-04",
             icon = R.drawable.icon_food_category,
             title = "희진이 간식비",
             category = "희진이 복지",
-            transaction = -7700.0
+            amount = -7700.0
         ),
         TransactionItem(
+            id = 32,
             date = "2024-11-08",
             icon = R.drawable.icon_food_category,
             title = "지환이 노래방",
             category = "지환이 복지",
-            transaction = -10000.0
-        ),
-
-        TransactionItem(
-            date = "2024-11-10",
-            icon = R.drawable.icon_food_category,
-            title = "정기 회비",
-            category = "수입",
-            transaction = 100000.0
-        ),
-        TransactionItem(
-            date = "2024-11-18",
-            icon = R.drawable.icon_food_category,
-            title = "지환이 노래방",
-            category = "지환이 복지",
-            transaction = -10000.0
-        ),
-        TransactionItem(
-            date = "2024-11-21",
-            icon = R.drawable.icon_food_category,
-            title = "지환이 노래방",
-            category = "지환이 복지",
-            transaction = -10000.0
-        ),
-
-        TransactionItem(
-            date = "2024-11-28",
-            icon = R.drawable.icon_food_category,
-            title = "지환이 노래방",
-            category = "지환이 복지",
-            transaction = -10000.0
+            amount = -10000.0
         )
     )
 
@@ -111,10 +67,10 @@ class CalendarFragment : Fragment() {
         // 각 날짜의 수입/지출 총액 계산
         calendarData.forEach { transaction ->
             val currentPair = dailyTotals[transaction.date] ?: Pair(0.0, 0.0)
-            dailyTotals[transaction.date] = if (transaction.transaction > 0) {
-                Pair(currentPair.first + transaction.transaction, currentPair.second)
+            dailyTotals[transaction.date] = if (transaction.amount > 0) {
+                Pair(currentPair.first + transaction.amount, currentPair.second)
             } else {
-                Pair(currentPair.first, currentPair.second - transaction.transaction)
+                Pair(currentPair.first, currentPair.second - transaction.amount)
             }
         }
 
@@ -138,10 +94,10 @@ class CalendarFragment : Fragment() {
         var monthlyExpense = 0.0
 
         calendarData.forEach { transaction ->
-            if (transaction.transaction > 0) {
-                monthlyIncome += transaction.transaction
+            if (transaction.amount > 0) {
+                monthlyIncome += transaction.amount
             } else {
-                monthlyExpense += -transaction.transaction
+                monthlyExpense += -transaction.amount
             }
         }
 
