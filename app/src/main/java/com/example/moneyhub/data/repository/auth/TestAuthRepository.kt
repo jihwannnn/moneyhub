@@ -26,7 +26,8 @@ class TestAuthRepository @Inject constructor() : AuthRepository {
     override suspend fun deleteAccount(): Result<Unit> {
         return Result.success(Unit)
     }
-    override suspend fun getCurrentUser(): String? { // uid 반환
-        return ""
+    override suspend fun getCurrentUser(): Result<CurrentUser> {
+        val currentUser = CurrentUser()
+        return Result.success(currentUser)
     }
 }

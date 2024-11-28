@@ -3,19 +3,22 @@ package com.example.moneyhub.data.repository.group
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.moneyhub.model.Group
-import com.example.moneyhub.model.Member
+import com.example.moneyhub.model.Membership
 import com.example.moneyhub.model.Role
+import com.example.moneyhub.model.UserGroup
 
 class GroupRepositoryImpl : GroupRepository {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
-    override suspend fun createGroup(name: String): Result<String> {
+    override suspend fun createGroup(name: String): Result<Unit> {
         TODO()
     }
 
-    override suspend fun joinGroup(inviteCode: String): Result<Unit> {
+    override suspend fun joinGroup(
+        gid: String,
+        inviteCode: String
+    ): Result<Boolean> {
         TODO()
     }
 
@@ -23,27 +26,26 @@ class GroupRepositoryImpl : GroupRepository {
         TODO()
     }
 
-    override suspend fun getUserGroups(uid: String): Result<List<Group>> {
+    override suspend fun getUserGroups(uid: String): Result<UserGroup> {
         TODO()
     }
 
-    override suspend fun getGroupMembers(gid: String): Result<List<Member>> {
+    override suspend fun getGroupMembers(gid: String): Result<List<Membership>> {
         TODO()
     }
 
-    override suspend fun promoteMember(gid: String, uid: String, newRole: Role): Result<Unit> {
+    override suspend fun promoteMember(membership: Membership): Result<Unit> {
         TODO()
     }
 
-    override suspend fun demoteMember(gid: String, uid: String): Result<Unit> {
+    override suspend fun demoteMember(membership: Membership): Result<Unit> {
         TODO()
     }
 
-    override suspend fun removeMember(gid: String, uid: String): Result<Unit> {
-        TODO()
-    }
-
-    override suspend fun leaveGroup(gid: String): Result<Unit> {
+    override suspend fun leaveGroup(
+        gid: String,
+        uid: String
+    ): Result<Unit> {
         TODO()
     }
 }

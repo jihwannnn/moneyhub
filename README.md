@@ -52,15 +52,6 @@ com/
         │   └── UiState.kt
         │
         ├── data/
-        │   ├── model/
-        │   │   ├── Post.kt
-        │   │   ├── Comment.kt
-        │   │   ├── Group.kt
-        │   │   ├── GroupMembership.kt
-        │   │   ├── Role.kt (enum)
-        │   │   ├── Transaction.kt
-        │   │   └── User.kt
-        │   │
         │   └── repository/
         │       ├── auth/
         │       │   ├── AuthRepository.kt
@@ -81,6 +72,15 @@ com/
         │           ├── TransactionRepository.kt
         │           ├── TransactionRepositoryImpl.kt
         │           └── TestTransactionRepository.kt
+        │
+        ├── model/
+        │   ├── Post.kt
+        │   ├── Comment.kt
+        │   ├── Group.kt
+        │   ├── GroupMembership.kt
+        │   ├── Role.kt (enum)
+        │   ├── Transaction.kt
+        │   └── User.kt
         │
         ├── di/
         │   └── RepositoryModule.kt

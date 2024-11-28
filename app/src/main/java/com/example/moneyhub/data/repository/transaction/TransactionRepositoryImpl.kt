@@ -8,27 +8,47 @@ class TransactionRepositoryImpl : TransactionRepository {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
-    override suspend fun addTransaction(gid: String, transaction: Transaction): Result<String> {
+    override suspend fun addTransaction(
+        gid: String,
+        transaction: Transaction
+    ): Result<String> {
         TODO()
     }
 
-    override suspend fun deleteTransaction(gid: String, tid: String): Result<Unit> {
+    override suspend fun deleteTransaction(
+        gid: String,
+        tid: String
+    ): Result<Unit> {
         TODO()
     }
 
-    override suspend fun updateTransactionToHistory(gid: String, tid: String, receiptUrl: String?): Result<Unit> {
+    override suspend fun updateTransactionToHistory(
+        gid: String,
+        tid: String,
+        receiptUrl: String?
+    ): Result<Unit> {
         TODO()
     }
 
-    override suspend fun getTransactions(gid: String, verified: Boolean): Result<List<Transaction>> {
+    override suspend fun getTransactions(
+        gid: String,
+        verified: Boolean
+    ): Result<List<Transaction>> {
         TODO()
     }
 
-    override suspend fun getTransactionsByDate(gid: String, startDate: Long, endDate: Long): Result<List<Transaction>> {
+    override suspend fun getTransactionsByDate(
+        gid: String,
+        startDate: Long,
+        endDate: Long
+    ): Result<List<Transaction>> {
         TODO()
     }
 
-    override suspend fun getTransactionsByCategory(gid: String, category: String): Result<List<Transaction>> {
+    override suspend fun getTransactionsByCategory(
+        gid: String,
+        category: String
+    ): Result<List<Transaction>> {
         TODO()
     }
 }

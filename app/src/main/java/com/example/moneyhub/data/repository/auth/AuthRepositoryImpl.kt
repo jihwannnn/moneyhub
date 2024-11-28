@@ -76,7 +76,24 @@ class AuthRepositoryImpl : AuthRepository {
         }
     }
 
-    override suspend fun getCurrentUser(): String? {
-        return auth.currentUser?.uid
+    override suspend fun getCurrentUser(): Result<CurrentUser> {
+
+        return try{
+            val user = auth.currentUser
+            if (user != null) {
+                val currentUser = CurrentUser(
+                    id = user.uid,
+                    name = user.displayName ?: "",
+                    currentGid = "",  // 기본값 사용
+                    currentGname = "", // 기본값 사용
+                    role = Role.REGULAR // 기본값 사용
+                )
+                Result.success(currentUser)
+            } else {
+                Result.failure(Exception("자동 로그인 실패: 다시 로그인 해주세요"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
     }
 }
