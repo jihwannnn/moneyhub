@@ -24,8 +24,6 @@ class PostOnBoardViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
 
-
-
     // Post submission logic
     fun post(title: String, content: String, authorId: String, authorName: String, groupId: String, imageUri: String) {
         if (!validateInputs(title, content)) return
@@ -84,5 +82,19 @@ class PostOnBoardViewModel @Inject constructor(
         }
 
         else -> true
+    }
+
+    private val _currentPost = MutableStateFlow<Post?>(null)
+    val currentPost = _currentPost.asStateFlow()
+
+    fun fetchPost(postId: String) {
+        viewModelScope.launch {
+            try {
+                val post = repository.getPost(postId) // 게시글 데이터를 가져옴
+                _currentPost.value = post
+            } catch (e: Exception) {
+                _currentPost.value = null // 에러 발생 시 null로 설정
+            }
+        }
     }
 }
