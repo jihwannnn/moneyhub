@@ -1,6 +1,10 @@
 package com.example.moneyhub.utils
 
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
@@ -17,5 +21,12 @@ object DateUtils {
 
     fun millisToDate(timeMillis: Long): String {
         return sdf.format(Date(timeMillis))
+    }
+
+    fun millisToLocalDateTime(timeMillis: Long): LocalDateTime {
+        val instant = Instant.ofEpochMilli(timeMillis)
+        val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+
+        return dateTime
     }
 }
