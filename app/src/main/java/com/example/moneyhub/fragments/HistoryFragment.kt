@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
-import com.example.moneyhub.model.TransactionItem
 import com.example.moneyhub.databinding.FragmentHistoryBinding
+import com.example.moneyhub.model.Transaction
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -32,29 +32,38 @@ class HistoryFragment : Fragment() {
     private lateinit var adapter: TransactionAdapter
 
     private val historyData = mutableListOf(
-        TransactionItem(
-            11,
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "간식 사업 지출",
-            "학생 복지 |",
-            -120000.0
+        Transaction(
+            tid = "11",
+            title = "간식 사업 지출",
+            category = "학생 복지 |",
+            type = false, // 지출
+            amount = -120000.0,
+            content = "",
+            payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
+            verified = true,
+            createdAt = System.currentTimeMillis()
         ),
-        TransactionItem(
-            12,
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
+        Transaction(
+            tid = "12",
+            title = "그 외 Title",
+            category = "그 외 category |",
+            type = false, // 지출
+            amount = -1000.0,
+            content = "",
+            payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
+            verified = true,
+            createdAt = System.currentTimeMillis()
         ),
-        TransactionItem(
-            13,
-            "2024-11-10",
-            R.drawable.icon_food_category,
-            "그 외 Title",
-            "그 외 category |",
-            -1000.0
+        Transaction(
+            tid = "13",
+            title = "그 외 Title",
+            category = "그 외 category |",
+            type = false, // 지출
+            amount = -1000.0,
+            content = "",
+            payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
+            verified = true,
+            createdAt = System.currentTimeMillis()
         )
     )
 

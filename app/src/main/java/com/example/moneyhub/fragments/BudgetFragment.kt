@@ -13,7 +13,7 @@ import com.example.moneyhub.activity.CameraActivity
 import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentBudgetBinding
-import com.example.moneyhub.model.TransactionItem
+import com.example.moneyhub.model.Transaction
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -24,7 +24,7 @@ class BudgetFragment : Fragment() {
     private lateinit var binding: FragmentBudgetBinding
     private lateinit var recyclerViewAdapter: TransactionAdapter
 
-    private val budgetData = mutableListOf<TransactionItem>()  // 추가
+    private val budgetData = mutableListOf<Transaction>()  // 추가
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,24 +60,48 @@ class BudgetFragment : Fragment() {
     private fun initRecyclerView() {
         // budgetData mutable list를 초기화하는 더미 데이터
         budgetData.addAll(listOf(
-            TransactionItem(0, "2024-11-01", R.drawable.icon_food_category,
-                "간식 사업 지출 (예정)", "학생 복지 |", -120000.0),
-            TransactionItem(1, "2024-11-02", R.drawable.icon_food_category,
-                "희진이 간식비 (예정)", "희진이 복지 |", -7700.0),
-            TransactionItem(2, "2024-11-03", R.drawable.icon_food_category,
-                "지환이 지각비 (예정)", "지환이 복지 |", 10000.0),
-            TransactionItem(3, "2024-11-03", R.drawable.icon_food_category,
-                "그 외 Title (예정)", "그 외 category |", -1000.0)
+        Transaction(
+            tid = "0",
+            title = "간식 사업 지출 (예정)",
+            category = "학생 복지 |",
+            type = false,
+            amount = -120000.0,
+            content = "",
+            payDate = System.currentTimeMillis(),
+            verified = false,
+            createdAt = System.currentTimeMillis()
+        ),
+        Transaction(
+            tid = "1",
+            title = "희진이 간식비 (예정)",
+            category = "희진이 복지 |",
+            type = false,
+            amount = -7700.0,
+            content = "",
+            payDate = System.currentTimeMillis(),
+            verified = false,
+            createdAt = System.currentTimeMillis()
+        ),
+        Transaction(
+            tid = "2",
+            title = "지환이 지각비 (예정)",
+            category = "지환이 복지 |",
+            type = true,
+            amount = 10000.0,
+            content = "",
+            payDate = System.currentTimeMillis(),
+            verified = false,
+            createdAt = System.currentTimeMillis()
         )
-        )
+        ))
 
-        recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) { transactionItem ->
+        recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) { transaction ->
             val intent = Intent(requireContext(), CameraActivity::class.java).apply {
-                putExtra("transaction_id", transactionItem.tid) //id 전달
-                putExtra("transaction_date", transactionItem.date) //id 전달
-                putExtra("transaction_title", transactionItem.title) //id 전달
-                putExtra("transaction_category", transactionItem.category) //id 전달
-                putExtra("transaction_amount", transactionItem.amount) //id 전달
+                putExtra("transaction_id", transaction.tid) // tid 전달
+                putExtra("transaction_date", transaction.payDate)
+                putExtra("transaction_title", transaction.title)
+                putExtra("transaction_category", transaction.category)
+                putExtra("transaction_amount", transaction.amount)
 
             }
             startActivity(intent)
@@ -101,19 +125,23 @@ class BudgetFragment : Fragment() {
         //budgetData에 추가하고 RecyclerView 갱신하는 코드
         if (requestCode == ADD_BUDGET_TRANSACTION_REQUEST && resultCode == Activity.RESULT_OK){
             data?.let { intent ->
-                val newTransaction = TransactionItem(
-                    tid = System.currentTimeMillis(),
-                    date = intent.getStringExtra("date") ?: "",
-                    icon = R.drawable.icon_food_category,
-                    title = intent.getStringExtra("title") ?: "",
+                val newTransaction = Transaction(
+                    tid = System.currentTimeMillis().toString(),
+                    title = intent.getStringExtra("name") ?: "",
                     category = "${intent.getStringExtra("category")} |",
-                    amount = intent.getDoubleExtra("amount", 0.0)
+                    type = intent.getBooleanExtra("type", false),
+                    amount = intent.getDoubleExtra("amount", 0.0),
+                    content = intent.getStringExtra("content") ?: "",
+                    payDate = intent.getLongExtra("payDate", System.currentTimeMillis()),
+                    verified = false,
+                    createdAt = System.currentTimeMillis()
                 )
                 budgetData.add(newTransaction)
                 recyclerViewAdapter.notifyDataSetChanged()
             }
         }
     }
+
 
     private fun loadBudgets() {
         // TODO: Firestore에서 예산 데이터 가져오기

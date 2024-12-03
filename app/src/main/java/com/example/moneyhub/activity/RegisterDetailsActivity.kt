@@ -132,6 +132,9 @@ class RegisterDetailsActivity : AppCompatActivity() {
     private fun setupView() {
         // 등록 버튼 설정
         binding.btnRegister.setOnClickListener {
+
+
+
             // 등록 처리
             finish()
         }

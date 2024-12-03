@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.adapter.TransactionAdapter
-import com.example.moneyhub.model.TransactionItem
 import com.example.moneyhub.databinding.FragmentCalendarBinding
+import com.example.moneyhub.model.Transaction
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CalendarFragment : Fragment() {
@@ -19,22 +19,31 @@ class CalendarFragment : Fragment() {
 
     // 캘린더 샘플 데이터
     private val calendarData = listOf(
-        TransactionItem(
-            tid = 31,
-            date = "2024-11-04",
-            icon = R.drawable.icon_food_category,
+        Transaction(
+            tid = "31",
             title = "희진이 간식비",
             category = "희진이 복지",
-            amount = -7700.0
+            type = false, // 지출
+            amount = -7700.0,
+            content = "",
+            payDate = System.currentTimeMillis(),
+            verified = true,
+            createdAt = System.currentTimeMillis()
+
         ),
-        TransactionItem(
-            tid = 32,
-            date = "2024-11-08",
-            icon = R.drawable.icon_food_category,
+
+        Transaction(
+            tid = "32",
             title = "지환이 노래방",
             category = "지환이 복지",
-            amount = -10000.0
-        )
+            type = false, // 지출
+            amount = -10000.0,
+            content = "",
+            payDate = System.currentTimeMillis(),
+            verified = true,
+            createdAt = System.currentTimeMillis()
+
+        ),
     )
 
     override fun onCreateView(
@@ -66,8 +75,8 @@ class CalendarFragment : Fragment() {
 
         // 각 날짜의 수입/지출 총액 계산
         calendarData.forEach { transaction ->
-            val currentPair = dailyTotals[transaction.date] ?: Pair(0.0, 0.0)
-            dailyTotals[transaction.date] = if (transaction.amount > 0) {
+            val currentPair = dailyTotals[transaction.payDate.toString()] ?: Pair(0.0, 0.0)
+            dailyTotals[transaction.payDate.toString()] = if (transaction.amount > 0) {
                 Pair(currentPair.first + transaction.amount, currentPair.second)
             } else {
                 Pair(currentPair.first, currentPair.second - transaction.amount)
@@ -78,7 +87,7 @@ class CalendarFragment : Fragment() {
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
 
             // 선택된 날짜의 거래 내역 필터링
-            val transactionsForDate = calendarData.filter { it.date == selectedDate }
+            val transactionsForDate = calendarData.filter { it.payDate.toString() == selectedDate }
             adapter = TransactionAdapter(transactionsForDate, true, true)
             binding.transactionList.adapter = adapter
 

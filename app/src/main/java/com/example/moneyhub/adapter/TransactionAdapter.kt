@@ -8,22 +8,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
-import com.example.moneyhub.model.TransactionItem
+import com.example.moneyhub.model.Transaction
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class TransactionAdapter(
-    private val items: List<TransactionItem>,
+    private val items: List<Transaction>,
     private val isForBudget: Boolean,
     private val isForCalendar: Boolean = false,  // 새로운 파라미터 추가, 기본값은 false
 
     // TransactionItem을 매개변수로 받는 함수 타입
-    private val onItemClick: (TransactionItem) -> Unit = {} // 클릭된 아이템의 정보를 전달 가능
+    private val onItemClick: (Transaction) -> Unit = {} // 클릭된 아이템의 정보를 전달 가능
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     // ViewHolder: 아이템 뷰를 저장하는 클래스
     inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView = itemView.findViewById(R.id.item_icon)
         val title: TextView = itemView.findViewById(R.id.item_title)
         val category: TextView = itemView.findViewById(R.id.item_category)
         val transaction: TextView = itemView.findViewById(R.id.item_transaction)
@@ -61,7 +61,8 @@ class TransactionAdapter(
         val item = items[position]
 
         // 데이터를 ViewHolder에 반영
-        holder.icon.setImageResource(item.icon)
+// icon 설정
+//        holder.icon.setImageResource(item.icon)
         holder.title.text = item.title
         holder.category.text = item.category
         holder.transaction.text = if (item.amount < 0) "-$ ${-item.amount}" else "$ ${item.amount}"
@@ -69,10 +70,10 @@ class TransactionAdapter(
         // 날짜에 따른 배경색 설정
         if (isForCalendar) {
             val currentDate = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val itemDate = dateFormat.parse(item.date)
+            val itemDate = Date(item.payDate)  // 타임스탬프를 Date 객체로 변환
 
-            if (itemDate?.before(currentDate.time) == true) {
+
+            if (itemDate.before(currentDate.time)) {
                 holder.itemView.setBackgroundResource(R.drawable.yellow_thin_block_less_corners)
             } else {
                 holder.itemView.setBackgroundResource(R.drawable.grey_block)
