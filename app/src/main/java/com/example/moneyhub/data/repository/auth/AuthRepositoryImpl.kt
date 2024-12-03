@@ -1,9 +1,10 @@
 package com.example.moneyhub.data.repository.auth
+import com.google.firebase.auth.FirebaseAuth
 
 import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.Role
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.userProfileChangeRequest
+
 import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryImpl : AuthRepository {
@@ -18,13 +19,11 @@ class AuthRepositoryImpl : AuthRepository {
         return try {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
 
-            // Update user profile with additional information
             authResult.user?.let { user ->
                 val profileUpdates = userProfileChangeRequest {
                     displayName = name
                 }
                 user.updateProfile(profileUpdates).await()
-                // user.updatePhoneNumber(phone).await()
             }
 
             Result.success(Unit)

@@ -77,10 +77,11 @@ com/
         │   ├── Post.kt
         │   ├── Comment.kt
         │   ├── Group.kt
-        │   ├── GroupMembership.kt
+        │   ├── Membership.kt
         │   ├── Role.kt (enum)
         │   ├── Transaction.kt
-        │   └── User.kt
+        │   ├── Category.kt
+        │   └── UserGroup.kt
         │
         ├── di/
         │   └── RepositoryModule.kt
@@ -125,8 +126,7 @@ com/
 │       └── members/
 │           └── {uid}/
 │               ├── userName: String
-│               ├── role: String (OWNER/MANAGER/REGULAR)
-│               └── joinedAt: Timestamp
+│               └── role: String (OWNER/MANAGER/REGULAR)
 │
 ├── transactions_group/ # 내역/예산 데이터
 │   └── {gid}/
@@ -157,15 +157,20 @@ com/
 │               ├── commentCount: Number
 │               └── createdAt: Timestamp
 │
-└── comments_group/ # 댓글 데이터
+├── comments_group/ # 댓글 데이터
+│   └── {gid}/
+│       └── comments_post/
+│           └── {pid}/
+│               └── comments/
+│                   └── {cid}/
+│                       ├── content: String
+│                       ├── authorId: String
+│                       ├── authorName: String
+│                       ├── replyTo: String?
+│                       └── createdAt: Timestamp
+│
+└── categories/ # 그룹 카테고리 데이터
     └── {gid}/
-        └── comments_post/
-            └── {pid}/
-                └── comments/
-                    └── {cid}/
-                        ├── content: String
-                        ├── authorId: String
-                        ├── authorName: String
-                        ├── replyTo: String?
-                        └── createdAt: Timestamp
+        ├── gid: String
+        └── category: List<String>
 ```

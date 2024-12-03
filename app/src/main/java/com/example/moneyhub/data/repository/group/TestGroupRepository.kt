@@ -15,8 +15,7 @@ class TestGroupRepository @Inject constructor() : GroupRepository {
 
     override suspend fun joinGroup(
         gid: String,
-        user: CurrentUser,
-        inviteCode: String
+        user: CurrentUser
     ): Result<Boolean> {
         return Result.success(true)
     }

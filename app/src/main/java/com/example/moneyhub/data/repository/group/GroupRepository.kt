@@ -11,7 +11,7 @@ interface GroupRepository {
     suspend fun createGroup(name: String, user: CurrentUser): Result<Unit>
 
     // 그룹 참여
-    suspend fun joinGroup(gid: String, user: CurrentUser, inviteCode: String): Result<Boolean>
+    suspend fun joinGroup(gid: String, user: CurrentUser): Result<Boolean>
 
     // 그룹 삭제
     suspend fun deleteGroup(gid: String): Result<Unit>

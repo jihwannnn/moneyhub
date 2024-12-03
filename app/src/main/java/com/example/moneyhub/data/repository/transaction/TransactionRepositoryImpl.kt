@@ -1,15 +1,14 @@
 package com.example.moneyhub.data.repository.transaction
 
-import com.example.moneyhub.model.Category
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+
+import com.example.moneyhub.model.Category
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.utils.DateUtils
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
-import java.util.Calendar
 
 class TransactionRepositoryImpl : TransactionRepository {
-    private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
     override suspend fun addTransaction(
@@ -29,8 +28,9 @@ class TransactionRepositoryImpl : TransactionRepository {
                 tid = transactionRef.id
             )
 
-            // 저장
+            // 트랜잭션 저장
             transactionRef.set(newTransaction.toMap()).await()
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -57,7 +57,7 @@ class TransactionRepositoryImpl : TransactionRepository {
                 return Result.failure(Exception("해당 트랜잭션을 찾을 수 없습니다"))
             }
 
-            // 트랜잭션 업데이트
+            // 트랜잭션 저장
             transactionRef.set(transaction.toMap()).await()
 
             Result.success(Unit)
@@ -98,6 +98,7 @@ class TransactionRepositoryImpl : TransactionRepository {
 
             val querySnapshot = transactionsRef.get().await()
 
+            // 트랜잭션 리스트로 변환
             val transactions = querySnapshot.documents.mapNotNull { doc ->
                 doc.data?.let { Transaction.fromMap(it) }
             }
@@ -114,25 +115,10 @@ class TransactionRepositoryImpl : TransactionRepository {
     ): Result<List<Transaction>> {
         return try {
 
-            // Calendar를 사용하여 해당 날짜의 시작과 끝 시간 계산
-            val calendar = Calendar.getInstance().apply {
-                timeInMillis = date
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
-            val startOfDay = calendar.timeInMillis
+            val startOfDay = DateUtils.getStartOfDay(date)
+            val endOfDay = DateUtils.getEndOfDay(date)
 
-            calendar.apply {
-                set(Calendar.HOUR_OF_DAY, 23)
-                set(Calendar.MINUTE, 59)
-                set(Calendar.SECOND, 59)
-                set(Calendar.MILLISECOND, 999)
-            }
-            val endOfDay = calendar.timeInMillis
-
-            // Firestore 쿼리 생성
+            // Firestore 쿼리 생성, 내역 중 해당 일 안에 있는 것들
             val transactionsRef = db.collection("transactions_group")
                 .document(gid)
                 .collection("transactions")
@@ -159,25 +145,11 @@ class TransactionRepositoryImpl : TransactionRepository {
         yearMonth: Long
     ): Result<List<Transaction>> {
         return try {
-            // Calendar를 사용하여 해당 월의 시작과 끝 시간 계산
-            val calendar = Calendar.getInstance().apply {
-                timeInMillis = yearMonth
-                set(Calendar.DAY_OF_MONTH, 1) // 월의 첫째 날
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
 
-            val startOfMonth = calendar.timeInMillis
+            val startOfMonth = DateUtils.getStartOfMonth(yearMonth)
+            val endOfMonth = DateUtils.getEndOfMonth(yearMonth)
 
-            calendar.apply {
-                add(Calendar.MONTH, 1) // 다음 달의 첫째 날
-                add(Calendar.MILLISECOND, -1) // 현재 달의 마지막 순간
-            }
-            val endOfMonth = calendar.timeInMillis
-
-            // Firestore 쿼리 생성
+            // Firestore 쿼리 생성, 내역 중 해당 월 안에 있는 것들
             val transactionsRef = db.collection("transactions_group")
                 .document(gid)
                 .collection("transactions")
@@ -200,20 +172,14 @@ class TransactionRepositoryImpl : TransactionRepository {
 
     override suspend fun getCategory(gid: String): Result<Category> {
         return try {
-            // groups 컬렉션에서 해당 그룹의 카테고리 문서 조회
-            val categoryDoc = db.collection("category")
+            val categoryDoc = db.collection("categories")
                 .document(gid)
                 .get()
                 .await()
 
-            // 문서가 존재하면 데이터 변환하여 반환
-            if (categoryDoc.exists()) {
-                val category = categoryDoc.data?.let { Category.fromMap(it) } ?: Category(gid = gid)
-                Result.success(category)
-            } else {
-                // 문서가 없으면 빈 카테고리 목록 반환
-                Result.success(Category(gid = gid))
-            }
+            val category = categoryDoc.data?.let { Category.fromMap(it) } ?: Category(gid = gid, category = emptyList())
+
+            Result.success(category)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -221,14 +187,10 @@ class TransactionRepositoryImpl : TransactionRepository {
 
     override suspend fun saveCategory(gid: String, category: Category): Result<Unit> {
         return try {
-            // 카테고리 데이터를 Map 형태로 변환
             val categoryData = category.toMap()
 
-            // groups 컬렉션의 해당 그룹 문서 아래에 카테고리 저장
-            db.collection("groups")
+            db.collection("categories")
                 .document(gid)
-                .collection("settings")
-                .document("categories")
                 .set(categoryData)
                 .await()
 

@@ -8,7 +8,6 @@ import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 
 class BoardRepositoryImpl : BoardRepository {
-    private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
     // post 생성

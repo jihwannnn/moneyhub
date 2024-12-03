@@ -2,22 +2,19 @@ package com.example.moneyhub.data.repository.group
 
 
 import kotlinx.coroutines.tasks.await
-import java.util.UUID
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.QuerySnapshot
 
 import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.Membership
 import com.example.moneyhub.model.Role
 import com.example.moneyhub.model.UserGroup
-import com.google.firebase.firestore.QuerySnapshot
+
 
 
 class GroupRepositoryImpl : GroupRepository {
-    private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
     override suspend fun createGroup(name: String, user: CurrentUser): Result<Unit> {
@@ -40,7 +37,7 @@ class GroupRepositoryImpl : GroupRepository {
             val groupData = mapOf(
                 "gid" to gid,
                 "name" to name,
-                "inviteCode" to generateInviteCode(),
+                "inviteCode" to gid,
                 "ownerId" to user.id,
                 "ownerName" to (user.name),
                 "memberCount" to 1,
@@ -82,7 +79,6 @@ class GroupRepositoryImpl : GroupRepository {
     override suspend fun joinGroup(
         gid: String,
         user: CurrentUser,
-        inviteCode: String
     ): Result<Boolean> {
         return try {
             // 그룹 정보 가져오기
@@ -90,7 +86,7 @@ class GroupRepositoryImpl : GroupRepository {
             val groupData = groupDoc.data ?: throw Exception("그룹을 찾을 수 없습니다.")
 
             // 초대 코드 확인
-            if (groupData["inviteCode"] != inviteCode) {
+            if (groupData["inviteCode"] != gid) {
                 return Result.success(false)
             }
 
@@ -372,9 +368,5 @@ class GroupRepositoryImpl : GroupRepository {
         } catch (e: Exception) {
             Result.failure(e)
         }
-    }
-
-    private fun generateInviteCode(): String {
-        return UUID.randomUUID().toString().substring(0, 8)
     }
 }
