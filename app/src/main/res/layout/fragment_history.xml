@@ -51,33 +51,47 @@
             android:id="@+id/constraintLayoutExpense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayoutIncome"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.5">
 
             <TextView
                 android:id="@+id/textViewExpenseHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Expense"
-                android:textSize="18sp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="5dp"
+                android:text="Expense"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$ 300,000"
-                android:textSize="18sp"
-                android:textColor="@color/moneyRed"
-                android:textStyle="bold"
                 android:layout_marginLeft="2dp"
-                android:layout_marginRight="5dp"
+                android:text="$ 300,000"
+                android:textColor="@color/moneyRed"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewExpenseHeader"/>
+                app:layout_constraintTop_toBottomOf="@id/textViewExpenseHeader" />
 
+            <ImageButton
+                android:id="@+id/btnAddHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="12dp"
+                android:src="@android:drawable/ic_input_add"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

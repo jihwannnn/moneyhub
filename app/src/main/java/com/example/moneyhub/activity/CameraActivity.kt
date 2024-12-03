@@ -51,22 +51,23 @@ class CameraActivity : AppCompatActivity() {
         setupImageContainer()
     }
 
+    // view model에 옮겨야 할 것
     private fun getTransactionData() {
-        // Intent에서 데이터 추출
-        date = intent.getStringExtra("date")
-        title = intent.getStringExtra("title")
-        category = intent.getStringExtra("category")
-        amount = intent.getDoubleExtra("amount", 0.0)
+        // 데이터 받기
+        date = intent.getStringExtra("transaction_date")
+        title = intent.getStringExtra("transaction_title")
+        category = intent.getStringExtra("transaction_category")
+        amount = intent.getDoubleExtra("transaction_amount", 0.0)
 
-        // 디버깅 용도: 받은 데이터를 화면에 표시
+        // 텍스트뷰 표시
         binding.tvTransactionInfo.text = """
-            날짜: $date
-            제목: $title
-            카테고리: $category
-            금액: $amount
-        """.trimIndent()
+       거래 ID: ${intent.getLongExtra("transaction_id", -1)}
+       날짜: $date 
+       제목: $title
+       카테고리: $category
+       금액: $amount
+   """.trimIndent()
     }
-
     private fun setupButtons() {
         // Open Camera 버튼 설정
         binding.btnOpenCamera.apply {
