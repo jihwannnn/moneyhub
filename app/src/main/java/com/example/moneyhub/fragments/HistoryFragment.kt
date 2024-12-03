@@ -1,14 +1,15 @@
 package com.example.moneyhub.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moneyhub.R
 import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
@@ -17,19 +18,44 @@ import com.example.moneyhub.model.Transaction
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HistoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HistoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     lateinit var binding: FragmentHistoryBinding
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TransactionAdapter
+
+    // ActivityResultLauncher 추가
+    private val startForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            data?.let { intent ->
+                val amount = if (intent.hasExtra("amount")) {
+                    intent.getLongExtra("amount", 0L)
+                } else {
+                    null
+                }
+
+                val newTransaction = Transaction(
+                    tid = System.currentTimeMillis().toString(),
+                    title = intent.getStringExtra("title") ?: "",
+                    category = "${intent.getStringExtra("category")} |",
+                    type = intent.getBooleanExtra("type", false),
+                    amount = amount,
+                    content = intent.getStringExtra("content") ?: "",
+                    payDate = intent.getLongExtra("payDate", System.currentTimeMillis()),
+                    verified = true,
+                    createdAt = System.currentTimeMillis()
+                )
+
+                historyData.add(newTransaction)
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
 
     private val historyData = mutableListOf(
         Transaction(
@@ -79,36 +105,24 @@ class HistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
-        // Initializing RecyclerView
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // adapter setting
         adapter = TransactionAdapter(historyData, false)
         recyclerView.adapter = adapter
 
-        // 버튼 클릭 리스너 추가
+        // 버튼 클릭 리스너 수정
         binding.btnAddHistory.setOnClickListener {
             val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
-            startActivity(intent)
+            startForResult.launch(intent)  // startActivity 대신 startForResult.launch 사용
         }
 
         return binding.root
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HistoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             HistoryFragment().apply {

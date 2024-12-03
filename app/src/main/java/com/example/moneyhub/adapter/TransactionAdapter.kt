@@ -100,8 +100,6 @@ class TransactionAdapter(
 }
 
 
-
-
     // getItemCount: 아이템의 총 개수를 반환
     override fun getItemCount(): Int = items.size
 }
