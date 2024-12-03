@@ -68,9 +68,9 @@ class TransactionAdapter(
 
         // amount가 null일 경우 처리
         holder.transaction.text = when {
-            item.amount == null -> "$ -"
-            item.amount < 0 -> "-$ ${-item.amount}"
-            else -> "$ ${item.amount}"
+            item.amount == null -> "₩ -"
+            item.amount < 0 -> String.format("- ₩%,d", -item.amount)  // 음수일 때
+            else -> String.format("₩%,d", item.amount)  // 양수일 때
         }
 
         // 날짜에 따른 배경색 설정

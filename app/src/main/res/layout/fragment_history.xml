@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$ 300,000"
+                android:text="₩ 300,000"
                 android:textSize="18sp"
                 android:textColor="@color/moneyGreenThick"
                 android:textStyle="bold"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="$ 300,000"
+                android:text="₩ 300,000"
                 android:textColor="@color/moneyRed"
                 android:textSize="18sp"
                 android:textStyle="bold"

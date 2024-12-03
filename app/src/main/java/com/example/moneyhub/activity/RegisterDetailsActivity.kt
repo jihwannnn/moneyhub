@@ -52,6 +52,7 @@ class RegisterDetailsActivity : AppCompatActivity() {
         setupCategorySpinner()
         setupTransactionTypeRadioGroup()
         setupDatePicker()
+        setupAmountEditText()
 
         // 초기 라디오 버튼 상태 설정 - 지출이 기본 선택되도록
         binding.radioExpense.isChecked = true
@@ -153,7 +154,9 @@ class RegisterDetailsActivity : AppCompatActivity() {
             // 유저가 입력한 값을 가져온다
             // TransactionItem Data Class에 맞게
             val title = binding.detailTitle.text.toString()
+            // 여기가 수정된 부분 - 원화 기호와 쉼표를 제거하고 Long으로 변환
             val amountText = binding.detailAmount.text.toString()
+                .replace("[₩,]".toRegex(), "") // 원화 기호와 쉼표 제거
             var amount: Long? = amountText.toLongOrNull() // Changed from Double to Long
             val category = binding.categorySpinner.selectedItem.toString()
             val content = binding.detailMemo.text.toString()
@@ -242,7 +245,48 @@ class RegisterDetailsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupAmountEditText() {
+        binding.detailAmount.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if (s == null) return
+
+                // 현재 커서 위치 저장
+                val cursor = binding.detailAmount.selectionStart
+
+                // 입력된 텍스트에서 원화 기호, 쉼표 제거
+                val number = s.toString().replace("[₩,]".toRegex(), "")
+
+                // 숫자가 비어있지 않은 경우에만 포맷팅
+                if (number.isNotEmpty()) {
+                    // 숫자를 Long으로 변환
+                    val parsed = number.toLongOrNull()
+                    if (parsed != null) {
+                        // 원화 기호와 쉼표가 포함된 문자열로 변환
+                        val formatted = String.format("₩%,d", parsed)
+
+                        // TextWatcher 임시 제거 (무한루프 방지)
+                        binding.detailAmount.removeTextChangedListener(this)
+
+                        // 포맷된 텍스트 설정
+                        binding.detailAmount.setText(formatted)
+
+                        // 커서 위치 조정
+                        val newCursor = cursor + (formatted.length - s.length)
+                        if (newCursor > 0) {
+                            binding.detailAmount.setSelection(newCursor)
+                        }
+
+                        // TextWatcher 다시 추가
+                        binding.detailAmount.addTextChangedListener(this)
+                    }
+                }
+            }
+        })
+    }
 
 
 
