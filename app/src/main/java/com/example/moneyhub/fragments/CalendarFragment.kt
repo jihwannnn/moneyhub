@@ -20,7 +20,7 @@ class CalendarFragment : Fragment() {
     // 캘린더 샘플 데이터
     private val calendarData = listOf(
         TransactionItem(
-            id = 31,
+            tid = 31,
             date = "2024-11-04",
             icon = R.drawable.icon_food_category,
             title = "희진이 간식비",
@@ -28,7 +28,7 @@ class CalendarFragment : Fragment() {
             amount = -7700.0
         ),
         TransactionItem(
-            id = 32,
+            tid = 32,
             date = "2024-11-08",
             icon = R.drawable.icon_food_category,
             title = "지환이 노래방",

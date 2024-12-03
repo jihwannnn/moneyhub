@@ -4,7 +4,7 @@ package com.example.moneyhub.model
 data class Transaction(
     val tid: String = "",           // 내역/예산 ID
     val gid: String = "",           // 그룹 ID
-    val name: String = "",          // 내역/예산 이름
+    val title: String = "",          // 내역/예산 이름
     val category: String = "",      // 카테고리
     val type: Boolean = false,      // 수입(true)/지출(false)
     val amount: Double = 0.0,       // 금액
@@ -24,7 +24,7 @@ data class Transaction(
         return mapOf(
             "tid" to tid,
             "gid" to gid,
-            "name" to name,
+            "title" to title,
             "category" to category,
             "type" to type,
             "amount" to amount,
@@ -45,7 +45,7 @@ data class Transaction(
             return Transaction(
                 tid = map["tid"] as? String ?: "",
                 gid = map["gid"] as? String ?: "",
-                name = map["name"] as? String ?: "",
+                title = map["title"] as? String ?: "",
                 category = map["category"] as? String ?: "",
                 type = map["type"] as? Boolean ?: false,
                 amount = (map["amount"] as? Number)?.toDouble() ?: 0.0,

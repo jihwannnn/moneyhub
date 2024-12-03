@@ -73,7 +73,7 @@ class BudgetFragment : Fragment() {
 
         recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) { transactionItem ->
             val intent = Intent(requireContext(), CameraActivity::class.java).apply {
-                putExtra("transaction_id", transactionItem.id) //id 전달
+                putExtra("transaction_id", transactionItem.tid) //id 전달
                 putExtra("transaction_date", transactionItem.date) //id 전달
                 putExtra("transaction_title", transactionItem.title) //id 전달
                 putExtra("transaction_category", transactionItem.category) //id 전달
@@ -102,7 +102,7 @@ class BudgetFragment : Fragment() {
         if (requestCode == ADD_BUDGET_TRANSACTION_REQUEST && resultCode == Activity.RESULT_OK){
             data?.let { intent ->
                 val newTransaction = TransactionItem(
-                    id = System.currentTimeMillis(),
+                    tid = System.currentTimeMillis(),
                     date = intent.getStringExtra("date") ?: "",
                     icon = R.drawable.icon_food_category,
                     title = intent.getStringExtra("title") ?: "",
