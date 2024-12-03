@@ -65,7 +65,7 @@ class BudgetFragment : Fragment() {
             title = "간식 사업 지출 (예정)",
             category = "학생 복지 |",
             type = false,
-            amount = -120000.0,
+            amount = -120000,
             content = "",
             payDate = System.currentTimeMillis(),
             verified = false,
@@ -76,7 +76,7 @@ class BudgetFragment : Fragment() {
             title = "희진이 간식비 (예정)",
             category = "희진이 복지 |",
             type = false,
-            amount = -7700.0,
+            amount = -7700,
             content = "",
             payDate = System.currentTimeMillis(),
             verified = false,
@@ -87,7 +87,7 @@ class BudgetFragment : Fragment() {
             title = "지환이 지각비 (예정)",
             category = "지환이 복지 |",
             type = true,
-            amount = 10000.0,
+            amount = 10000,
             content = "",
             payDate = System.currentTimeMillis(),
             verified = false,
@@ -125,12 +125,21 @@ class BudgetFragment : Fragment() {
         //budgetData에 추가하고 RecyclerView 갱신하는 코드
         if (requestCode == ADD_BUDGET_TRANSACTION_REQUEST && resultCode == Activity.RESULT_OK){
             data?.let { intent ->
+
+                val amount = if (intent.hasExtra("amount")) {
+                    intent.getLongExtra("amount", 0L)
+                } else {
+                    null
+                }
+
+
+
                 val newTransaction = Transaction(
                     tid = System.currentTimeMillis().toString(),
                     title = intent.getStringExtra("name") ?: "",
                     category = "${intent.getStringExtra("category")} |",
                     type = intent.getBooleanExtra("type", false),
-                    amount = intent.getDoubleExtra("amount", 0.0),
+                    amount = amount,
                     content = intent.getStringExtra("content") ?: "",
                     payDate = intent.getLongExtra("payDate", System.currentTimeMillis()),
                     verified = false,

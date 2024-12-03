@@ -37,7 +37,7 @@ class HistoryFragment : Fragment() {
             title = "간식 사업 지출",
             category = "학생 복지 |",
             type = false, // 지출
-            amount = -120000.0,
+            amount = -120000,
             content = "",
             payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
             verified = true,
@@ -48,7 +48,7 @@ class HistoryFragment : Fragment() {
             title = "그 외 Title",
             category = "그 외 category |",
             type = false, // 지출
-            amount = -1000.0,
+            amount = -1000,
             content = "",
             payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
             verified = true,
@@ -59,7 +59,7 @@ class HistoryFragment : Fragment() {
             title = "그 외 Title",
             category = "그 외 category |",
             type = false, // 지출
-            amount = -1000.0,
+            amount = -1000,
             content = "",
             payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
             verified = true,

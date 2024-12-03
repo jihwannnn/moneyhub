@@ -60,17 +60,21 @@ class RegisterDetailsActivity : AppCompatActivity() {
     // Intent로부터 데이터를 받아서 화면에 설정하는 함수
     private fun getTransactionData() {
         // Intent에서 데이터 가져오기
-//        val date = intent.getStringExtra("date")
 
+//        val date = intent.getStringExtra("date")
         val title = intent.getStringExtra("title")
         val category = intent.getStringExtra("category")
-        val amount = intent.getDoubleExtra("amount", 0.0)
+        val amount = intent.getLongExtra("amount", 0L)
         val type = intent.getBooleanExtra("type", true)
 
         // 가져온 데이터를 EditText에 설정
         binding.apply {
             detailTitle.setText(title)
-            detailAmount.setText(amount.toString())
+
+            // amount가 0이 아닐 때만 setText 실행
+            if (amount != 0L) {
+                detailAmount.setText(amount.toString())
+            }
 
             // 수입/지출 라디오 버튼 설정
             if (type) {
@@ -149,7 +153,8 @@ class RegisterDetailsActivity : AppCompatActivity() {
             // 유저가 입력한 값을 가져온다
             // TransactionItem Data Class에 맞게
             val title = binding.detailTitle.text.toString()
-            var amount = binding.detailAmount.text.toString().toDoubleOrNull() ?: 0.0
+            val amountText = binding.detailAmount.text.toString()
+            var amount: Long? = amountText.toLongOrNull() // Changed from Double to Long
             val category = binding.categorySpinner.selectedItem.toString()
             val content = binding.detailMemo.text.toString()
 
@@ -158,7 +163,7 @@ class RegisterDetailsActivity : AppCompatActivity() {
             // java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
             // 금액의 부호 처리
-            if (!isIncome) {
+            if (!isIncome && amount != null) {
                 amount = -kotlin.math.abs(amount)
             }
 
