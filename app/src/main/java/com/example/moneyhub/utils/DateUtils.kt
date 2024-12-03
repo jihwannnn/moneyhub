@@ -1,6 +1,10 @@
 package com.example.moneyhub.utils
 
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -20,6 +24,13 @@ object DateUtils {
     // 밀리초 -> 날짜
     fun millisToDate(timeMillis: Long): String {
         return sdf.format(Date(timeMillis))
+    }
+
+    fun millisToLocalDateTime(timeMillis: Long): LocalDateTime {
+        val instant = Instant.ofEpochMilli(timeMillis)
+        val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+
+        return dateTime
     }
 
     // timestamp의 자정(00:00:00.000)을 반환

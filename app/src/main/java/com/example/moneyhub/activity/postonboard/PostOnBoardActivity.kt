@@ -11,7 +11,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityPostOnBoardBinding
 import android.net.Uri
+import android.view.View
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,7 +27,16 @@ class PostOnBoardActivity : AppCompatActivity() {
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri?.toString() ?: ""
+            if (uri != null) {
+                binding.ivPreview.visibility = View.VISIBLE // 이미지 미리보기 보이기
+                Glide.with(this)
+                    .load(uri) // Uri로 이미지 로드
+                    .into(binding.ivPreview) // ivPreview에 바인딩
+            } else {
+                binding.ivPreview.visibility = View.GONE // Uri가 없으면 숨기기
+            }
         }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
