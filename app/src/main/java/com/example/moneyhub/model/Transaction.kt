@@ -9,8 +9,7 @@ data class Transaction(
     val type: Boolean = false,      // 수입(true)/지출(false)
     val amount: Double = 0.0,       // 금액
     val content: String = "",       // 상세 내용
-    val payDateEx: Long = 0L,       // 예상 결제일 (예산일 경우)
-    val payDate: Long = 0L,         // 실제 결제일 (내역일 경우)
+    val payDate: Long = 0L,         // 결제일
     val verified: Boolean = false,   // 내역(true)/예산(false)
     val receiptUrl: String? = null,  // 영수증 이미지 URL
     val authorId: String = "",      // 작성자 ID
@@ -29,7 +28,6 @@ data class Transaction(
             "type" to type,
             "amount" to amount,
             "content" to content,
-            "payDateEx" to payDateEx,
             "payDate" to payDate,
             "verified" to verified,
             "receiptUrl" to receiptUrl,
@@ -50,7 +48,6 @@ data class Transaction(
                 type = map["type"] as? Boolean ?: false,
                 amount = (map["amount"] as? Number)?.toDouble() ?: 0.0,
                 content = map["content"] as? String ?: "",
-                payDateEx = map["payDateEx"] as? Long ?: 0L,
                 payDate = map["payDate"] as? Long ?: 0L,
                 verified = map["verified"] as? Boolean ?: false,
                 receiptUrl = map["receiptUrl"] as? String,
