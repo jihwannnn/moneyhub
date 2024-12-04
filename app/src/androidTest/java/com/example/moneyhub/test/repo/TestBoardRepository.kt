@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.repository.board
+package com.example.moneyhub.test.repo
 
 import com.example.moneyhub.model.Comment
 import com.example.moneyhub.model.Post

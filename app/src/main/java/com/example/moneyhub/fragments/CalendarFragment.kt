@@ -24,7 +24,7 @@ class CalendarFragment : Fragment() {
             title = "희진이 간식비",
             category = "희진이 복지",
             type = false, // 지출
-            amount = -7700.0,
+            amount = -7700L,
             content = "",
             payDate = System.currentTimeMillis(),
             verified = true,
@@ -37,7 +37,7 @@ class CalendarFragment : Fragment() {
             title = "지환이 노래방",
             category = "지환이 복지",
             type = false, // 지출
-            amount = -10000.0,
+            amount = -10000L,
             content = "",
             payDate = System.currentTimeMillis(),
             verified = true,

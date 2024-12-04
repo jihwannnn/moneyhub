@@ -74,6 +74,10 @@ com/
         │           └── TestTransactionRepository.kt
         │
         ├── model/
+        │   │
+        │   ├── sessions/
+        │   │   ├── CurrentUserSession.kt
+        │   │   └── PostSession.kt
         │   ├── Post.kt
         │   ├── Comment.kt
         │   ├── Group.kt
@@ -82,6 +86,7 @@ com/
         │   ├── Transaction.kt
         │   ├── Category.kt
         │   └── UserGroup.kt
+        │   
         │
         ├── di/
         │   └── RepositoryModule.kt
@@ -110,10 +115,12 @@ com/
 ```
 ├── users/ # 유저가 가입된 그룹 데이터 (나머지는 firebase로 처리)
 │   └── {uid}/
+│       ├── uid: String
 │       └── groups: Map<String, String>
 │
 ├── groups/ # 그룹 기본 데이터
 │   └── {gid}/
+│       ├── gid: String
 │       ├── name: String
 │       ├── inviteCode: String
 │       ├── ownerId: String
@@ -125,6 +132,8 @@ com/
 │   └── {gid}/
 │       └── members/
 │           └── {uid}/
+│               ├── uid: String
+│               ├── gid: String
 │               ├── userName: String
 │               └── role: String (OWNER/MANAGER/REGULAR)
 │
@@ -132,6 +141,8 @@ com/
 │   └── {gid}/
 │       └── transactions/
 │           └── {tid}/
+│               ├── tid: String
+│               ├── gid: String
 │               ├── name: String
 │               ├── category: String
 │               ├── type: Boolean
@@ -149,6 +160,8 @@ com/
 │   └── {gid}/
 │       └── posts/
 │           └── {pid}/
+│               ├── pid: String
+│               ├── gid: String
 │               ├── title: String
 │               ├── content: String
 │               ├── authorId: String
@@ -163,6 +176,9 @@ com/
 │           └── {pid}/
 │               └── comments/
 │                   └── {cid}/
+│                       ├── cid: String
+│                       ├── pid: String
+│                       ├── gid: String
 │                       ├── content: String
 │                       ├── authorId: String
 │                       ├── authorName: String

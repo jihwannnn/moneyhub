@@ -11,18 +11,22 @@ import com.example.moneyhub.R
 import com.example.moneyhub.activity.ViewOnBoardActivity
 import com.example.moneyhub.databinding.ItemLayoutBoardBinding
 import com.example.moneyhub.model.Post
+import com.example.moneyhub.model.sessions.PostSession
 import com.example.moneyhub.utils.DateUtils
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.Duration
 
-class BoardRecyclerAdapter (
-    private val posts: List<Post>,
-    private val context: Context,
-    ) :
-    RecyclerView.Adapter<BoardRecyclerAdapter.ViewHolder>() {
+class BoardRecyclerAdapter(
+    private var posts: List<Post>,
+) : RecyclerView.Adapter<BoardRecyclerAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardRecyclerAdapter.ViewHolder {
+    fun updateData(newPosts: List<Post>) {
+        posts = newPosts
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemLayoutBoardBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -31,13 +35,18 @@ class BoardRecyclerAdapter (
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: BoardRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
         holder.bind(post)
 
-        // 이미지 처리
+        handlePostImage(holder, post)
+
+        setupClickListener(holder, post)
+    }
+
+    private fun handlePostImage(holder: ViewHolder, post: Post) {
         with(holder.binding) {
-            if (post.imageUrl != "") {
+            if (post.imageUrl.isNotEmpty()) {
                 postImage.visibility = View.VISIBLE
                 Glide.with(holder.itemView.context)
                     .load(post.imageUrl)
@@ -46,13 +55,18 @@ class BoardRecyclerAdapter (
                 postImage.visibility = View.GONE
             }
         }
+    }
 
+    private fun setupClickListener(holder: ViewHolder, post: Post) {
         holder.itemView.setOnClickListener {
-            // 새 액티비티로 전환
-            val intent = Intent(holder.itemView.context, ViewOnBoardActivity::class.java)
-            intent.putExtra("post_id", post.pid)   // group id 전달
-            holder.itemView.context.startActivity(intent)
+            navigateToPostDetail(holder.itemView.context, post)
         }
+    }
+
+    private fun navigateToPostDetail(context: Context, post: Post) {
+        val intent = Intent(context, ViewOnBoardActivity::class.java)
+        PostSession.setPost(post)
+        context.startActivity(intent)
     }
 
     class ViewHolder(
@@ -63,8 +77,8 @@ class BoardRecyclerAdapter (
                 val localDateTime = DateUtils.millisToLocalDateTime(post.createdAt)
                 postTitle.text = post.title
                 postContent.text = post.content
-                postTimeAgo.text = getTimeAgo(localDateTime, itemView.context)
-                postCommentCount.text = "${post.commentCount}"
+                postTimeAgo.text = getTimeAgo(localDateTime)
+                postCommentCount.text = post.commentCount.toString()
             }
         }
     }
@@ -72,22 +86,22 @@ class BoardRecyclerAdapter (
     override fun getItemCount(): Int = posts.size
 
     companion object {
-        fun getTimeAgo(postTime: LocalDateTime, context: android.content.Context): String {
+        fun getTimeAgo(postTime: LocalDateTime): String {
             val now = LocalDateTime.now()
             val duration = Duration.between(postTime, now)
 
             return when {
                 duration.toMinutes() < 60 -> {
                     val minutes = duration.toMinutes().toInt()
-                    context.resources.getQuantityString(R.plurals.time_minutes_ago, minutes, minutes)
+                    if (minutes == 1) "1 minute ago" else "$minutes minutes ago"
                 }
                 duration.toHours() < 24 -> {
                     val hours = duration.toHours().toInt()
-                    context.resources.getQuantityString(R.plurals.time_hours_ago, hours, hours)
+                    if (hours == 1) "1 hour ago" else "$hours hours ago"
                 }
                 duration.toDays() < 7 -> {
                     val days = duration.toDays().toInt()
-                    context.resources.getQuantityString(R.plurals.time_days_ago, days, days)
+                    if (days == 1) "1 day ago" else "$days days ago"
                 }
                 else -> postTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
             }

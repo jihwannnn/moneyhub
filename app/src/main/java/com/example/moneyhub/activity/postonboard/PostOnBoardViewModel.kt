@@ -4,9 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.common.UiState
+import com.example.moneyhub.data.repository.board.BoardRepository
+import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.Post
+import com.example.moneyhub.model.sessions.CurrentUserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -15,29 +19,47 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostOnBoardViewModel @Inject constructor(
-    private val repository: PostRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val repository: BoardRepository,
 ) : ViewModel() {
 
     // UI state
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _currentUser = MutableStateFlow<CurrentUser?>(null)
+    val currentUser: StateFlow<CurrentUser?> = _currentUser.asStateFlow()
+
+    private val _currentPost = MutableStateFlow<Post?>(null)
+    val currentPost = _currentPost.asStateFlow()
+
+    init {
+        loadUser()
+    }
+
+    private fun loadUser() {
+        _currentUser.value = CurrentUserSession.getCurrentUser()
+    }
+
 
     // Post submission logic
-    fun post(title: String, content: String, authorId: String, authorName: String, groupId: String, imageUri: String) {
+    fun post(title: String, content: String, imageUri: String) {
         if (!validateInputs(title, content)) return
+
+        val user = _currentUser.value ?: run {
+            _uiState.update { it.copy(error = "사용자 정보를 찾을 수 없습니다") }
+            return
+        }
+
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
             val post = Post(
-                pid = System.currentTimeMillis().toString(), // Unique ID
-                gid = groupId,
+                gid = user.currentGid,
                 title = title,
                 content = content,
-                authorId = authorId,
-                authorName = authorName,
+                authorId = user.id,
+                authorName = user.name,
                 imageUrl = imageUri,
                 commentCount = 0,
                 createdAt = System.currentTimeMillis()
@@ -84,13 +106,10 @@ class PostOnBoardViewModel @Inject constructor(
         else -> true
     }
 
-    private val _currentPost = MutableStateFlow<Post?>(null)
-    val currentPost = _currentPost.asStateFlow()
 
-    fun fetchPost(postId: String) {
+    fun fetchPost(post: Post) {
         viewModelScope.launch {
             try {
-                val post = repository.getPost(postId) // 게시글 데이터를 가져옴
                 _currentPost.value = post
             } catch (e: Exception) {
                 _currentPost.value = null // 에러 발생 시 null로 설정

@@ -149,7 +149,7 @@ class RegisterDetailsActivity : AppCompatActivity() {
             // 유저가 입력한 값을 가져온다
             // TransactionItem Data Class에 맞게
             val title = binding.detailTitle.text.toString()
-            var amount = binding.detailAmount.text.toString().toDoubleOrNull() ?: 0.0
+            var amount = binding.detailAmount.text.toString().toLongOrNull() ?: 0
             val category = binding.categorySpinner.selectedItem.toString()
             val content = binding.detailMemo.text.toString()
 

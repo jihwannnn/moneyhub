@@ -10,8 +10,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.moneyhub.R
+import com.example.moneyhub.activity.mypage.MyPageActivity
 import com.example.moneyhub.activity.postonboard.PostOnBoardViewModel
 import com.example.moneyhub.databinding.ActivityViewOnBoardBinding
+import com.example.moneyhub.model.sessions.PostSession
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,8 +43,8 @@ class ViewOnBoardActivity : AppCompatActivity() {
 
     private fun setupUI() {
 
-        val postId = intent.getStringExtra("post_id") ?: return
-        viewModel.fetchPost(postId)
+        val post = PostSession.getCurrentPost()
+        viewModel.fetchPost(post)
 
         binding.apply {
             customHeaderInclude.imageViewMyPage.setOnClickListener{

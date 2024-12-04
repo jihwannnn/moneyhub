@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.repository.auth
+package com.example.moneyhub.test.repo
 import com.google.firebase.auth.FirebaseAuth
 
 import com.example.moneyhub.model.CurrentUser

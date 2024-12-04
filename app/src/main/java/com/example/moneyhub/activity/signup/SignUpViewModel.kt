@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.common.UiState
 import com.example.moneyhub.data.repository.auth.AuthRepository
+import com.example.moneyhub.data.repository.group.GroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val groupRepository: GroupRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -33,12 +35,22 @@ class SignUpViewModel @Inject constructor(
                     phone = phone,
                     password = password
                 ).fold(
-                    onSuccess = {
-                        _uiState.update { it.copy(
-                            isLoading = false,
-                            isSuccess = true,
-                            error = null
-                        ) }
+                    onSuccess = { uid ->
+                        groupRepository.createUserGroup(uid).fold(
+                            onSuccess = {
+                                _uiState.update { it.copy(
+                                    isLoading = false,
+                                    isSuccess = true,
+                                    error = null
+                                ) }
+                            },
+                            onFailure = { throwable ->
+                                _uiState.update { it.copy(
+                                    isLoading = false,
+                                    error = "계정은 생성되었으나 그룹 초기화에 실패했습니다: ${throwable.message}"
+                                ) }
+                            }
+                        )
                     },
                     onFailure = { throwable ->
                         _uiState.update { it.copy(

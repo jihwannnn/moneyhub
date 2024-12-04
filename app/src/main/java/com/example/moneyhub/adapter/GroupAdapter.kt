@@ -1,21 +1,23 @@
 package com.example.moneyhub.adapter
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moneyhub.activity.MainActivity
-import com.example.moneyhub.data.model.GroupItem
 import com.example.moneyhub.databinding.CustomGroupItemBinding
+import com.example.moneyhub.model.UserGroup
 
-// Mypage의 RecyclerView에 데이터를 바인딩하기 위한 어댑터 클래스
-class GroupAdapter (
-    private val groups: List<GroupItem>,
-    private val context: Context,
+class GroupAdapter(
+    private val onGroupClick: (String, String) -> Unit
 ) : RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupAdapter.ViewHolder {
+    private var userGroup: UserGroup = UserGroup()
+
+    fun updateData(newUserGroup: UserGroup) {
+        userGroup = newUserGroup
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = CustomGroupItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -24,27 +26,21 @@ class GroupAdapter (
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: GroupAdapter.ViewHolder, position: Int) {
-        val group = groups[position]
-        holder.bind(group)
-
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val groupEntry = userGroup.groups.entries.elementAt(position)
+        holder.bind(groupEntry.value)
         holder.itemView.setOnClickListener {
-            // 새 액티비티로 전환
-            val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra("group_id", group.id)   // group id 전달
-            context.startActivity(intent)
+            onGroupClick(groupEntry.key, groupEntry.value)
         }
     }
 
-    override fun getItemCount() = groups.size
+    override fun getItemCount() = userGroup.groups.size
 
     class ViewHolder(
         private val binding: CustomGroupItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(group: GroupItem) {
-            with(binding) {
-                tvGroupName.text = group.groupName
-            }
+        fun bind(groupName: String) {
+            binding.tvGroupName.text = groupName
         }
     }
 }

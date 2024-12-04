@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.moneyhub.viewmodel.MainViewModel
 import com.example.moneyhub.R
+import com.example.moneyhub.activity.mypage.MyPageActivity
 import com.example.moneyhub.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -64,7 +65,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, MyPageActivity::class.java)
             startActivity(intent)
         }
-
-        
     }
 }

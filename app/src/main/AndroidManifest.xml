@@ -43,12 +43,12 @@
             android:exported="false"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".activity.MyPageActivity"
+            android:name=".activity.mypage.MyPageActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.MoneyHub" />
         <activity
-            android:name=".activity.LogInActivity"
+            android:name=".activity.login.LogInActivity"
             android:exported="true"
             android:screenOrientation="sensorPortrait" >
             <intent-filter>
@@ -58,7 +58,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.CreateActivity"
+            android:name=".activity.creategroup.CreateActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".activity.signup.SignUpActivity"

@@ -139,7 +139,7 @@ class BoardFragment : Fragment() {
             )
         )
 
-        val adapter = BoardRecyclerAdapter(postList, requireContext()) // Adapter Creation
+        val adapter = BoardRecyclerAdapter(postList) // Adapter Creation
         binding.recyclerViewBoard.adapter = adapter
         binding.recyclerViewBoard.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 

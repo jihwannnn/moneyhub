@@ -7,7 +7,7 @@ data class Transaction(
     val title: String = "",          // 내역/예산 이름
     val category: String = "",      // 카테고리
     val type: Boolean = false,      // 수입(true)/지출(false)
-    val amount: Double = 0.0,       // 금액
+    val amount: Long = 0L,       // 금액
     val content: String = "",       // 상세 내용
     val payDate: Long = 0L,         // 결제일
     val verified: Boolean = false,   // 내역(true)/예산(false)
@@ -46,7 +46,7 @@ data class Transaction(
                 title = map["title"] as? String ?: "",
                 category = map["category"] as? String ?: "",
                 type = map["type"] as? Boolean ?: false,
-                amount = (map["amount"] as? Number)?.toDouble() ?: 0.0,
+                amount = (map["amount"] as? Number)?.toLong() ?: 0,
                 content = map["content"] as? String ?: "",
                 payDate = map["payDate"] as? Long ?: 0L,
                 verified = map["verified"] as? Boolean ?: false,

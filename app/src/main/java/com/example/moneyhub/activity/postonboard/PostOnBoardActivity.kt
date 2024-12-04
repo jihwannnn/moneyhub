@@ -75,9 +75,6 @@ class PostOnBoardActivity : AppCompatActivity() {
                 viewModel?.post(
                     title = etTitle.text.toString(),
                     content = etContent.text.toString(),
-                    authorId = "user123",
-                    authorName = "John Doe",
-                    groupId = "group456",
                     imageUri = imageUri
                 )
             }

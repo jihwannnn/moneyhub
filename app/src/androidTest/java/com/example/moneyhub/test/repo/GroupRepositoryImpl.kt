@@ -1,4 +1,4 @@
-package com.example.moneyhub.data.repository.group
+package com.example.moneyhub.test.repo
 
 
 import kotlinx.coroutines.tasks.await
@@ -238,20 +238,7 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
     }
 
     override suspend fun getUserMembership(gid: String, uid: String): Result<Membership>{
-        return try {
-
-            val membershipDoc = db.collection("members_group")
-                .document(gid)
-                .collection("members")
-                .document(uid)
-                .get()
-                .await()
-
-            val membership = membershipDoc.data?.let { Membership.fromMap(it) } ?: throw Exception("유저 멤버쉽 정보를 찾을 수 없습니다")
-            Result.success(membership)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        TODO()
     }
 
     override suspend fun getGroupMembers(gid: String): Result<List<Membership>> {

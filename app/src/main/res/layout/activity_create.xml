@@ -4,7 +4,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="#FFFFFF"
     android:orientation="vertical">
 
@@ -19,7 +18,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rwulmjdm442"
+            android:id="@+id/content_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="236dp"
@@ -28,11 +27,10 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/button_open_main"
+            android:id="@+id/button_create_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="39dp"
@@ -44,10 +42,10 @@
             android:paddingVertical="23dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/r2q551lhv7ib">
+            app:layout_constraintTop_toBottomOf="@+id/group_name_container">
 
             <TextView
-                android:id="@+id/r5utuogl2s85"
+                android:id="@+id/button_create_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="141dp"
@@ -63,7 +61,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/r2q551lhv7ib"
+            android:id="@+id/group_name_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="34dp"
@@ -74,11 +72,11 @@
             android:paddingVertical="12dp"
             android:paddingLeft="24dp"
             android:paddingRight="11dp"
-            app:layout_constraintTop_toBottomOf="@+id/rpukn3o5jt6"
+            app:layout_constraintTop_toBottomOf="@+id/group_name_title"
             tools:layout_editor_absoluteX="34dp">
 
             <ImageView
-                android:id="@+id/rta4dj3gt7p"
+                android:id="@+id/group_icon"
                 android:layout_width="41dp"
                 android:layout_height="50dp"
                 android:scaleType="fitXY"
@@ -86,8 +84,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <EditText
+                android:id="@+id/group_name_input"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
@@ -95,13 +93,13 @@
                 android:hint="Enter your group name here"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.26"
-                app:layout_constraintStart_toEndOf="@+id/rta4dj3gt7p"
-                app:layout_constraintTop_toTopOf="parent"></EditText>
+                app:layout_constraintStart_toEndOf="@+id/group_icon"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/rpukn3o5jt6"
+            android:id="@+id/group_name_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="43dp"
