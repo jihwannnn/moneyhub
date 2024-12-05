@@ -83,7 +83,6 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        // UI 상태와 CurrentUser 동시 관찰
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when {
