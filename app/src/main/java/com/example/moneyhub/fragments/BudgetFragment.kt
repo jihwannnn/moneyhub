@@ -98,11 +98,11 @@ class BudgetFragment : Fragment() {
         recyclerViewAdapter = TransactionAdapter(budgetData, isForBudget = true) { transaction ->
             val intent = Intent(requireContext(), CameraActivity::class.java).apply {
                 putExtra("transaction_id", transaction.tid) // tid 전달
-                putExtra("transaction_date", transaction.payDate)
                 putExtra("transaction_title", transaction.title)
                 putExtra("transaction_category", transaction.category)
                 putExtra("transaction_amount", transaction.amount)
-
+                putExtra("transaction_content", transaction.content)
+                putExtra("transaction_date", transaction.payDate)
             }
             startActivity(intent)
         }
