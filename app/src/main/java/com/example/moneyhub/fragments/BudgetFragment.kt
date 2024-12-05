@@ -126,7 +126,7 @@ class BudgetFragment : Fragment() {
             data?.let { intent ->
                 val newTransaction = Transaction(
                     tid = System.currentTimeMillis().toString(),
-                    title = intent.getStringExtra("name") ?: "",
+                    title = intent.getStringExtra("title") ?: "",
                     category = "${intent.getStringExtra("category")} |",
                     type = intent.getBooleanExtra("type", false),
                     amount = intent.getLongExtra("amount", 0L),
