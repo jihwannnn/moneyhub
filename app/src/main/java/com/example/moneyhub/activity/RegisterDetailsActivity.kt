@@ -158,7 +158,7 @@ class RegisterDetailsActivity : AppCompatActivity() {
             // 여기가 수정된 부분 - 원화 기호와 쉼표를 제거하고 Long으로 변환
             val amountText = binding.detailAmount.text.toString()
                 .replace("[₩,]".toRegex(), "") // 원화 기호와 쉼표 제거
-            var amount: Long? = amountText.toLongOrNull() // Changed from Double to Long
+            var amount: Long = amountText.toLongOrNull() ?: 0L // Changed from Double to Long
             val category = binding.categorySpinner.selectedItem.toString()
             val content = binding.detailMemo.text.toString()
 
