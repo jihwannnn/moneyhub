@@ -63,21 +63,22 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-        // 로그인 버튼
-        binding.buttonOpenCreate.setOnClickListener {
-            val email = binding.emailForm.getText()
-            val password = binding.passwordForm.getText()
-            viewModel.signIn(email, password)
-        }
 
-        // 회원가입 버튼
-        binding.buttonOpenSignup.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
+        with(binding) {
+            buttonLogin.setOnClickListener {
+                val email = emailForm.getText()
+                val password = passwordForm.getText()
+                viewModel.signIn(email, password)
+            }
+
+            buttonSignup.setOnClickListener {
+                val intent = Intent(this@LogInActivity, SignUpActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         // 아이디/비밀번호 찾기
-        binding.rjg1t5g8a3ch.setOnClickListener {
+        binding.findCredentials.setOnClickListener {
             TODO()
         }
     }

@@ -33,18 +33,12 @@ class HistoryFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             data?.let { intent ->
-                val amount = if (intent.hasExtra("amount")) {
-                    intent.getLongExtra("amount", 0L)
-                } else {
-                    null
-                }
-
                 val newTransaction = Transaction(
                     tid = System.currentTimeMillis().toString(),
                     title = intent.getStringExtra("title") ?: "",
                     category = "${intent.getStringExtra("category")} |",
                     type = intent.getBooleanExtra("type", false),
-                    amount = amount,
+                    amount = intent.getLongExtra("amount", 0L),
                     content = intent.getStringExtra("content") ?: "",
                     payDate = intent.getLongExtra("payDate", System.currentTimeMillis()),
                     verified = true,
