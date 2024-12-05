@@ -75,11 +75,12 @@ class CalendarFragment : Fragment() {
 
         // 각 날짜의 수입/지출 총액 계산
         calendarData.forEach { transaction ->
-            val currentPair = dailyTotals[transaction.payDate.toString()] ?: Pair(0.0, 0.0)
-            dailyTotals[transaction.payDate.toString()] = if (transaction.amount > 0) {
-                Pair(currentPair.first + transaction.amount, currentPair.second)
-            } else {
-                Pair(currentPair.first, currentPair.second - transaction.amount)
+            transaction.amount?.let { amount -> // null이 아닌 경우에만 처리
+                val currentPair = dailyTotals[transaction.payDate.toString()] ?: Pair(0.0, 0.0)
+                dailyTotals[transaction.payDate.toString()] = when {
+                    amount > 0 -> Pair(currentPair.first + amount, currentPair.second)
+                    else -> Pair(currentPair.first, currentPair.second - amount)
+                }
             }
         }
 
@@ -103,15 +104,16 @@ class CalendarFragment : Fragment() {
         var monthlyExpense = 0.0
 
         calendarData.forEach { transaction ->
-            if (transaction.amount > 0) {
-                monthlyIncome += transaction.amount
-            } else {
-                monthlyExpense += -transaction.amount
+            transaction.amount?.let { amount ->  // null이 아닌 경우에만 처리
+                when {
+                    amount > 0 -> monthlyIncome += amount
+                    else -> monthlyExpense += -amount
+                }
             }
         }
 
-        binding.textViewIncome.text = String.format("$ %.0f", monthlyIncome)
-        binding.textViewExpense.text = String.format("$ %.0f", monthlyExpense)
+        binding.textViewIncome.text = String.format(" ₩ %.0f", monthlyIncome)
+        binding.textViewExpense.text = String.format("₩ %.0f", monthlyExpense)
     }
 
     companion object {

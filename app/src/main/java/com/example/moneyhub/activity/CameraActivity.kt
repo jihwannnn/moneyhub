@@ -22,7 +22,8 @@ class CameraActivity : AppCompatActivity() {
     private var date: String? = null
     private var title: String? = null
     private var category: String? = null
-    private var amount: Double = 0.0
+    private var amount: Long? = null
+
 
     // 갤러리 실행 결과 처리
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -57,7 +58,7 @@ class CameraActivity : AppCompatActivity() {
         date = intent.getStringExtra("transaction_date")
         title = intent.getStringExtra("transaction_title")
         category = intent.getStringExtra("transaction_category")
-        amount = intent.getDoubleExtra("transaction_amount", 0.0)
+        amount = intent.getLongExtra("transaction_amount", 0L)
 
         // 텍스트뷰 표시
         binding.tvTransactionInfo.text = """

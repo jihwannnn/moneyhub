@@ -1,40 +1,29 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
     android:id="@+id/login"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <!--            입력상자간 간격을 의미하는 layout_marginBottom-->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="100dp"
-                android:layout_marginBottom="33dp"
-                android:orientation="horizontal"/>
+            android:orientation="vertical">
 
             <include
-                android:id="@+id/custom_header_without_mypage_include"
+                android:id="@+id/custom_header"
                 layout="@layout/custom_header_without_mypage"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp" />
 
             <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/emailForm"
@@ -47,108 +36,78 @@
                 android:id="@+id/passwordForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:customHint="Enter your group name here"
-                app:customIcon="@drawable/group"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                app:customHint="Enter your group name here"
+                app:customIcon="@drawable/group" />
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rpbg67a1q9qf"
+            <!-- 자동 로그인 및 아이디 저장 영역 -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginBottom="40dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/rjmrz4bykic"
-                    android:layout_width="15dp"
-                    android:layout_height="18dp"
-                    android:layout_marginStart="35dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/check"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/ruv8ezejlznd"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.833" />
-
-                <TextView
-                    android:id="@+id/ruv8ezejlznd"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="자동 로그인"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/rewzudxrzq0p"
-                    app:layout_constraintStart_toEndOf="@+id/rjmrz4bykic"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/rd27xbc1r3nm"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="315dp"
-                    android:layout_marginBottom="29dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"></androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/autoLoginCheck"
+                        android:layout_width="15dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/check" />
 
-                <ImageView
-                    android:id="@+id/rewzudxrzq0p"
-                    android:layout_width="15dp"
-                    android:layout_height="18dp"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/check"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/rx64351pn71"
-                    app:layout_constraintStart_toEndOf="@+id/ruv8ezejlznd"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/autoLoginText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="자동 로그인"
+                        android:textColor="#000000"
+                        android:textSize="16sp" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/rx64351pn71"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="아이디 저장"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/rewzudxrzq0p"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_marginStart="60dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/saveIdCheck"
+                        android:layout_width="15dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/check" />
+
+                    <TextView
+                        android:id="@+id/saveIdText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="아이디 저장"
+                        android:textColor="#000000"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 로그인 버튼 -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/button_open_create"
+                android:id="@+id/button_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="39dp"
                 android:layout_marginBottom="33dp"
                 android:background="@drawable/yellow"
                 android:elevation="4dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
                 android:paddingVertical="21dp">
 
                 <TextView
-                    android:id="@+id/r7ml5k58uvve"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="로그인"
@@ -161,24 +120,20 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- 회원가입 버튼 -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/button_open_signup"
+                android:id="@+id/button_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="39dp"
                 android:layout_marginBottom="33dp"
                 android:background="@drawable/emerald"
                 android:elevation="4dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-
                 android:paddingVertical="21dp">
 
                 <TextView
-                    android:id="@+id/r92q7rsbbork"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:text="회원 가입"
                     android:textColor="#000000"
                     android:textSize="24sp"
@@ -189,16 +144,16 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- 아이디/비밀번호 찾기 -->
             <TextView
-                android:id="@+id/rjg1t5g8a3ch"
+                android:id="@+id/find_credentials"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="135dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
                 android:text="아이디/비밀번호 찾기"
                 android:textColor="#949494"
                 android:textSize="16sp" />
         </LinearLayout>
-
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

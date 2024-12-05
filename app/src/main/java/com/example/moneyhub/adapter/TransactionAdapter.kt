@@ -65,7 +65,13 @@ class TransactionAdapter(
 //        holder.icon.setImageResource(item.icon)
         holder.title.text = item.title
         holder.category.text = item.category
-        holder.transaction.text = if (item.amount < 0) "-$ ${-item.amount}" else "$ ${item.amount}"
+
+        // amount가 null일 경우 처리
+        holder.transaction.text = when {
+            item.amount == null -> "₩ -"
+            item.amount < 0 -> String.format("- ₩%,d", -item.amount)  // 음수일 때
+            else -> String.format("₩%,d", item.amount)  // 양수일 때
+        }
 
         // 날짜에 따른 배경색 설정
         if (isForCalendar) {
@@ -84,10 +90,15 @@ class TransactionAdapter(
             holder.itemView.setBackgroundResource(R.drawable.cyan_block)
         }
 
-        // 금액 색상 설정
-        val textColor = if (item.amount < 0) R.color.moneyRed else R.color.moneyGreenThick
-        holder.transaction.setTextColor(holder.itemView.context.getColor(textColor))
+    // 금액 색상 설정 - null 처리 추가
+    val textColor = when {
+        item.amount == null -> R.color.moneyGrey  // null일 경우 기본 색상 지정
+        item.amount < 0 -> R.color.moneyRed
+        else -> R.color.moneyGreenThick
     }
+    holder.transaction.setTextColor(holder.itemView.context.getColor(textColor))
+}
+
 
     // getItemCount: 아이템의 총 개수를 반환
     override fun getItemCount(): Int = items.size
