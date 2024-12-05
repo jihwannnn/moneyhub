@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moneyhub.R
-import com.example.moneyhub.activity.CameraActivity
+import com.example.moneyhub.activity.camera.CameraActivity
 import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentBudgetBinding

@@ -1,4 +1,4 @@
-package com.example.moneyhub.activity
+package com.example.moneyhub.activity.camera
 
 import android.Manifest
 import android.content.Intent
@@ -13,7 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.moneyhub.R
+import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.databinding.ActivityCameraBinding
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
