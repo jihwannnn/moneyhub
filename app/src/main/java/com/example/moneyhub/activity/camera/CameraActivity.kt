@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.databinding.ActivityCameraBinding
+import com.example.moneyhub.model.Transaction
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -29,10 +30,11 @@ class CameraActivity : AppCompatActivity() {
     private val viewModel: CameraViewModel by viewModels()
 
     // 거래 내역 데이터를 저장할 변수들
-    private var date: String? = null
+    private var date: Long = 0L
     private var title: String? = null
     private var category: String? = null
-    private var amount: Long? = null
+    private var amount: Long = 0L
+    private var transactionId: String = ""
 
     // For OCR
     private val secretKey = "S1JoZ3dFa0RMY1RKTFRXRVl4cVlEV1Byb1BJaElyUXo="
@@ -44,7 +46,17 @@ class CameraActivity : AppCompatActivity() {
             // Once image is set, call OCR API
             val imagePath = getFilePathFromUri(it)
             if (imagePath != null) {
-                viewModel.callClovaOcrApi(imagePath, secretKey)
+                // originTransaction 만들기
+                val originTransaction = Transaction(
+                    tid = transactionId,
+                    title = title ?: "",
+                    category = category ?: "",
+                    amount = amount,
+                    payDate = date,
+                    verified = false
+                )
+
+                viewModel.callClovaOcrApi(imagePath, secretKey, originTransaction)
             } else {
                 Toast.makeText(this, "이미지 경로를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -73,13 +85,12 @@ class CameraActivity : AppCompatActivity() {
 
     // view model에 옮겨야 할 것
     private fun getTransactionData() {
-        // 데이터 받기
-        date = intent.getStringExtra("transaction_date")
+        // BudgetFragment에서 보낸 데이터
+        transactionId = intent.getStringExtra("transaction_id") ?: ""
+        date = intent.getLongExtra("transaction_date", 0L)
         title = intent.getStringExtra("transaction_title")
         category = intent.getStringExtra("transaction_category")
         amount = intent.getLongExtra("transaction_amount", 0L)
-
-        val transactionId = intent.getStringExtra("transaction_id") ?: ""
 
         // 텍스트뷰 표시
         binding.tvTransactionInfo.text = """
@@ -200,18 +211,35 @@ class CameraActivity : AppCompatActivity() {
                 }
 
                 if (state.isSuccess) {
-                    // OCR 성공적으로 완료됨
+                    // OCR 성공 -> Transaction 업데이트 완료
+                    Toast.makeText(this@CameraActivity, "OCR 완료! 거래내역이 검증되었습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        // observe OCR result
+        // observe OCR result를 toast함
         lifecycleScope.launchWhenStarted {
             viewModel.ocrResult.collect { texts ->
                 if (texts.isNotEmpty()) {
-                    // OCR 인식된 텍스트를 처리
-                    // 여기서는 단순히 Toast로 보여주지만, UI에 표시하거나 다음 동작을 수행할 수 있음
                     Toast.makeText(this@CameraActivity, "OCR 결과: ${texts.joinToString(", ")}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        // 최종 transaction 관찰
+        lifecycleScope.launchWhenStarted {
+            viewModel.finalTransaction.collect { transaction ->
+                if (transaction != null) {
+                    // finalTransactoin이 업데이트되면 tvTransactionInfo 갱신
+                    binding.tvTransactionInfo.text = """
+                    거래 ID: ${transaction.tid}
+                    날짜: ${transaction.payDate} 
+                    제목: ${transaction.title}
+                    카테고리: ${transaction.category}
+                    금액: ${transaction.amount}
+                    검증 여부: ${transaction.verified}
+                    내용: ${transaction.content}
+                    """.trimIndent()
                 }
             }
         }
