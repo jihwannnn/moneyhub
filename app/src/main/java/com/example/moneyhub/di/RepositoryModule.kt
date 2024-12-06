@@ -67,7 +67,7 @@ abstract class OcrModule {
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://0uqgp61nqk.apigw.ntruss.com/custom/v1/36533/94b3814bb3fdbb6a5a7be1f643a4718bbacdcca2a0fda7d8a5166b176fb1502a/infer/"
+    private const val BASE_URL = "https://0uqgp61nqk.apigw.ntruss.com/"
 
     @Provides
     @Singleton
