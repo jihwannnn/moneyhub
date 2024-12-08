@@ -5,6 +5,7 @@ import com.example.moneyhub.data.repository.auth.AuthRepository
 import com.example.moneyhub.data.repository.auth.AuthRepositoryImpl
 import com.example.moneyhub.api.clovaocr.ClovaOcrApi
 import com.example.moneyhub.data.repository.board.BoardRepository
+import com.example.moneyhub.data.repository.board.BoardRepositoryImpl
 import com.example.moneyhub.data.repository.board.TestBoardRepository
 import com.example.moneyhub.data.repository.camera.OcrRepository
 import com.example.moneyhub.data.repository.camera.OcrRepositoryImpl
@@ -35,7 +36,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindBoardRepository(
-        boardRepository: TestBoardRepository
+        boardRepository: BoardRepositoryImpl
     ): BoardRepository
 
     @Binds

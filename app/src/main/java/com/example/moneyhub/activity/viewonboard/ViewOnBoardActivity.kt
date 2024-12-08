@@ -1,4 +1,4 @@
-package com.example.moneyhub.activity
+package com.example.moneyhub.activity.viewonboard
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class ViewOnBoardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityViewOnBoardBinding
-    private val viewModel: PostOnBoardViewModel by viewModels()
+    private val viewModel: ViewOnBoardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

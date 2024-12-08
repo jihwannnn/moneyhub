@@ -1,6 +1,5 @@
 package com.example.moneyhub.data.repository.board
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.moneyhub.model.Comment
 import com.example.moneyhub.model.Post

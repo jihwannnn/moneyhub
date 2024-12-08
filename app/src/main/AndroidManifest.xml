@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31" >
-        <activity android:name=".activity.ViewOnBoardActivity"
+        <activity android:name=".activity.viewonboard.ViewOnBoardActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait" />
         <activity

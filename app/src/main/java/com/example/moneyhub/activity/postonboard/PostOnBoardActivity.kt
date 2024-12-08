@@ -81,8 +81,6 @@ class PostOnBoardActivity : AppCompatActivity() {
                     content = etContent.text.toString(),
                     imageUri = imageUri
                 )
-
-                finish()
             }
 
             // ViewModel 상태에 따라 버튼 활성화/비활성화
