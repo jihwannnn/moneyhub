@@ -74,13 +74,14 @@
             android:hint="참여할 모임 링크 입력"
             android:padding="16dp" />
 
-        <Button
+        <include
             android:id="@+id/btnSubmitLink"
+            layout="@layout/custom_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:text="참여"
-            android:backgroundTint="@color/moneyGrey" />
+            />
+
 
     </LinearLayout>
 
