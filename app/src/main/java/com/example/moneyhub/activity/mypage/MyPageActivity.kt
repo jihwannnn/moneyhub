@@ -1,5 +1,6 @@
 package com.example.moneyhub.activity.mypage
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -12,6 +13,7 @@ import com.example.moneyhub.activity.creategroup.CreateActivity
 import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.adapter.GroupAdapter
 import com.example.moneyhub.databinding.ActivityMyPageBinding
+import com.example.moneyhub.utils.LocalCacheUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -81,6 +83,8 @@ class MyPageActivity : AppCompatActivity() {
             viewModel.userGroups.collect { userGroup ->
                 userGroup?.let {
                     adapter.updateData(it)
+                    // 그룹 정보가 로드되었을 때 로컬 캐시에 저장
+                    saveUserGroupsToLocalCache(this@MyPageActivity, it.groups)
                 }
             }
         }
@@ -103,5 +107,23 @@ class MyPageActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // 유저 그룹 데이터 갱신 시 호출
+    fun saveUserGroupsToLocalCache(context: Context, groups: Map<String, String>) {
+        val prefs = context.getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+
+        // 간단히 JSON 문자열로 저장
+        val json = org.json.JSONObject().apply {
+            put("uid", "currentUserId") // 필요하다면 현재 유저의 uid도 저장
+            val groupsObj = org.json.JSONObject()
+            for ((gid, gname) in groups) {
+                groupsObj.put(gid, gname)
+            }
+            put("groups", groupsObj)
+        }.toString()
+        editor.putString("userGroups", json)
+        editor.apply()
     }
 }
