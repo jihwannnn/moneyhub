@@ -24,12 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31">
-        <activity
-            android:name=".activity.viewtransactiondetails.ViewTransactionDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.viewonboard.ViewOnBoardActivity"
-        tools:targetApi="31" >
+
         <!-- AndroidManifest.xml -->
         <receiver android:name=".widget.MyGroupsWidgetProvider"
             android:exported="true">
@@ -43,7 +38,11 @@
         <service android:name=".widget.MyGroupsRemoteViewsService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false"/>
-        <activity android:name=".activity.viewonboard.ViewOnBoardActivity"
+        <activity
+            android:name=".activity.viewtransactiondetails.ViewTransactionDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.viewonboard.ViewOnBoardActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait" />
         <activity
