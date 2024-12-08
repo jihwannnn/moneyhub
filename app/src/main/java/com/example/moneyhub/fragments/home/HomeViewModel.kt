@@ -12,6 +12,7 @@ import javax.inject.Inject
 // 홈 화면의 월 이동과 관련된 상태를 관리하는 ViewModel
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
+
     // 현재 선택된 년월을 저장하는 상태
     // StateFlow는 상태를 관찰 가능한 형태로 만들어주는 Kotlin의 Flow API
     private val _currentYearMonth = MutableStateFlow(YearMonth.now())
