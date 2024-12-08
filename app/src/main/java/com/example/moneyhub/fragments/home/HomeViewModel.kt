@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.YearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Year
 import javax.inject.Inject
 
 // 홈 화면의 월 이동과 관련된 상태를 관리하는 ViewModel
@@ -15,6 +16,10 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     // StateFlow는 상태를 관찰 가능한 형태로 만들어주는 Kotlin의 Flow API
     private val _currentYearMonth = MutableStateFlow(YearMonth.now())
     val currentYearMonth: StateFlow<YearMonth> = _currentYearMonth.asStateFlow()
+
+    fun setCurrentYearMonth(yearMonth: YearMonth) {
+        _currentYearMonth.value = yearMonth
+    }
 
     // 월 표시 텍스트(예: "Oct")를 반환하는 함수
     fun getMonthDisplayText(): String {

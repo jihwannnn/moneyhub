@@ -32,7 +32,7 @@
             android:exported="false"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".activity.RegisterDetailsActivity"
+            android:name=".activity.registerdetails.RegisterDetailsActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait" />
         <activity

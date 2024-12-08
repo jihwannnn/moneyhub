@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.moneyhub.R
 import com.example.moneyhub.adapter.HomePagerAdapter
 import com.example.moneyhub.databinding.FragmentHomeBinding
@@ -49,16 +51,28 @@ class HomeFragment : Fragment() {
 
     private fun setupMonthNavigation() {
         binding.imageViewPrevioiusMonthButton.setOnClickListener {
+            val newMonth = homeViewModel.currentYearMonth.value.minusMonths(1)
             homeViewModel.moveToPreviousMonth()
+            sharedViewModel.setCurrentYearMonth(newMonth)   // ViewModel에 변경 사항 반영
         }
 
         binding.imageViewNextMonthButton.setOnClickListener {
+            val newMonth = homeViewModel.currentYearMonth.value.plusMonths(1)
             homeViewModel.moveToNextMonth()
+            sharedViewModel.setCurrentYearMonth(newMonth)   // ViewModel에 변경 사항 반영
         }
     }
 
     private fun observeYearMonth() {
         viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.currentYearMonth.collect { yearMonth ->
+                    binding.currentMonthText.text = "${yearMonth.month.name.take(3)} ${yearMonth.year}"
+
+                    homeViewModel.setCurrentYearMonth(yearMonth)
+                }
+            }
+
             homeViewModel.currentYearMonth.collect { yearMonth ->
                 binding.currentMonthText.text = homeViewModel.getMonthDisplayText()
                 sharedViewModel.updateMonthlyTransactions(yearMonth)

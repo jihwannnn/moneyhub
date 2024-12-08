@@ -17,7 +17,10 @@ import com.example.moneyhub.model.Transaction
 import com.example.moneyhub.utils.DateUtils
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.time.Year
+import java.time.YearMonth
 
 @AndroidEntryPoint // Hilt를 사용한 의존성 주입을 위한 어노테이션
 class CalendarFragment : Fragment() {
@@ -71,6 +74,7 @@ class CalendarFragment : Fragment() {
         setupRecyclerView()
         setupCalendarView()
         observeTransactions()  // ViewModel의 데이터 변화를 관찰하기 시작
+        observeCurrentYearMonth()
 
     }
 
@@ -98,6 +102,11 @@ class CalendarFragment : Fragment() {
         }
 
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+
+            // 선택된 월 정보 -> 뷰모델로
+            val selectedYearMonth = YearMonth.of(year, month + 1)   // 월은 0부터 시작하니까
+            sharedViewModel.setCurrentYearMonth(selectedYearMonth)
+
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
 
             // 선택된 날짜의 거래 내역 필터링
@@ -128,6 +137,19 @@ class CalendarFragment : Fragment() {
         // 계산된 총액을 TextView에 표시
         binding.textViewIncome.text = String.format(" ₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
         binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
+    }
+
+    private fun observeCurrentYearMonth() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.currentYearMonth.collect { yearMonth ->
+                    // 변경된 YearMonth를 기반으로 캘린더 업데이트
+                    val calendar = java.util.Calendar.getInstance()
+                    calendar.set(yearMonth.year, yearMonth.monthValue - 1, 1) // 월은 0부터 시작
+                    binding.calendarView.date = calendar.timeInMillis
+                }
+            }
+        }
     }
 
     // ViewModel의 데이터 변화를 관찰하는 함수
