@@ -67,13 +67,14 @@ object DateUtils {
         }.timeInMillis
     }
 
-    // timestamp의 해당 월의 마지막 날 마지막 시간을 반환
     fun getEndOfMonth(timestamp: Long): Long {
         return Calendar.getInstance().apply {
             timeInMillis = timestamp
-            set(Calendar.DAY_OF_MONTH, 1)
-            add(Calendar.MONTH, 1)
-            add(Calendar.MILLISECOND, -1)
+            set(Calendar.DAY_OF_MONTH, getActualMaximum(Calendar.DAY_OF_MONTH))
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+            set(Calendar.MILLISECOND, 999)
         }.timeInMillis
     }
 }

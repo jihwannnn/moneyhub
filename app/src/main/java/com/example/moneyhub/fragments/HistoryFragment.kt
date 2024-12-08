@@ -8,31 +8,44 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.activity.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.utils.DateUtils
+import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+@AndroidEntryPoint  // Hilt 의존성 주입을 위한 어노테이션
 class HistoryFragment : Fragment() {
+    // Fragment 수준에서 공유되는 ViewModel 참조
+    private val sharedViewModel: SharedTransactionViewModel by activityViewModels()
+
+    // ViewBinding null 안전성을 위한 처리
+    private var _binding: FragmentHistoryBinding? = null
+    private val binding get() = _binding!!  // !! 연산자로 null이 아님을 보장
+
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var binding: FragmentHistoryBinding
-
-    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TransactionAdapter
 
-    // ActivityResultLauncher 추가
+    // RegisterDetailsActivity로부터의 결과를 처리하는 launcher
     private val startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             data?.let { intent ->
+                // 새로운 거래내역 객체 생성
                 val newTransaction = Transaction(
                     tid = System.currentTimeMillis().toString(),
                     title = intent.getStringExtra("title") ?: "",
@@ -44,48 +57,11 @@ class HistoryFragment : Fragment() {
                     verified = true,
                     createdAt = System.currentTimeMillis()
                 )
-
-                historyData.add(newTransaction)
-                adapter.notifyDataSetChanged()
+                // 생성된 거래내역을 SharedViewModel에 추가
+                sharedViewModel.addTransaction(newTransaction)
             }
         }
     }
-
-    private val historyData = mutableListOf(
-        Transaction(
-            tid = "11",
-            title = "간식 사업 지출",
-            category = "학생 복지 |",
-            type = false, // 지출
-            amount = -120000L,
-            content = "",
-            payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
-            verified = true,
-            createdAt = System.currentTimeMillis()
-        ),
-        Transaction(
-            tid = "12",
-            title = "그 외 Title",
-            category = "그 외 category |",
-            type = false, // 지출
-            amount = -1000L,
-            content = "",
-            payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
-            verified = true,
-            createdAt = System.currentTimeMillis()
-        ),
-        Transaction(
-            tid = "13",
-            title = "그 외 Title",
-            category = "그 외 category |",
-            type = false, // 지출
-            amount = -1000L,
-            content = "",
-            payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse("2024-11-10").time,
-            verified = true,
-            createdAt = System.currentTimeMillis()
-        )
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,24 +72,69 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHistoryBinding.inflate(inflater, container, false)
+    ): View {
+        // ViewBinding 초기화
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        // RecyclerView 초기화
+        setupRecyclerView()
 
-        adapter = TransactionAdapter(historyData, false)
-        recyclerView.adapter = adapter
-
-        // 버튼 클릭 리스너 수정
-        binding.btnAddHistory.setOnClickListener {
-            val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
-            startForResult.launch(intent)  // startActivity 대신 startForResult.launch 사용
-        }
+        // 새 거래내역 추가 버튼 설정
+        setupAddButton()
 
         return binding.root
+    }
+
+    // 거래내역 추가 버튼 설정
+    private fun setupAddButton() {
+        binding.btnAddHistory.setOnClickListener {
+            val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
+            startForResult.launch(intent)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        println("DEBUG: HistoryFragment onViewCreated")
+
+        setupRecyclerView()
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                println("DEBUG: Starting to collect filtered histories")
+                sharedViewModel.filteredHistories.collect { transactions ->
+                    println("DEBUG: Received filtered update, size = ${transactions.size}")
+                    if (transactions.isNotEmpty()) {
+                        println("DEBUG: Transaction dates = ${
+                            transactions.map { DateUtils.millisToDate(it.payDate) }
+                        }")
+                    }
+                    adapter.updateData(transactions)
+                }
+            }
+        }
+    }
+
+    // RecyclerView 설정을 위한 함수
+    private fun setupRecyclerView() {
+        // 어댑터를 빈 리스트로 초기화 (데이터는 나중에 observe에서 업데이트)
+        adapter = TransactionAdapter(emptyList(), false)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = this@HistoryFragment.adapter
+        }
+    }
+
+
+
+    // 메모리 누수 방지를 위한 binding null 처리
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
