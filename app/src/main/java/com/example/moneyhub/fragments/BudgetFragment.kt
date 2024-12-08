@@ -15,6 +15,7 @@ import com.example.moneyhub.activity.camera.CameraActivity
 import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentBudgetBinding
+import com.example.moneyhub.model.Transaction
 import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import kotlinx.coroutines.launch
 
@@ -70,6 +71,30 @@ class BudgetFragment : Fragment() {
     }
 
 
+    private fun updateMonthlyTotals(transactions: List<Transaction>) {
+        var monthlyIncome = 0L
+        var monthlyExpense = 0L
+
+        // 모든 거래내역을 순회하면서 내역의 수입과 지출 합계 계산
+        transactions.forEach { transaction ->
+            if (!transaction.verified) {
+                if (transaction.type) {  // type이 true면 수입
+                    monthlyIncome += transaction.amount
+                } else {  // type이 false면 지출
+                    monthlyExpense += transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
+                }
+            }
+        }
+
+        // 계산된 총액을 TextView에 표시
+        binding.textViewIncome.text = String.format(" ₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
+        binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
+    }
+
+
+
+
+
     // 메모리 누수 방지를 위한 binding null 처리
     override fun onDestroyView() {
         super.onDestroyView()
@@ -81,6 +106,7 @@ class BudgetFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.filteredBudgets.collect { transactions ->
                     adapter.updateData(transactions)
+                    updateMonthlyTotals(transactions)
                 }
             }
         }
