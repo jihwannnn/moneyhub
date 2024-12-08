@@ -10,10 +10,14 @@ data class ImageResponse(
 
 data class TextField(
     val inferText: String,
-    val boundingPoly: List<Coordinate>
+    val boundingPoly: BoundingPoly
+)
+
+data class BoundingPoly(
+    val vertices: List<Coordinate>
 )
 
 data class Coordinate(
-    val x: Int,
-    val y: Int
+    val x: Float,
+    val y: Float
 )
