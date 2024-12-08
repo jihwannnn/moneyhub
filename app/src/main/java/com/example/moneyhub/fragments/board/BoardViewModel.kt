@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BoardFragmentViewModel @Inject constructor(
+class BoardViewModel @Inject constructor(
     private val repository: BoardRepository,
 ) : ViewModel() {
 
@@ -38,13 +38,15 @@ class BoardFragmentViewModel @Inject constructor(
         _currentUser.value = CurrentUserSession.getCurrentUser()
     }
 
-    private fun loadPosts() {
+    fun loadPosts() {
         viewModelScope.launch {
             val userGroupId = _currentUser.value?.currentGid ?: return@launch
             repository.getPosts(userGroupId).fold(
-                onSuccess = { posts -> _postList.value = posts },
+                onSuccess = { posts ->
+                    _postList.value = posts
+                    _uiState.value = UiState(isSuccess = true) },
                 onFailure = { exception ->
-                    // Log or handle errors here
+                    _uiState.value = UiState(error = exception.message)
                 }
             )
         }

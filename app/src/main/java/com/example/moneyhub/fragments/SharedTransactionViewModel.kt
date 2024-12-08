@@ -53,10 +53,7 @@ class SharedTransactionViewModel @Inject constructor(
         println("DEBUG: ViewModel initialized")
         viewModelScope.launch(Dispatchers.Main.immediate) {  // Main.immediate로 변경
 
-            // 더미 데이터로 초기화
-            loadDummyData()
-            // ViewModel 초기화 시 사용자 정보 로드
-//            loadUser()
+            loadUser()
         }
     }
 

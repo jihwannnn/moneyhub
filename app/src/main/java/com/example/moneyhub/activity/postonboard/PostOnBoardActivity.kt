@@ -1,5 +1,6 @@
 package com.example.moneyhub.activity.postonboard
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -116,6 +117,7 @@ class PostOnBoardActivity : AppCompatActivity() {
 
     private fun handleSuccess() {
         Toast.makeText(this, "게시물이 업로드되었습니다.", Toast.LENGTH_SHORT).show()
+        setResult(Activity.RESULT_OK)
         finish()
     }
 

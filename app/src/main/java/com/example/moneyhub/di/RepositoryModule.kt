@@ -13,6 +13,7 @@ import com.example.moneyhub.data.repository.group.GroupRepository
 import com.example.moneyhub.data.repository.group.GroupRepositoryImpl
 import com.example.moneyhub.data.repository.transaction.TestTransactionRepository
 import com.example.moneyhub.data.repository.transaction.TransactionRepository
+import com.example.moneyhub.data.repository.transaction.TransactionRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -48,7 +49,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindTransactionRepository(
-        transactionRepository: TestTransactionRepository
+        transactionRepository: TransactionRepositoryImpl
     ): TransactionRepository
 
 }

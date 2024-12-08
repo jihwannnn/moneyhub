@@ -8,12 +8,14 @@ import com.example.moneyhub.data.repository.board.BoardRepository
 import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.Post
 import com.example.moneyhub.model.sessions.CurrentUserSession
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ViewOnBoardViewModel @Inject constructor(
     private val repository: BoardRepository,
 ) : ViewModel() {
