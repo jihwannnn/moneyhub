@@ -5,14 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentCalendarBinding
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.utils.DateUtils
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint // Hilt를 사용한 의존성 주입을 위한 어노테이션
 class CalendarFragment : Fragment() {
+
+    // Fragment들 간의 공유되는 Viewmodel을 activityModels()를 통해 가져옴
+    private val sharedViewModel: SharedTransactionViewModel by activityViewModels()
+
     private val db = FirebaseFirestore.getInstance()
     private lateinit var binding: FragmentCalendarBinding
     private lateinit var adapter: TransactionAdapter
@@ -58,7 +70,8 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupCalendarView()
-        updateMonthlyTotals()
+        observeTransactions()  // ViewModel의 데이터 변화를 관찰하기 시작
+
     }
 
     // RecyclerView 초기화 및 설정
@@ -99,22 +112,57 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun updateMonthlyTotals() {
-        var monthlyIncome = 0.0
-        var monthlyExpense = 0.0
+    private fun updateMonthlyTotals(transactions: List<Transaction>) {
+        var monthlyIncome = 0L
+        var monthlyExpense = 0L
 
-        calendarData.forEach { transaction ->
-            transaction.amount?.let { amount ->  // null이 아닌 경우에만 처리
-                when {
-                    amount > 0 -> monthlyIncome += amount
-                    else -> monthlyExpense += -amount
-                }
+        // 모든 거래내역을 순회하면서 수입과 지출 합계 계산
+        transactions.forEach { transaction ->
+            if (transaction.type) {  // type이 true면 수입
+                monthlyIncome += transaction.amount
+            } else {  // type이 false면 지출
+                monthlyExpense += -transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
             }
         }
 
-        binding.textViewIncome.text = String.format(" ₩ %.0f", monthlyIncome)
-        binding.textViewExpense.text = String.format("₩ %.0f", monthlyExpense)
+        // 계산된 총액을 TextView에 표시
+        binding.textViewIncome.text = String.format(" ₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
+        binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
     }
+
+    // ViewModel의 데이터 변화를 관찰하는 함수
+    private fun observeTransactions() {
+        // Fragment의 생명주기를 고려한 코루틴 스코프 실행
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Fragment가 STARTED 상태일 때만 데이터 수집
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // filteredHistories의 변화를 관찰
+                sharedViewModel.filteredHistories.collect { transactions ->
+                    // 월간 총계 업데이트
+                    updateMonthlyTotals(transactions)
+
+                    // 현재 캘린더뷰에서 선택된 날짜 가져오기
+                    val selectedDate = binding.calendarView.date
+
+                    // 해당 날짜의 거래 내역만 필터링
+                    val filteredForDate = transactions.filter {
+                        DateUtils.isSameDay(it.payDate, selectedDate)
+                    }
+
+                    // 필터링된 데이터로 새 어댑터 생성
+                    adapter = TransactionAdapter(
+                        filteredForDate,  // 필터링된 거래 내역
+                        true,            // 달력 보기 모드
+                        true             // 캘린더 스타일 적용
+                    )
+
+                    // RecyclerView에 새 어댑터 설정
+                    binding.transactionList.adapter = adapter
+                }
+            }
+        }
+    }
+
 
     companion object {
         @JvmStatic
