@@ -13,14 +13,22 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+// 변경: items -> transactions로 변경하여 데이터 업데이트 지원
 class TransactionAdapter(
-    private val items: List<Transaction>,
+    // 거래내역 목록을 담는 변수. var로 선언하여 업데이트 가능하게 함
+    private var transactions: List<Transaction>,
     private val isForBudget: Boolean,
     private val isForCalendar: Boolean = false,  // 새로운 파라미터 추가, 기본값은 false
-
     // TransactionItem을 매개변수로 받는 함수 타입
     private val onItemClick: (Transaction) -> Unit = {} // 클릭된 아이템의 정보를 전달 가능
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+
+    // 추가: 새로운 거래내역 목록으로 데이터를 업데이트하는 함수
+    // SharedViewModel에서 필터링된 데이터를 받아 RecyclerView를 갱신할 때 사용
+    fun updateData(newTransactions: List<Transaction>) {
+        transactions = newTransactions
+        notifyDataSetChanged() // RecyclerView에 데이터가 변경되었음을 알림
+    }
 
     // ViewHolder: 아이템 뷰를 저장하는 클래스
     inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -31,7 +39,8 @@ class TransactionAdapter(
         init {
             itemView.setOnClickListener {
                 // 거래 내역 아이템 리스트를 가져온다.
-                onItemClick.invoke(items[position])  // 클릭된 아이템 전체를 전달
+                // 변경: items -> transactions
+                onItemClick.invoke(transactions[position])  // 클릭된 아이템 전체를 전달
             }
         }
     }
@@ -58,11 +67,12 @@ class TransactionAdapter(
 
     // onBindViewHolder: 뷰 홀더에 데이터를 바인딩
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-        val item = items[position]
+        // 변경: items -> transactions
+        val item = transactions[position]
 
         // 데이터를 ViewHolder에 반영
-// icon 설정
-//        holder.icon.setImageResource(item.icon)
+        // icon 설정
+        // holder.icon.setImageResource(item.icon)
         holder.title.text = item.title
         holder.category.text = item.category
 
@@ -78,7 +88,6 @@ class TransactionAdapter(
             val currentDate = Calendar.getInstance()
             val itemDate = Date(item.payDate)  // 타임스탬프를 Date 객체로 변환
 
-
             if (itemDate.before(currentDate.time)) {
                 holder.itemView.setBackgroundResource(R.drawable.yellow_thin_block_less_corners)
             } else {
@@ -90,16 +99,16 @@ class TransactionAdapter(
             holder.itemView.setBackgroundResource(R.drawable.cyan_block)
         }
 
-    // 금액 색상 설정 - null 처리 추가
-    val textColor = when {
-        item.amount == null -> R.color.moneyGrey  // null일 경우 기본 색상 지정
-        item.amount < 0 -> R.color.moneyRed
-        else -> R.color.moneyGreenThick
+        // 금액 색상 설정 - null 처리 추가
+        val textColor = when {
+            item.amount == null -> R.color.moneyGrey  // null일 경우 기본 색상 지정
+            item.amount < 0 -> R.color.moneyRed
+            else -> R.color.moneyGreenThick
+        }
+        holder.transaction.setTextColor(holder.itemView.context.getColor(textColor))
     }
-    holder.transaction.setTextColor(holder.itemView.context.getColor(textColor))
-}
-
 
     // getItemCount: 아이템의 총 개수를 반환
-    override fun getItemCount(): Int = items.size
+    // 변경: items -> transactions
+    override fun getItemCount(): Int = transactions.size
 }
