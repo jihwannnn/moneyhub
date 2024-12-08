@@ -92,7 +92,7 @@ class CalendarFragment : Fragment() {
 
         // 각 날짜의 수입/지출 총액 계산
         calendarData.forEach { transaction ->
-            transaction.amount?.let { amount -> // null이 아닌 경우에만 처리
+            transaction.amount.let { amount ->
                 val currentPair = dailyTotals[transaction.payDate.toString()] ?: Pair(0.0, 0.0)
                 dailyTotals[transaction.payDate.toString()] = when {
                     amount > 0 -> Pair(currentPair.first + amount, currentPair.second)

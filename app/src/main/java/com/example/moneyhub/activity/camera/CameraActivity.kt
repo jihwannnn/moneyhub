@@ -201,7 +201,7 @@ class CameraActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         // Observe UI State
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 if (state.isLoading) {
                     // Show loading indicator
@@ -221,7 +221,7 @@ class CameraActivity : AppCompatActivity() {
         }
 
         // observe OCR result를 toast함
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             viewModel.ocrResult.collect { texts ->
                 if (texts.isNotEmpty()) {
                     Toast.makeText(this@CameraActivity, "OCR 결과: ${texts.joinToString(", ")}", Toast.LENGTH_LONG).show()

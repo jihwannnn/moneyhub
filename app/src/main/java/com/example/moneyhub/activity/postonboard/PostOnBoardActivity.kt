@@ -78,8 +78,8 @@ class PostOnBoardActivity : AppCompatActivity() {
 
                 // Example authorId and authorName. Replace with actual user data.
                 viewModel.post(
-                    title = etTitle.text.toString(),
-                    content = etContent.text.toString(),
+                    title = title,
+                    content = content,
                     imageUri = imageUri
                 )
             }
