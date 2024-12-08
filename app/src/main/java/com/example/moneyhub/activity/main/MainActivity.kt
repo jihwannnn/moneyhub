@@ -1,4 +1,4 @@
-package com.example.moneyhub.activity
+package com.example.moneyhub.activity.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.moneyhub.viewmodel.MainViewModel
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.mypage.MyPageActivity
 import com.example.moneyhub.databinding.ActivityMainBinding

@@ -1,4 +1,4 @@
-package com.example.moneyhub.viewmodel
+package com.example.moneyhub.activity.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

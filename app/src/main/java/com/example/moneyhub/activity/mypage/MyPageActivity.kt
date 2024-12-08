@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.creategroup.CreateActivity
-import com.example.moneyhub.activity.MainActivity
+import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.adapter.GroupAdapter
 import com.example.moneyhub.databinding.ActivityMyPageBinding
 import dagger.hilt.android.AndroidEntryPoint
