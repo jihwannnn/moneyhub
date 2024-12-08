@@ -95,7 +95,7 @@ class TransactionRepositoryImpl @Inject constructor() : TransactionRepository {
                 .document(gid)
                 .collection("transactions")
                 .whereEqualTo("verified", verified)
-                .orderBy("payDate", Query.Direction.DESCENDING)
+                .orderBy("payDate", Query.Direction.ASCENDING)
 
             val querySnapshot = transactionsRef.get().await()
 
@@ -126,7 +126,7 @@ class TransactionRepositoryImpl @Inject constructor() : TransactionRepository {
                 .whereEqualTo("verified", true)
                 .whereGreaterThanOrEqualTo("payDate", startOfDay)
                 .whereLessThanOrEqualTo("payDate", endOfDay)
-                .orderBy("payDate", Query.Direction.DESCENDING)
+                .orderBy("payDate", Query.Direction.ASCENDING)
 
             val querySnapshot = transactionsRef.get().await()
 
