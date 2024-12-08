@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moneyhub.activity.ViewOnBoardActivity
+import com.example.moneyhub.activity.viewonboard.ViewOnBoardActivity
 import com.example.moneyhub.databinding.ItemLayoutBoardBinding
 import com.example.moneyhub.model.Post
 import com.example.moneyhub.model.sessions.PostSession
@@ -20,7 +20,7 @@ class BoardRecyclerAdapter(
     private var posts: List<Post>,
 ) : RecyclerView.Adapter<BoardRecyclerAdapter.ViewHolder>() {
 
-    fun updateData(newPosts: List<Post>) {
+    fun updatePosts(newPosts: List<Post>) {
         posts = newPosts
         notifyDataSetChanged()
     }

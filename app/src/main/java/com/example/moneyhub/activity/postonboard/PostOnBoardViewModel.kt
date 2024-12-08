@@ -1,6 +1,5 @@
 package com.example.moneyhub.activity.postonboard
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.common.UiState
@@ -55,6 +54,7 @@ class PostOnBoardViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
 
             val post = Post(
+                pid = user.id,
                 gid = user.currentGid,
                 title = title,
                 content = content,
@@ -104,16 +104,5 @@ class PostOnBoardViewModel @Inject constructor(
         }
 
         else -> true
-    }
-
-
-    fun fetchPost(post: Post) {
-        viewModelScope.launch {
-            try {
-                _currentPost.value = post
-            } catch (e: Exception) {
-                _currentPost.value = null // 에러 발생 시 null로 설정
-            }
-        }
     }
 }

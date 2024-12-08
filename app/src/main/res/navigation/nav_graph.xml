@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/BoardFragment"
-        android:name="com.example.moneyhub.fragments.BoardFragment"
+        android:name="com.example.moneyhub.fragments.board.BoardFragment"
         android:label="@string/vote_fragment_label"
         tools:layout="@layout/fragment_board" >
 
