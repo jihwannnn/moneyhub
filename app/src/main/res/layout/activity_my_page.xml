@@ -55,21 +55,34 @@
         android:layout_margin="15dp"
         app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-
-
-
-    <EditText
-        android:id="@+id/etMeetingLink"
+    <LinearLayout
+        android:id="@+id/linkInputContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="34dp"
         android:layout_marginTop="13dp"
-        android:hint="참여할 모임 링크 입력"
-        android:padding="16dp"
-
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLogOut" />
+        app:layout_constraintTop_toBottomOf="@id/btnLogOut">
+
+        <EditText
+            android:id="@+id/etMeetingLink"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="참여할 모임 링크 입력"
+            android:padding="16dp" />
+
+        <Button
+            android:id="@+id/btnSubmitLink"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:text="참여"
+            android:backgroundTint="@color/moneyGrey" />
+
+    </LinearLayout>
 
     <include
         android:id="@+id/btnCreateRoom"
@@ -77,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        app:layout_constraintTop_toBottomOf="@id/etMeetingLink" />
+        app:layout_constraintTop_toBottomOf="@id/linkInputContainer" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/groupList"
