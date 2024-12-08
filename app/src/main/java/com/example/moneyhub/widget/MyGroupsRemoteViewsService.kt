@@ -5,6 +5,7 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.example.moneyhub.R
+import com.example.moneyhub.utils.LocalCacheUtils.loadUserGroupsFromLocalCache
 
 class MyGroupsRemoteViewsService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
@@ -28,7 +29,7 @@ class MyGroupsRemoteViewsFactory(
         // 예를 들어 SharedPreferences나 Room DB 등에서 현재 유저가 속한 그룹 리스트 로드
         // groupList = loadUserGroupsFromLocalCache()
         // 예시
-        groupList = listOf("group1" to "ITM student council", "group2" to "Marketing team")
+        groupList = loadUserGroupsFromLocalCache(context)
     }
 
     override fun onDestroy() {

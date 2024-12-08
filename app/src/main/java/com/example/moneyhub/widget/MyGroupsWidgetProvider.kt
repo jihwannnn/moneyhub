@@ -28,10 +28,21 @@ class MyGroupsWidgetProvider : AppWidgetProvider() {
             // 빈뷰 설정 (데이터 없을 때)
             // views.setEmptyView(R.id.widgetGroupListView, R.id.tvEmptyView)
 
+            // 리스트 아이템 클릭 시 실행될 인텐트 템플릿 설정
+            val clickIntent = Intent(context, MyPageActivity::class.java)
+            val pendingIntent1 = PendingIntent.getActivity(
+                context,
+                0,
+                clickIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
             // 위젯을 터치하면 MyPageActivity로 이동하는 인텐트
             val intent = Intent(context, MyPageActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.tvWidgetTitle, pendingIntent)
+            val pendingIntent2 = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+            views.setOnClickPendingIntent(R.id.tvWidgetTitle, pendingIntent2)
+            views.setPendingIntentTemplate(R.id.widgetGroupListView, pendingIntent1)
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetGroupListView)
