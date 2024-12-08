@@ -64,7 +64,11 @@ class HistoryFragment : Fragment() {
         println("DEBUG: HistoryFragment onViewCreated")
 
         setupRecyclerView()
+        observeViewModel()
 
+    }
+
+    private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 println("DEBUG: Starting to collect filtered histories")
@@ -77,6 +81,14 @@ class HistoryFragment : Fragment() {
                     }
                     adapter.updateData(transactions)
                     updateMonthlyTotals(transactions)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.currentYearMonth.collect { yearMonth ->
+                    sharedViewModel.updateMonthlyTransactions(yearMonth)
                 }
             }
         }
@@ -102,7 +114,7 @@ class HistoryFragment : Fragment() {
                 if (transaction.type) {  // type이 true면 수입
                     monthlyIncome += transaction.amount
                 } else {  // type이 false면 지출
-                    monthlyExpense += -transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
+                    monthlyExpense += transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
                 }
             }
         }
