@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var lastX: Float = 0.0f
     private var lastY: Float = 0.0f
     private var lastZ: Float = 0.0f
-    private val shakeThreshold = 10000 // 흔들기 감지 임계값
+    private val shakeThreshold = 1500 // 흔들기 감지 임계값
 
 
 
