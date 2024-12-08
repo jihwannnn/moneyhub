@@ -45,6 +45,7 @@ class CameraViewModel @Inject constructor(
 
     private fun loadOriginTransaction() {
         _originTransaction.value = RegisterTransactionSession.getCurrentTransaction().copy(verified = true)
+        RegisterTransactionSession.setTransaction(_originTransaction.value)
     }
 
     fun callClovaOcrApi(imagePath: String, secretKey: String) {
