@@ -1,19 +1,16 @@
 package com.example.moneyhub.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
@@ -21,9 +18,6 @@ import com.example.moneyhub.model.Transaction
 import com.example.moneyhub.utils.DateUtils
 import kotlinx.coroutines.launch
 import dagger.hilt.android.AndroidEntryPoint
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 @AndroidEntryPoint  // Hilt 의존성 주입을 위한 어노테이션
 class HistoryFragment : Fragment() {
@@ -34,41 +28,10 @@ class HistoryFragment : Fragment() {
     private var _binding: FragmentHistoryBinding? = null
     private val binding get() = _binding!!  // !! 연산자로 null이 아님을 보장
 
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var adapter: TransactionAdapter
-
-    // RegisterDetailsActivity로부터의 결과를 처리하는 launcher
-    private val startForResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            data?.let { intent ->
-                // 새로운 거래내역 객체 생성
-                val newTransaction = Transaction(
-                    tid = System.currentTimeMillis().toString(),
-                    title = intent.getStringExtra("title") ?: "",
-                    category = "${intent.getStringExtra("category")} |",
-                    type = intent.getBooleanExtra("type", false),
-                    amount = intent.getLongExtra("amount", 0L),
-                    content = intent.getStringExtra("content") ?: "",
-                    payDate = intent.getLongExtra("payDate", System.currentTimeMillis()),
-                    verified = true,
-                    createdAt = System.currentTimeMillis()
-                )
-                // 생성된 거래내역을 SharedViewModel에 추가
-                sharedViewModel.addTransaction(newTransaction)
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -92,7 +55,7 @@ class HistoryFragment : Fragment() {
     private fun setupAddButton() {
         binding.btnAddHistory.setOnClickListener {
             val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
-            startForResult.launch(intent)
+            startActivity(intent)
         }
     }
 
@@ -101,7 +64,6 @@ class HistoryFragment : Fragment() {
         println("DEBUG: HistoryFragment onViewCreated")
 
         setupRecyclerView()
-
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -114,6 +76,7 @@ class HistoryFragment : Fragment() {
                         }")
                     }
                     adapter.updateData(transactions)
+                    updateMonthlyTotals(transactions)
                 }
             }
         }
@@ -129,22 +92,29 @@ class HistoryFragment : Fragment() {
         }
     }
 
+    private fun updateMonthlyTotals(transactions: List<Transaction>) {
+        var monthlyIncome = 0L
+        var monthlyExpense = 0L
 
+        // 모든 거래내역을 순회하면서 내역의 수입과 지출 합계 계산
+        transactions.forEach { transaction ->
+            if (transaction.verified) {
+                if (transaction.type) {  // type이 true면 수입
+                    monthlyIncome += transaction.amount
+                } else {  // type이 false면 지출
+                    monthlyExpense += -transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
+                }
+            }
+        }
+
+        // 계산된 총액을 TextView에 표시
+        binding.textViewIncome.text = String.format(" ₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
+        binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
+    }
 
     // 메모리 누수 방지를 위한 binding null 처리
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HistoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

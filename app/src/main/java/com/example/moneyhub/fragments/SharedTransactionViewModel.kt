@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Year
 import java.time.YearMonth
 import javax.inject.Inject
 
@@ -48,6 +49,9 @@ class SharedTransactionViewModel @Inject constructor(
     private val _currentUser = MutableStateFlow<CurrentUser?>(null)
     val currentUser: StateFlow<CurrentUser?> = _currentUser.asStateFlow()
 
+    private val _currentYearMonth = MutableStateFlow(YearMonth.now())
+    val currentYearMonth: StateFlow<YearMonth> = _currentYearMonth.asStateFlow()
+
 
     init {
         println("DEBUG: ViewModel initialized")
@@ -57,6 +61,9 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
+    fun setCurrentYearMonth(yearMonth: YearMonth) {
+        _currentYearMonth.value = yearMonth
+    }
 
 
     private fun filterCurrentMonthHistories() {
