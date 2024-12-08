@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.YearMonth
 import javax.inject.Inject
 
@@ -136,6 +135,7 @@ class SharedTransactionViewModel @Inject constructor(
         // 그 다음 필터링
         filterCurrentMonthTransactions()
     }
+
     private fun filterCurrentMonthTransactions() {
         val currentYearMonth = YearMonth.now()
         val startOfMonth = DateUtils.getStartOfMonth(currentYearMonth.atDay(1).toEpochDay() * 86400000)

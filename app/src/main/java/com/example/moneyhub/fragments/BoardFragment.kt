@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.moneyhub.activity.postonboard.PostOnBoardActivity
 import com.example.moneyhub.adapter.BoardRecyclerAdapter
 import com.example.moneyhub.databinding.FragmentBoardBinding
+import com.example.moneyhub.fragments.home.HomeFragment
 import com.example.moneyhub.model.Post
 
 private const val ARG_PARAM1 = "param1"
