@@ -13,7 +13,9 @@ import com.example.moneyhub.viewmodel.MainViewModel
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.mypage.MyPageActivity
 import com.example.moneyhub.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

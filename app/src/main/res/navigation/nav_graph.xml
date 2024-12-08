@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/MembersFragment"
-        android:name="com.example.moneyhub.fragments.MembersFragment"
+        android:name="com.example.moneyhub.fragments.member.MembersFragment"
         android:label="@string/members_fragment_label"
         tools:layout="@layout/fragment_members" >
 

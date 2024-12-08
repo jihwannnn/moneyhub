@@ -88,7 +88,7 @@ class LogInActivity : AppCompatActivity() {
             viewModel.uiState.collect { state ->
                 when {
                     state.isLoading -> {
-                        // Show loading indicator
+                        Toast.makeText(this@LogInActivity, "처리 중...", Toast.LENGTH_SHORT).show()
                     }
                     state.isSuccess -> {
                         Toast.makeText(this@LogInActivity, "로그인 성공", Toast.LENGTH_SHORT).show()

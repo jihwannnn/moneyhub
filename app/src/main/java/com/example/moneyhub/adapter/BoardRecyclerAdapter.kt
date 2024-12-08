@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moneyhub.R
 import com.example.moneyhub.activity.ViewOnBoardActivity
 import com.example.moneyhub.databinding.ItemLayoutBoardBinding
 import com.example.moneyhub.model.Post

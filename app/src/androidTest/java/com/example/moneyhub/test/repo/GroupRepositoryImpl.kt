@@ -39,6 +39,15 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
 
     override suspend fun createGroup(name: String, user: CurrentUser): Result<Unit> {
         return try {
+            // 동일한 이름이 있는지 확인
+            val existingGroups = db.collection("groups")
+                .whereEqualTo("name", name)
+                .get()
+                .await()
+
+            if (!existingGroups.isEmpty) {
+                throw Exception("이미 존재하는 그룹 이름입니다")
+            }
 
             // 그룹 문서 참조 생성
             val groupRef = db.collection("groups").document()
@@ -238,7 +247,20 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
     }
 
     override suspend fun getUserMembership(gid: String, uid: String): Result<Membership>{
-        TODO()
+        return try {
+
+            val membershipDoc = db.collection("members_group")
+                .document(gid)
+                .collection("members")
+                .document(uid)
+                .get()
+                .await()
+
+            val membership = membershipDoc.data?.let { Membership.fromMap(it) } ?: throw Exception("유저 멤버쉽 정보를 찾을 수 없습니다")
+            Result.success(membership)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun getGroupMembers(gid: String): Result<List<Membership>> {

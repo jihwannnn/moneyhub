@@ -12,8 +12,7 @@ object PostSession {
 
     fun getCurrentPost(): Post = currentPost ?: Post()
 
-    fun clearCurrentUser() {
+    fun clearCurrentPost() {
         currentPost = null
     }
-
 }

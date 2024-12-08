@@ -24,7 +24,7 @@ class SignUpViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun signUp(name: String, email: String, phone: String, password: String, passwordCheck: String) {
-        // if (!validateInputs(name, email, password, passwordCheck)) return
+        if (!validateInputs(name, email, password, passwordCheck)) return
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }

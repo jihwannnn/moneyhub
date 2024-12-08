@@ -39,6 +39,15 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
 
     override suspend fun createGroup(name: String, user: CurrentUser): Result<Unit> {
         return try {
+            // 동일한 이름이 있는지 확인
+            val existingGroups = db.collection("groups")
+                .whereEqualTo("name", name)
+                .get()
+                .await()
+
+            if (!existingGroups.isEmpty) {
+                throw Exception("이미 존재하는 그룹 이름입니다")
+            }
 
             // 그룹 문서 참조 생성
             val groupRef = db.collection("groups").document()
