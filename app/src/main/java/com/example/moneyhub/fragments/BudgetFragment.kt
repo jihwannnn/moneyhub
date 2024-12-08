@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.activity.camera.CameraActivity
-import com.example.moneyhub.activity.RegisterDetailsActivity
+import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentBudgetBinding
 import com.example.moneyhub.model.Transaction
@@ -64,7 +64,7 @@ class BudgetFragment : Fragment() {
             title = "간식 사업 지출 (예정)",
             category = "학생 복지 |",
             type = false,
-            amount = -120000L,
+            amount = 120000L,
             content = "",
             payDate = System.currentTimeMillis(),
             verified = false,
@@ -75,7 +75,7 @@ class BudgetFragment : Fragment() {
             title = "희진이 간식비 (예정)",
             category = "희진이 복지 |",
             type = false,
-            amount = -7700L,
+            amount = 7700L,
             content = "",
             payDate = System.currentTimeMillis(),
             verified = false,

@@ -55,17 +55,17 @@ class MoneyHubDataTest {
         try {
             println("Starting dummy data creation...")
 
-            // 1. Create group with Jihwan as owner
-//            println("Creating group...")
-//            val createGroupResult = groupRepository.createGroup("MP", users[0])
-//            requireNotNull(createGroupResult.getOrNull()) { "Group creation failed" }
+             // 1. Create group with Jihwan as owner
+            println("Creating group...")
+            val createGroupResult = groupRepository.createGroup("test2", users[0])
+            requireNotNull(createGroupResult.getOrNull()) { "Group creation failed" }
 
             // Get created group's ID from user's groups
             val userGroupResult = groupRepository.getUserGroups(users[0].id)
             val userGroup =
                 requireNotNull(userGroupResult.getOrNull()) { "Failed to get user groups" }
-            val groupId = userGroup.groups.entries.find { it.value == "MP" }?.key
-                ?: error("Could not find group with name 'MP'")
+            val groupId = userGroup.groups.entries.find { it.value == "test2" }?.key
+                ?: error("Could not find group with name 'test2'")
 
             // 2. Add other members to the group
             println("Adding members...")
@@ -119,50 +119,69 @@ class MoneyHubDataTest {
             // 4. Create transactions for each user
             println("Creating transactions...")
 
-            var p1 = 50000L
-            var p2 = 100000L
-
-            users.filter { it.role != Role.REGULAR }.forEach { user ->
-                // Verified transaction (실제 내역)
-                val verifiedTransaction = Transaction(
-                    gid = groupId,
-                    title = "${user.name}'s expense",
-                    category = "교통비",
-                    type = false,
-                    amount = p1,
-                    verified = true,
-                    authorId = user.id,
-                    authorName = user.name
-                )
-                val verifiedResult = transactionRepository.addTransaction(groupId, verifiedTransaction)
-                requireNotNull(verifiedResult.getOrNull()) { "Failed to create verified transaction for ${user.name}" }
-
-                // Unverified transaction (예산)
-                val unverifiedTransaction = Transaction(
-                    gid = groupId,
-                    title = "${user.name}'s budget",
-                    category = "식비",
-                    type = false,
-                    amount = p2,
-                    verified = false,
-                    authorId = user.id,
-                    authorName = user.name
-                )
-                val unverifiedResult = transactionRepository.addTransaction(groupId, unverifiedTransaction)
-                requireNotNull(unverifiedResult.getOrNull()) { "Failed to create unverified transaction for ${user.name}" }
-                p1 += p1
-                p2 += p2
-                println("Successfully created transactions for ${user.name}")
-            }
-
-            // 5. Create categories
+            // 먼저 카테고리 생성
             println("Creating categories...")
+            val categories = listOf("교통비", "식비", "여가비", "회식", "복지사업", "기타")
             val category = Category(
                 gid = groupId,
-                category = listOf("교통비", "식비", "여가비")
+                category = categories
             )
             val categoryResult = transactionRepository.saveCategory(groupId, category)
             requireNotNull(categoryResult.getOrNull()) { "Failed to create categories" }
+
+            val sampleTransactions = listOf(
+                Triple("9월 회식", "2024-09-15", "회식"),
+                Triple("10월 동아리 지원금", "2024-10-15", "복지사업"),
+                Triple("11월 체육대회 간식", "2024-11-15", "식비"),
+                Triple("12월 송년회", "2024-12-15", "여가비")
+            )
+
+            val amounts = listOf(50000L, 300000L, 70000L, 150000L)
+
+            var bl = true
+
+            users.filter { it.role != Role.REGULAR }.forEach { user ->
+                sampleTransactions.forEachIndexed { index, (title, date, category) ->
+
+                    // Verified transaction (실제 내역)
+                    val verifiedTransaction = Transaction(
+                        gid = groupId,
+                        title = title,
+                        category = category,
+                        type = bl,
+                        amount = amounts[index],
+                        content = "${user.name}이(가) 처리한 ${category} 관련 ${if(bl) "수입" else "지출"}",
+                        payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse(date).time,
+                        verified = true,
+                        authorId = user.id,
+                        authorName = user.name
+                    )
+                    val verifiedResult = transactionRepository.addTransaction(groupId, verifiedTransaction)
+                    requireNotNull(verifiedResult.getOrNull()) { "Failed to create verified transaction for ${user.name}" }
+
+                    bl = !bl
+
+                    // Unverified transaction (예산)
+                    val unverifiedTransaction = Transaction(
+                        gid = groupId,
+                        title = "$title (예산)",
+                        category = category,
+                        type = bl,
+                        amount = amounts[index],
+                        content = "${category} 관련 예산 계획",
+                        payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse(date).time,
+                        verified = false,
+                        authorId = user.id,
+                        authorName = user.name
+                    )
+                    val unverifiedResult = transactionRepository.addTransaction(groupId, unverifiedTransaction)
+                    requireNotNull(unverifiedResult.getOrNull()) { "Failed to create unverified transaction for ${user.name}" }
+
+                    println("Successfully created transactions for ${user.name} - ${title}")
+
+                }
+            }
+
 
             println("Successfully created all dummy data!")
             println("Group ID: $groupId")

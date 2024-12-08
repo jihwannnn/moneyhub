@@ -5,13 +5,13 @@ import com.example.moneyhub.data.repository.auth.AuthRepository
 import com.example.moneyhub.data.repository.auth.AuthRepositoryImpl
 import com.example.moneyhub.api.clovaocr.ClovaOcrApi
 import com.example.moneyhub.data.repository.board.BoardRepository
-import com.example.moneyhub.data.repository.board.TestBoardRepository
+import com.example.moneyhub.data.repository.board.BoardRepositoryImpl
 import com.example.moneyhub.data.repository.camera.OcrRepository
 import com.example.moneyhub.data.repository.camera.OcrRepositoryImpl
 import com.example.moneyhub.data.repository.group.GroupRepository
 import com.example.moneyhub.data.repository.group.GroupRepositoryImpl
-import com.example.moneyhub.data.repository.transaction.TestTransactionRepository
 import com.example.moneyhub.data.repository.transaction.TransactionRepository
+import com.example.moneyhub.data.repository.transaction.TransactionRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -35,7 +35,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindBoardRepository(
-        boardRepository: TestBoardRepository
+        boardRepository: BoardRepositoryImpl
     ): BoardRepository
 
     @Binds
@@ -47,7 +47,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindTransactionRepository(
-        transactionRepository: TestTransactionRepository
+        transactionRepository: TransactionRepositoryImpl
     ): TransactionRepository
 
 }

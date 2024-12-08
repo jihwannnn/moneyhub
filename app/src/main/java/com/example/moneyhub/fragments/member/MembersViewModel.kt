@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MembersFragmentViewModel @Inject constructor(
+class MembersViewModel @Inject constructor(
     private val groupRepository: GroupRepository
 ) : ViewModel() {
 

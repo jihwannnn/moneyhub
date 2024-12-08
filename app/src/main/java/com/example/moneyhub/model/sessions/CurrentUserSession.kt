@@ -9,7 +9,7 @@ object CurrentUserSession {
         currentUser = user
     }
 
-    fun getCurrentUser(): CurrentUser? = currentUser
+    fun getCurrentUser(): CurrentUser = currentUser ?: CurrentUser()
 
     fun clearCurrentUser() {
         currentUser = null

@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moneyhub.activity.RegisterDetailsActivity
+import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
 import com.example.moneyhub.model.Transaction

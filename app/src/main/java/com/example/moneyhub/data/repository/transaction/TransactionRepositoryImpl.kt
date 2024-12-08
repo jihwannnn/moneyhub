@@ -146,27 +146,40 @@ class TransactionRepositoryImpl @Inject constructor() : TransactionRepository {
         yearMonth: Long
     ): Result<List<Transaction>> {
         return try {
-
+            println("DEBUG: Fetching transactions for gid: $gid, yearMonth: $yearMonth")
             val startOfMonth = DateUtils.getStartOfMonth(yearMonth)
             val endOfMonth = DateUtils.getEndOfMonth(yearMonth)
+            println("DEBUG: Date range - Start: ${DateUtils.millisToDate(startOfMonth)}, End: ${DateUtils.millisToDate(endOfMonth)}")
 
-            // Firestore 쿼리 생성, 내역 중 해당 월 안에 있는 것들
             val transactionsRef = db.collection("transactions_group")
                 .document(gid)
                 .collection("transactions")
-                .whereEqualTo("verified", true)
+                .orderBy("payDate")
                 .whereGreaterThanOrEqualTo("payDate", startOfMonth)
                 .whereLessThanOrEqualTo("payDate", endOfMonth)
+                .whereEqualTo("verified", true)
 
             val querySnapshot = transactionsRef.get().await()
+            println("DEBUG: Query returned ${querySnapshot.documents.size} documents")
 
-            // 트랜잭션 리스트로 변환
             val transactions = querySnapshot.documents.mapNotNull { doc ->
-                doc.data?.let { Transaction.fromMap(it) }
+                doc.data?.let {
+                    try {
+                        Transaction.fromMap(it).also { transaction ->
+                            println("DEBUG: Parsed transaction - Date: ${DateUtils.millisToDate(transaction.payDate)}, Amount: ${transaction.amount}")
+                        }
+                    } catch (e: Exception) {
+                        println("DEBUG: Failed to parse document ${doc.id}: ${e.message}")
+                        null
+                    }
+                }
             }
 
+            println("DEBUG: Successfully parsed ${transactions.size} transactions")
             Result.success(transactions)
         } catch (e: Exception) {
+            println("ERROR: Transaction fetch failed: ${e.message}")
+            e.printStackTrace()
             Result.failure(e)
         }
     }

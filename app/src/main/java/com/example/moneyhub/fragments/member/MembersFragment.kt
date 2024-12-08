@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class MembersFragment : Fragment() {
     private lateinit var binding: FragmentMembersBinding
     private lateinit var memberAdapter: MemberAdapter
-    private val viewModel: MembersFragmentViewModel by viewModels()
+    private val viewModel: MembersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

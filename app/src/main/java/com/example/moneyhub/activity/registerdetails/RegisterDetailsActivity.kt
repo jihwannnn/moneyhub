@@ -1,7 +1,4 @@
-package com.example.moneyhub.activity
-
-// 현재 시스템의 날짜와 시간을 가져오는 클래스 --> 자동으로 날짜를 입력해 거래 내역 생성을 하기 위해
-import java.util.Date
+package com.example.moneyhub.activity.registerdetails
 
 // 지역 설정을 처리하는 클래스, 날짜 형식이나 숫자 표기 등의 지역화에 사용한다.
 import java.util.Locale
@@ -16,23 +13,26 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityRegisterDetailsBinding
 import com.example.moneyhub.model.Transaction
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class RegisterDetailsActivity : AppCompatActivity() {
     // ViewBinding 객체를 담을 변수
     private lateinit var binding: ActivityRegisterDetailsBinding
+    private val viewModel: RegisterDetailsViewModel by viewModels()
 
     // 카테고리 목록을 Spinner에 표시하기 위한 어댑터
     private lateinit var categoryAdapter: ArrayAdapter<String>
 
     // 카테고리 목록을 담는 변경 가능한 리스트
     // mutableListOf를 사용하여 나중에 새로운 카테고리를 추가할 수 있음
-    private val categories = mutableListOf("선택해주세요", "회식", "지원금", "복지사업", "관리")
-
+    private val categories = viewModel.category.value.category.toMutableList()
 
     // 현재 선택된 거래 유형을 저장할 변수
     private var isIncome = false // 기본값은 지출으로 설정
@@ -62,12 +62,12 @@ class RegisterDetailsActivity : AppCompatActivity() {
     private fun getTransactionData() {
         // Intent에서 데이터 가져오기
 
-//        val date = intent.getStringExtra("date")
+        val transaction = viewModel.currentTransaction.value
 
-        val title = intent.getStringExtra("title")
-        val category = intent.getStringExtra("category")
-        val amount = intent.getLongExtra("amount", 0L)
-        val type = intent.getBooleanExtra("type", true)
+        val title = transaction.title
+        val category = transaction.category
+        val amount = transaction.amount
+        val type = transaction.type
 
         // 가져온 데이터를 EditText에 설정
         binding.apply {
@@ -86,10 +86,8 @@ class RegisterDetailsActivity : AppCompatActivity() {
             }
 
 
-            // 카테고리에서 | 기호 이전의 실제 카테고리명만 추출
-            val cleanCategory = category?.split("|")?.get(0)?.trim()
             // 해당하는 카테고리의 위치를 찾아 스피너에서 선택
-            val categoryPosition = categories.indexOfFirst { it == cleanCategory }.takeIf { it != -1 } ?: 0
+            val categoryPosition = categories.indexOfFirst { it == category }.takeIf { it != -1 } ?: 0
             categorySpinner.setSelection(categoryPosition)
         }
     }
@@ -165,11 +163,6 @@ class RegisterDetailsActivity : AppCompatActivity() {
             // 현재 시스템의 날짜를 "yyyy-MM-dd" 형식으로 자동 입력
             // val currentDate =
             // java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
-            // 금액의 부호 처리
-            if (!isIncome && amount != null) {
-                amount = -kotlin.math.abs(amount)
-            }
 
 
             //Transaction객체 생성

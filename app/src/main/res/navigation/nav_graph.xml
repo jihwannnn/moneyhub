@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/AnalysisFragment"
-        android:name="com.example.moneyhub.fragments.AnalysisFragment"
+        android:name="com.example.moneyhub.fragments.analysis.AnalysisFragment"
         android:label="@string/analysis_fragment_label"
         tools:layout="@layout/fragment_analysis" >
 

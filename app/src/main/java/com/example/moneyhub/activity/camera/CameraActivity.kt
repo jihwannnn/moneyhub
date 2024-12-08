@@ -15,13 +15,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.moneyhub.R
-import com.example.moneyhub.activity.RegisterDetailsActivity
+import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
 import com.example.moneyhub.databinding.ActivityCameraBinding
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import kotlinx.coroutines.launch
 import java.io.File
 
 @AndroidEntryPoint
@@ -118,10 +117,14 @@ class CameraActivity : AppCompatActivity() {
             root.setOnClickListener {
                 // RegisterDetailsActivity로 데이터 전달
                 val intent = Intent(this@CameraActivity, RegisterDetailsActivity::class.java).apply {
-                    putExtra("date", date)
-                    putExtra("title", title)
-                    putExtra("category", category)
-                    putExtra("amount", amount)
+                    val cleanCategory = category?.split("|")?.get(0)?.trim()
+                    val transaction = Transaction(
+                        payDate = date,
+                        title = title ?: "",
+                        category = cleanCategory ?: "",
+                        amount = amount
+                    )
+                    RegisterTransactionSession.setTransaction(transaction)
                 }
                 startActivity(intent)
             }
@@ -227,7 +230,7 @@ class CameraActivity : AppCompatActivity() {
         }
 
         // 최종 transaction 관찰
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             viewModel.finalTransaction.collect { transaction ->
                 if (transaction != null) {
                     // finalTransactoin이 업데이트되면 tvTransactionInfo 갱신
