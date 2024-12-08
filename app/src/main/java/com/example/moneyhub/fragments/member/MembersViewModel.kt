@@ -41,12 +41,14 @@ class MembersViewModel @Inject constructor(
     init {
         loadCurrentUser()
         loadCurrentGroupInfo()
+        loadMembers()
     }
 
 
     private fun loadCurrentUser() {
-        _currentUser.value = CurrentUserSession.getCurrentUser()
-        loadMembers()
+        viewModelScope.launch {
+            _currentUser.value = CurrentUserSession.getCurrentUser()
+        }
     }
 
     private fun loadCurrentGroupInfo() {

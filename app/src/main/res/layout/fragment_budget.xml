@@ -34,6 +34,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
+                android:id="@+id/textViewIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₩ 300,000"
@@ -67,7 +68,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/textViewExpenseAmount"
+                android:id="@+id/textViewExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₩ 120,000"

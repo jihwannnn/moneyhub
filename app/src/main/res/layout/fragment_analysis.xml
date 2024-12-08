@@ -111,7 +111,7 @@
             android:id="@+id/lineChartTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="일별 지출"
+            android:text="일별 지출/수입"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginStart="16dp"

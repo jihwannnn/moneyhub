@@ -71,14 +71,7 @@ class HistoryFragment : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                println("DEBUG: Starting to collect filtered histories")
                 sharedViewModel.filteredHistories.collect { transactions ->
-                    println("DEBUG: Received filtered update, size = ${transactions.size}")
-                    if (transactions.isNotEmpty()) {
-                        println("DEBUG: Transaction dates = ${
-                            transactions.map { DateUtils.millisToDate(it.payDate) }
-                        }")
-                    }
                     adapter.updateData(transactions)
                     updateMonthlyTotals(transactions)
                 }
@@ -110,12 +103,10 @@ class HistoryFragment : Fragment() {
 
         // 모든 거래내역을 순회하면서 내역의 수입과 지출 합계 계산
         transactions.forEach { transaction ->
-            if (transaction.verified) {
-                if (transaction.type) {  // type이 true면 수입
-                    monthlyIncome += transaction.amount
-                } else {  // type이 false면 지출
-                    monthlyExpense += transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
-                }
+            if (transaction.type) {  // type이 true면 수입
+                monthlyIncome += transaction.amount
+            } else {  // type이 false면 지출
+                monthlyExpense += transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
             }
         }
 

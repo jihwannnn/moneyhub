@@ -1,13 +1,12 @@
 package com.example.moneyhub.activity.camera
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.api.clovaocr.OcrResponse
 import com.example.moneyhub.common.UiState
 import com.example.moneyhub.data.repository.camera.OcrRepository
-import com.example.moneyhub.data.repository.transaction.TransactionRepository
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CameraViewModel @Inject constructor(
     private val ocrRepository: OcrRepository,
-    private val transactionRepository: TransactionRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -35,11 +33,21 @@ class CameraViewModel @Inject constructor(
     private val _ocrResult = MutableStateFlow<List<String>>(emptyList())
     val ocrResult: StateFlow<List<String>> = _ocrResult
 
-    // OCR 성공 후 만들어진 Transaction을 담을 StateFlow
-    private val _finalTransaction = MutableStateFlow<Transaction?>(null)
-    val finalTransaction: StateFlow<Transaction?> = _finalTransaction
+    private val _originTransaction = MutableStateFlow(Transaction())
+    val originTransaction: StateFlow<Transaction> = _originTransaction
 
-    fun callClovaOcrApi(imagePath: String, secretKey: String, originTransaction: Transaction) {
+    private val _finalTransaction = MutableStateFlow(Transaction())
+    val finalTransaction: StateFlow<Transaction> = _finalTransaction
+
+    init {
+        loadOriginTransaction()
+    }
+
+    private fun loadOriginTransaction() {
+        _originTransaction.value = RegisterTransactionSession.getCurrentTransaction().copy(verified = true)
+    }
+
+    fun callClovaOcrApi(imagePath: String, secretKey: String) {
         viewModelScope.launch {
             _uiState.value = UiState(isLoading = true)
 
@@ -54,28 +62,19 @@ class CameraViewModel @Inject constructor(
                 val jsonString = Gson().toJson(requestJson)
                 val messageBody = jsonString.toRequestBody("application/json; charset=utf-8".toMediaType())
 
-                // 이미지 파일 RequestBody 생성
                 val file = File(imagePath)
                 val fileRequestBody = file.asRequestBody("image/jpeg".toMediaType())
                 val filePart = MultipartBody.Part.createFormData("file", file.name, fileRequestBody)
 
-                // OCR API 호출
                 val response = ocrRepository.recognizeText(secretKey, messageBody, filePart)
 
-                // 결과 처리
                 val detectedTexts = response.images.flatMap { it.fields }.map { it.inferText }
                 _ocrResult.value = detectedTexts
 
-                // OCR 결과를 바탕으로 Transaction 생성
-                val updatedTransaction = parseOcrResponseToTransaction(response, originTransaction)
-
-                // Firebase에 Transaction 업데이트 (verified = true, amount 등 업데이트)
-                // 여기선 gid가 ""로 되어있는데, 실제 gid를 어디선가 가져와야 함(현재 코드에선 gid 정보 없음)
-                val gid = updatedTransaction.gid.ifEmpty { "default_group_id" }
-                transactionRepository.modifyTransaction(gid, updatedTransaction)
-
+                val updatedTransaction = parseOcrResponseToTransaction(response, _originTransaction.value)
                 _finalTransaction.value = updatedTransaction
 
+                RegisterTransactionSession.setTransaction(updatedTransaction)
                 _uiState.value = UiState(isLoading = false, isSuccess = true)
 
             } catch (e: Exception) {
@@ -84,7 +83,6 @@ class CameraViewModel @Inject constructor(
                     isSuccess = false,
                     error = "OCR 호출 실패: ${e.message}"
                 )
-                Log.d("ITM", "OCR 호출 실패: ${e.message}")
             }
         }
     }
@@ -96,12 +94,6 @@ class CameraViewModel @Inject constructor(
     private fun parseOcrResponseToTransaction(ocrResponse: OcrResponse, originTransaction: Transaction): Transaction {
         val fields = ocrResponse.images.firstOrNull()?.fields ?: emptyList()
         val allTexts = fields.map { it.inferText }
-
-        // title 추출: 일단 지금 영수증 기반 하드코딩임.
-        val title = allTexts.find { it.contains("봉자막창") } ?: originTransaction.title
-
-        // category: 일단 외식으로 하드코딩함
-        val category = "외식"
 
         // type: 영수증이면 지출이라고 일단 봄
         val type = false
@@ -150,13 +142,10 @@ class CameraViewModel @Inject constructor(
         // verified = true로 변경
         // tid, gid, authorId 등은 originTransaction에서 가져옴
         return originTransaction.copy(
-            title = title,
-            category = category,
             type = type,
             amount = amount,
             content = content,
             payDate = payDate,
-            verified = true
         )
     }
 }

@@ -36,8 +36,8 @@ class RegisterDetailsViewModel @Inject constructor(
 
     init {
         loadCurrentUser()
-        loadCurrentTransaction()
         loadCategory()
+        loadCurrentTransaction()
     }
 
     private fun loadCurrentUser() {
@@ -78,7 +78,7 @@ class RegisterDetailsViewModel @Inject constructor(
         }
     }
 
-    fun createTransaction(
+    fun saveTransaction(
         title: String,
         category: String,
         type: Boolean,
@@ -113,6 +113,47 @@ class RegisterDetailsViewModel @Inject constructor(
                         _uiState.update { it.copy(isLoading = false, error = throwable.message) }
                     }
                 )
+            }
+        }
+    }
+
+    // RegisterDetailsViewModel.kt
+    fun saveCategory(newCategory: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                _currentUser.value?.let { user ->
+                    // 현재 카테고리 리스트에 새 카테고리 추가
+                    val updatedCategories = _category.value.category.toMutableList().apply {
+                        add(newCategory)
+                    }
+                    val newCategoryData = Category(
+                        gid = user.currentGid,
+                        category = updatedCategories
+                    )
+
+                    // Repository를 통해 저장
+                    transactionRepository.saveCategory(user.currentGid, newCategoryData).fold(
+                        onSuccess = {
+                            _category.value = newCategoryData
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                error = null
+                            ) }
+                        },
+                        onFailure = { throwable ->
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                error = throwable.message
+                            ) }
+                        }
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    error = e.message
+                ) }
             }
         }
     }

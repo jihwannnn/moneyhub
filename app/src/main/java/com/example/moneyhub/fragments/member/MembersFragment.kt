@@ -27,13 +27,13 @@ class MembersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMembersBinding.inflate(inflater, container, false)
+        setupViews()
+        setupRecyclerView()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViews()
-        setupRecyclerView()
         observeViewModel()
     }
 
@@ -110,7 +110,15 @@ class MembersFragment : Fragment() {
                         onPromoteMember = { userId, newRole -> viewModel.promoteMember(userId, newRole) },
                         onDemoteMember = { userId -> viewModel.demoteMember(userId) }
                     )
-                    binding.memberList.adapter = memberAdapter
+
+                    binding.memberList.apply {
+                        adapter = memberAdapter
+                        layoutManager = LinearLayoutManager(context)
+                    }
+
+                    viewModel.members.value.let { members ->
+                        memberAdapter.updateMembers(members)
+                    }
                 }
             }
         }

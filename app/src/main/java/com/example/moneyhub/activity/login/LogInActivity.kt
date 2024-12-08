@@ -84,6 +84,7 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
+
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when {

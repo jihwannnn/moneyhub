@@ -1,6 +1,7 @@
 package com.example.moneyhub.activity.login
 
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.common.UiState
@@ -20,11 +21,47 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
+
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _currentUser = MutableStateFlow<CurrentUser?>(null)
     val currentUser: StateFlow<CurrentUser?> = _currentUser.asStateFlow()
+
+    init{
+        checkLoggedIn()
+    }
+
+
+    private fun checkLoggedIn() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                authRepository.getCurrentUser().fold(
+                    onSuccess = { user ->
+                        CurrentUserSession.setCurrentUser(user)
+                        _currentUser.value = user
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            isSuccess = true,
+                            error = null
+                        ) }
+                    },
+                    onFailure = { throwable ->
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            error = throwable.message
+                        ) }
+                    }
+                )
+            } catch (e: Exception) {
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    error = e.message
+                ) }
+            }
+        }
+    }
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {

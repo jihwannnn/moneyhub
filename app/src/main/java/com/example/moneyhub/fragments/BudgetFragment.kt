@@ -76,22 +76,18 @@ class BudgetFragment : Fragment() {
 
         // 모든 거래내역을 순회하면서 내역의 수입과 지출 합계 계산
         transactions.forEach { transaction ->
-            if (transaction.verified) {
-                if (transaction.type) {  // type이 true면 수입
-                    monthlyIncome += transaction.amount
-                } else {  // type이 false면 지출
-                    monthlyExpense += transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
-                }
+            if (transaction.type) {  // type이 true면 수입
+                monthlyIncome += transaction.amount
+            } else {  // type이 false면 지출
+                   monthlyExpense += transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
             }
         }
+
+        // 계산된 총액을 TextView에 표시
+        binding.textViewIncome.text = String.format(" ₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
+        binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
     }
 
-
-    // 메모리 누수 방지를 위한 binding null 처리
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -110,5 +106,11 @@ class BudgetFragment : Fragment() {
                 }
             }
         }
+    }
+
+    // 메모리 누수 방지를 위한 binding null 처리
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
