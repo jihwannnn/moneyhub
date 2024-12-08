@@ -19,6 +19,7 @@ class TransactionAdapter(
     private var transactions: List<Transaction>,
     private val isForBudget: Boolean,
     private val isForCalendar: Boolean = false,  // 새로운 파라미터 추가, 기본값은 false
+
     // TransactionItem을 매개변수로 받는 함수 타입
     private val onItemClick: (Transaction) -> Unit = {} // 클릭된 아이템의 정보를 전달 가능
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
@@ -27,6 +28,7 @@ class TransactionAdapter(
     // SharedViewModel에서 필터링된 데이터를 받아 RecyclerView를 갱신할 때 사용
     fun updateData(newTransactions: List<Transaction>) {
         transactions = newTransactions
+
         notifyDataSetChanged() // RecyclerView에 데이터가 변경되었음을 알림
     }
 

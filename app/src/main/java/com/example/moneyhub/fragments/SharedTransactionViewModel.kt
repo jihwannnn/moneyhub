@@ -59,7 +59,7 @@ class SharedTransactionViewModel @Inject constructor(
 
 
 
-    private fun filterCurrentMonthTransactions() {
+    private fun filterCurrentMonthHistories() {
         val currentYearMonth = YearMonth.now()
         val startOfMonth = DateUtils.getStartOfMonth(currentYearMonth.atDay(1).toEpochDay() * 86400000)
         val endOfMonth = DateUtils.getEndOfMonth(currentYearMonth.atDay(1).toEpochDay() * 86400000)
@@ -74,7 +74,20 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
+    private fun filterCurrentMonthBudgets() {
+        val currentYearMonth = YearMonth.now()
+        val startOfMonth = DateUtils.getStartOfMonth(currentYearMonth.atDay(1).toEpochDay() * 86400000)
+        val endOfMonth = DateUtils.getEndOfMonth(currentYearMonth.atDay(1).toEpochDay() * 86400000)
 
+        println("DEBUG: Filter range - Start: ${DateUtils.millisToDate(startOfMonth)} 00:00:00.000")
+        println("DEBUG: Filter range - End: ${DateUtils.millisToDate(endOfMonth)} 23:59:59.999")
+
+        _filteredBudgets.value = _budgets.value.filter { transaction ->
+            val inRange = transaction.payDate in startOfMonth..endOfMonth
+            println("DEBUG: Transaction ${DateUtils.millisToDate(transaction.payDate)} ${if (inRange) "IS" else "is NOT"} in range")
+            inRange
+        }
+    }
 
     // 현재 사용자 정보를 로드하고 해당 사용자의 거래 내역을 가져오는 함수
     private fun loadUser() {
@@ -95,13 +108,11 @@ class SharedTransactionViewModel @Inject constructor(
 
 
             // 거래 내역 필터링
-            val filtered = _histories.value.filter { transaction ->
+            _filteredHistories.value = _histories.value.filter { transaction ->
                 println("DEBUG: Checking transaction date = ${DateUtils.millisToDate(transaction.payDate)}")
                 transaction.payDate in startOfMonth..endOfMonth
             }
 
-            println("DEBUG: Filtered transactions size = ${filtered.size}")
-            _filteredHistories.value = filtered
 
             // 해당 기간에 속하는 예산만 필터링
             _filteredBudgets.value = _budgets.value.filter { transaction ->
@@ -120,8 +131,7 @@ class SharedTransactionViewModel @Inject constructor(
                 transactionRepository.getTransactions(gid, true).fold(
                     onSuccess = { transactions ->
                         _histories.value = transactions.sortedByDescending { it.payDate }
-                        _uiState.update { it.copy(isLoading = false) }
-                        filterCurrentMonthTransactions() // 여기서 한 번만 필터링
+                        filterCurrentMonthHistories() // 여기서 한 번만 필터링
                     },
                     onFailure = { throwable ->
                         _uiState.update { it.copy(
@@ -135,9 +145,14 @@ class SharedTransactionViewModel @Inject constructor(
                 transactionRepository.getTransactions(gid, false).fold(
                     onSuccess = { transactions ->
                         _budgets.value = transactions.sortedByDescending { it.payDate }
+                        _uiState.update { it.copy(isLoading = false) }
+                        filterCurrentMonthBudgets()
                     },
                     onFailure = { throwable ->
-                        _uiState.update { it.copy(error = throwable.message) }
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            error = throwable.message
+                        ) }
                     }
                 )
 
