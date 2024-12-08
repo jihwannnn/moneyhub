@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:autofillHints="Enter your group name here"
-                android:hint="Enter your group name here"
+                android:hint="Enter your group name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.26"
                 app:layout_constraintStart_toEndOf="@+id/group_icon"
