@@ -32,10 +32,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
+                android:id="@+id/currentMonthText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Oct"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toStartOf="@id/imageViewNextMonthButton"
                 app:layout_constraintStart_toEndOf="@id/imageViewPrevioiusMonthButton"
                 app:layout_constraintTop_toTopOf="parent"
@@ -67,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:text="balance"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@id/textViewBalance"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -78,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:text="\₩100,000"
                 android:textColor="@color/moneyBlue"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
