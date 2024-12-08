@@ -62,6 +62,11 @@ class MyPageActivity : AppCompatActivity() {
                 startActivity(Intent(this@MyPageActivity, CreateActivity::class.java))
             }
         }
+
+        binding.btnSubmitLink.apply {
+            root.setBackgroundResource(R.drawable.moneygrayblock)
+            btnText.text = "참여"
+        }
     }
 
     private fun observeViewModel() {

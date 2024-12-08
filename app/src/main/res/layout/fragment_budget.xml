@@ -37,7 +37,7 @@
                 android:id="@+id/textViewIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="₩ 300,000"
+                android:text="₩ 000,000"
                 android:textSize="18sp"
                 android:textColor="@color/moneyGreenThick"
                 android:textStyle="bold"
@@ -71,7 +71,7 @@
                 android:id="@+id/textViewExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="₩ 120,000"
+                android:text="₩ 000,000"
                 android:textSize="18sp"
                 android:textColor="@color/moneyRed"
                 android:textStyle="bold"
@@ -92,7 +92,7 @@
                 android:src="@android:drawable/ic_input_add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textViewExpenseAmount"
+                app:layout_constraintStart_toEndOf="@+id/textViewExpense"
                 app:layout_constraintTop_toTopOf="parent" />
 
 

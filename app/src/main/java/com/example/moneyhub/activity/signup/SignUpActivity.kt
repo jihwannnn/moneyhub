@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.moneyhub.R
 import com.example.moneyhub.activity.login.LogInActivity
 import com.example.moneyhub.databinding.ActivitySignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,8 +40,15 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+
+
+
     private fun setupSignUpButton() {
-        binding.customButtonInclude.root.setOnClickListener {
+        binding.btnSubmitInfo.apply {
+            btnText.text = "제출"
+        }
+
+        binding.btnSubmitInfo.root.setOnClickListener {
             val name = binding.nameForm.getText()
             val email = binding.idForm.getText()
             val phone = binding.phonenumberForm.getText()

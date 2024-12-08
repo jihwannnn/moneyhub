@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:customHint="Name"
-                app:customIcon="@drawable/group" />
+                app:customIcon="@drawable/name" />
 
             <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/idForm"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:customHint="Email"
-                app:customIcon="@drawable/group" />
+                app:customIcon="@drawable/email" />
 
             <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/phonenumberForm"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:customHint="phone number"
-                app:customIcon="@drawable/group" />
+                app:customIcon="@drawable/phone" />
 
             <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/passwordForm"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:customHint="password"
-                app:customIcon="@drawable/group" />
+                app:customIcon="@drawable/password" />
 
             <com.example.moneyhub.ui.customs.CustomGreyFormView
                 android:id="@+id/passwordFormCheck"
@@ -63,11 +63,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:customHint="password"
-                app:customIcon="@drawable/group" />
+                app:customIcon="@drawable/password" />
 
             <!-- LinearLayout 마지막에 버튼 include 배치 -->
             <include
-                android:id="@+id/custom_button_include"
+                android:id="@+id/btnSubmitInfo"
                 layout="@layout/custom_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

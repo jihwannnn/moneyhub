@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupMonthNavigation()
         observeYearMonth()
+        observeCurrentUser()
     }
 
     override fun onDestroyView() {
@@ -76,6 +77,18 @@ class HomeFragment : Fragment() {
             homeViewModel.currentYearMonth.collect { yearMonth ->
                 binding.currentMonthText.text = homeViewModel.getMonthDisplayText()
                 sharedViewModel.updateMonthlyTransactions(yearMonth)
+            }
+        }
+    }
+
+    private fun observeCurrentUser(){
+        viewLifecycleOwner.lifecycleScope.launch{
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                sharedViewModel.currentUser.collect{user ->
+                    user?.let{
+                        binding.customGroupbarYellowInclude.textViewGroupName.text = it.currentGname
+                    }
+                }
             }
         }
     }

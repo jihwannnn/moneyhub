@@ -85,6 +85,12 @@ class TransactionAdapter(
             else -> String.format("₩%,d", item.amount)  // 양수일 때
         }
 
+        // item이 클릭되었을 때, 클릭된 아이템을 전달
+        holder.itemView.setOnClickListener {
+            println("DEBUG: Transaction clicked: ${item.title}")
+            onItemClick(item)
+        }
+
         // 날짜에 따른 배경색 설정
         if (isForCalendar) {
             val currentDate = Calendar.getInstance()

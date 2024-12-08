@@ -12,9 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
+import com.example.moneyhub.activity.viewtransactiondetails.ViewTransactionDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.model.sessions.TransactionSession
 import com.example.moneyhub.utils.DateUtils
 import kotlinx.coroutines.launch
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,7 +92,17 @@ class HistoryFragment : Fragment() {
     // RecyclerView 설정을 위한 함수
     private fun setupRecyclerView() {
         // 어댑터를 빈 리스트로 초기화 (데이터는 나중에 observe에서 업데이트)
-        adapter = TransactionAdapter(emptyList(), false)
+        adapter = TransactionAdapter(emptyList(), false) { transaction ->
+            // 클릭된 Transaction을 TransactionSession에 저장
+            TransactionSession.setTransaction(transaction)
+            // ViewTransactionDetailsActivity 시작
+            val intent = Intent(requireContext(), ViewTransactionDetailsActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@HistoryFragment.adapter
