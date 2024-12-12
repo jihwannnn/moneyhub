@@ -1,50 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data></data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:layout_marginHorizontal="@dimen/margin_small"
+        android:layout_marginVertical="4dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/gray_200"
+        app:cardCornerRadius="8dp">
 
-        <TextView
-            android:id="@+id/tvCommentAuthor"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvCommentContent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCommentAuthor"
-            app:layout_constraintEnd_toStartOf="@id/btnEditComment"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="4dp"/>
+            <!-- 작성자 이름 -->
+            <TextView
+                android:id="@+id/tvCommentAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/gray_800"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="작성자 이름"/>
 
-        <Button
-            android:id="@+id/btnEditComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnDeleteComment"/>
+            <!-- 댓글 내용 -->
+            <TextView
+                android:id="@+id/tvCommentContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp"
+                android:textColor="@color/gray_700"
+                android:lineSpacingExtra="4dp"
+                android:breakStrategy="high_quality"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCommentAuthor"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="댓글 내용입니다. 여러 줄의 텍스트가 들어갈 수 있습니다."/>
 
-        <Button
-            android:id="@+id/btnDeleteComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Del"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <!-- 버튼 컨테이너 -->
+            <LinearLayout
+                android:id="@+id/buttonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCommentContent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- 수정 버튼 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="수정"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="4dp"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    app:cornerRadius="16dp"/>
+
+                <!-- 삭제 버튼 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDeleteComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="삭제"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:textColor="@color/error_color"
+                    app:cornerRadius="16dp"/>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 </layout>

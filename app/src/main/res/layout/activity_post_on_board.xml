@@ -7,94 +7,135 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/surface_color"
         tools:context=".activity.postonboard.PostOnBoardActivity">
 
-        <!-- 뒤로가기 버튼 -->
-        <ImageView
-            android:id="@+id/btnClose"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@drawable/icon_close"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- 상단 Write 텍스트 -->
-        <TextView
-            android:id="@+id/tvWrite"
-            android:layout_width="wrap_content"
+        <!-- Top App Bar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Write"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="10dp"
-            app:layout_constraintStart_toEndOf="@id/btnClose"
-            app:layout_constraintTop_toTopOf="@+id/btnClose"
-            app:layout_constraintBottom_toBottomOf="@id/btnClose"
-            app:layout_constraintHorizontal_bias="0.5" />
+            android:background="@color/surface_color"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!-- 제목 입력란 -->
-        <EditText
-            android:id="@+id/etTitle"
-            android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:paddingHorizontal="@dimen/padding_medium">
+
+                <ImageView
+                    android:id="@+id/btnClose"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_close"
+                    android:padding="2dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvWrite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Write"
+                    style="@style/BoardTitle"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    app:layout_constraintStart_toEndOf="@id/btnClose"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Content Area -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title"
-            android:textSize="18sp"
-            android:maxLines="1"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvWrite" />
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
-        <!-- 내용 입력란 -->
-        <EditText
-            android:id="@+id/etContent"
-            android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="제목"
+                android:textSize="18sp"
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilContent"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Write your content here"
-            android:inputType="textMultiLine"
-            android:minLines="5"
-            android:gravity="top"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etTitle"
-            app:layout_constraintBottom_toTopOf="@id/customButtonIncludePost" />
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/tilTitle"
+            app:layout_constraintBottom_toTopOf="@id/bottomBar">
 
-        <!-- 사진 미리보기 -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="내용을 입력하세요"
+                android:gravity="top"
+                android:inputType="textMultiLine"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Preview Image -->
         <ImageView
             android:id="@+id/ivPreview"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/customButtonIncludePost" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottomBar"/>
 
-        <!-- 사진 추가 버튼 -->
-        <ImageView
-            android:id="@+id/btnAddImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/icon_camera"
-            android:layout_marginLeft="15dp"
-            app:layout_constraintTop_toTopOf="@id/customButtonIncludePost"
-            app:layout_constraintBottom_toBottomOf="@id/customButtonIncludePost"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/customButtonIncludePost"
-            app:layout_constraintHorizontal_bias="0.5" />
-
-        <include
-            android:id="@+id/customButtonIncludePost"
-            layout="@layout/custom_button"
-            android:layout_width="0dp"
+        <!-- Bottom Bar -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnAddImage"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/icon_camera"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="게시하기"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    style="@style/Widget.MaterialComponents.Button"
+                    app:layout_constraintStart_toEndOf="@id/btnAddImage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

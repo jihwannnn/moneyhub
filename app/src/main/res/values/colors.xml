@@ -15,4 +15,19 @@
     <color name="moneyRed">#9C0003</color>
     <color name="moneyGreyBackground">#E3E3E3</color>
     <color name="moneyGrey">#959595</color>
+
+    <color name="gray_800">#424242</color>
+
+    <!-- Material Design Colors -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="surface_color">#FFFFFF</color>
+    <color name="primary_color">#2DD4BF</color>
+    <color name="primary_dark">#0F766E</color>
+    <color name="accent_color">#FEF08A</color>
+
+    <color name="gray_200">#EEEEEE</color>
+    <color name="gray_500">#6B7280</color>
+    <color name="gray_700">#616161</color>
+    <color name="error_color">#B00020</color>
+
 </resources>

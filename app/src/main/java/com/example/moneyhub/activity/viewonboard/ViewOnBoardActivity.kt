@@ -35,11 +35,11 @@ class ViewOnBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initializing view binding
         binding = ActivityViewOnBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        // 기존의 findViewById(R.id.main) 대신 binding.root 사용
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -47,7 +47,6 @@ class ViewOnBoardActivity : AppCompatActivity() {
 
         setupUI()
         observePost()
-        observeViewModel()
     }
 
     private fun setupUI() {

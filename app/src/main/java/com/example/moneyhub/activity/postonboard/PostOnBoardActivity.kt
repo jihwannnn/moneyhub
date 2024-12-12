@@ -72,7 +72,7 @@ class PostOnBoardActivity : AppCompatActivity() {
 
 
             // 게시 버튼
-            customButtonIncludePost.customButton.setOnClickListener {
+            btnPost.setOnClickListener {
                 val title = etTitle.text.toString()
                 val content = etContent.text.toString()
 
@@ -88,7 +88,7 @@ class PostOnBoardActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 viewModel.uiState.collect { state ->
                     // 버튼이 비활성화일 경우 클릭 불가 및 투명도 조정
-                    customButtonIncludePost.customButton.apply {
+                    btnPost.apply {
                         isClickable = !state.isLoading
                         alpha = if (state.isLoading) 0.5f else 1.0f
                     }
@@ -106,7 +106,7 @@ class PostOnBoardActivity : AppCompatActivity() {
                     state.isSuccess -> handleSuccess()
                     state.error != null -> handleError(state.error)
                 }
-                binding.customButtonIncludePost.customButton.isEnabled = !state.isLoading
+                binding.btnPost.isEnabled = !state.isLoading
             }
         }
     }
