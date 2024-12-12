@@ -179,6 +179,11 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
+
+    fun updating(){
+        loadUser()
+    }
+
     fun deleteTransaction(gid: String, tid: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -209,9 +214,5 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
-
-    fun updating(){
-        loadUser()
-    }
-
 }
+
