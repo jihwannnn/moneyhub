@@ -1,7 +1,10 @@
 package com.example.moneyhub.activity.viewonboard
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -74,17 +77,28 @@ class ViewOnBoardActivity : AppCompatActivity() {
         }
 
         binding.btnAddComment.setOnClickListener {
-            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            if (this.getCurrentFocus() != null) {
-                manager.hideSoftInputFromWindow(
-                    currentFocus!!.windowToken,
-                    InputMethodManager.HIDE_NOT_ALWAYS
-                )
+            val content = binding.etComment.text.toString().trim()
+            if (content.isNotEmpty()) {
+                viewModel.addComment(content)
+                binding.etComment.setText("")
+
+                // 부모 레이아웃에 포커스 요청
+                binding.root.requestFocus()
+
+                // 키보드 내리기
+                hideKeyboard()
+            } else {
+                Toast.makeText(this, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
-            val content = binding.etComment.text.toString()
-            viewModel.addComment(content)
-            binding.etComment.setText("")
         }
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = this.currentFocus ?: View(this)
+        imm.hideSoftInputFromWindow(view.windowToken, 0) // EditText의 windowToken 직접 사용
+        // EditText의 포커스 해제
+        binding.etComment.clearFocus()
     }
 
     private fun showEditCommentDialog(comment: Comment) {
