@@ -95,10 +95,16 @@ class MyPageActivity : AppCompatActivity() {
                     state.isLoading -> {
                         // Show loading if needed
                     }
-                    state.isSuccess -> {
-                        // 그룹 선택 성공 시 MainActivity로 이동
+                    state.successType == MyPageViewModel.SuccessType.GROUP_SELECTED -> {
+                        // MainActivity로 이동
                         startActivity(Intent(this@MyPageActivity, MainActivity::class.java))
                         finish()
+                    }
+
+                    state.successType == MyPageViewModel.SuccessType.GROUP_JOINED -> {
+                        // MyPageActivity 재시작
+                        Toast.makeText(this@MyPageActivity, "그룹 참여가 완료되었습니다", Toast.LENGTH_SHORT).show()
+                        recreate()
                     }
 
                     state.error != null -> {

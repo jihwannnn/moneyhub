@@ -20,8 +20,8 @@ class MyPageViewModel @Inject constructor(
     private val groupRepository: GroupRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(MyPageUiState())
+    val uiState: StateFlow<MyPageUiState> = _uiState.asStateFlow()
 
     private val _userGroups = MutableStateFlow<UserGroup?>(null)
     val userGroups: StateFlow<UserGroup?> = _userGroups.asStateFlow()
@@ -82,7 +82,7 @@ class MyPageViewModel @Inject constructor(
 
                             _uiState.update { it.copy(
                                 isLoading = false,
-                                isSuccess = true,
+                                successType = SuccessType.GROUP_SELECTED,
                                 error = null
                             ) }
                         },
@@ -103,5 +103,45 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun joinGroup(gid: String){
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                _currentUser.value?.let { currentUser ->
+                    groupRepository.joinGroup(gid, currentUser).fold(
+                        onSuccess = {
+                            loadUser()
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                successType = SuccessType.GROUP_JOINED,
+                                error = null
+                            ) }
+                        },
+                        onFailure = { throwable ->
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                error = throwable.message
+                            ) }
+                        }
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    error = e.message
+                ) }
+            }
+        }
+    }
 
+    data class MyPageUiState(
+        val isLoading: Boolean = false,
+        val successType: SuccessType? = null,
+        val error: String? = null
+    )
+
+    enum class SuccessType {
+        GROUP_SELECTED,
+        GROUP_JOINED
+    }
 }
