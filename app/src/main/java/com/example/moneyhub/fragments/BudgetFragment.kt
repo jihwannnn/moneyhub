@@ -52,16 +52,20 @@ class BudgetFragment : Fragment() {
 
 
     private fun setupRecyclerView() {
-        adapter = TransactionAdapter(sharedViewModel.filteredBudgets.value, isForBudget = true) { transaction ->
-
-
-            if(user.role != Role.REGULAR) {
-                val intent = Intent(requireContext(), CameraActivity::class.java).apply {
+        // 빈 리스트로 먼저 초기화
+        adapter = TransactionAdapter(
+            transactions = emptyList(),
+            isForBudget = true,
+            onItemClick = { transaction ->
+                if(user.role != Role.REGULAR) {
+                    // 로그 추가
+                    println("DEBUG: Transaction clicked: $transaction")
+                    val intent = Intent(requireContext(), CameraActivity::class.java)
                     RegisterTransactionSession.setTransaction(transaction)
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
-        }
+        )
 
         binding.recyclerViewBudget.apply {
             layoutManager = LinearLayoutManager(requireContext())
