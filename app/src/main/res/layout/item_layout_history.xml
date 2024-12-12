@@ -58,5 +58,4 @@
         app:layout_constraintTop_toBottomOf="@id/item_transaction"
         />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

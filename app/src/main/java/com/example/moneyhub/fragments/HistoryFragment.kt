@@ -80,14 +80,26 @@ class HistoryFragment : Fragment() {
     // RecyclerView 설정을 위한 함수
     private fun setupRecyclerView() {
         // 어댑터를 빈 리스트로 초기화 (데이터는 나중에 observe에서 업데이트)
-        adapter = TransactionAdapter(emptyList(), false) { transaction ->
-            // 클릭된 Transaction을 TransactionSession에 저장
-            TransactionSession.setTransaction(transaction)
-            // ViewTransactionDetailsActivity 시작
-            val intent = Intent(requireContext(), ViewTransactionDetailsActivity::class.java)
-            startActivity(intent)
-        }
+        adapter = TransactionAdapter(
+            transactions = emptyList(),
+            isForBudget = false,
+            onItemClick = { transaction ->
 
+                // 클릭된 Transaction을 TransactionSession에 저장
+                TransactionSession.setTransaction(transaction)
+                // ViewTransactionDetailsActivity 시작
+                val intent = Intent(requireContext(), ViewTransactionDetailsActivity::class.java)
+                startActivity(intent)
+            },
+            onDeleteClick = { transaction ->
+                // 현재 유저가 REGULAR가 아닐 때만 삭제 가능
+                if (user.role != Role.REGULAR) {
+                    sharedViewModel.currentUser.value?.currentGid?.let { gid ->
+                        sharedViewModel.deleteTransaction(gid, transaction.tid)
+                    }
+                }
+            }
+        )
 
 
 

@@ -20,9 +20,10 @@ class TransactionAdapter(
     private val isForBudget: Boolean,
     private val isForCalendar: Boolean = false,  // 새로운 파라미터 추가, 기본값은 false
 
+
     // TransactionItem을 매개변수로 받는 함수 타입
     private val onItemClick: (Transaction) -> Unit = {}, // 클릭된 아이템의 정보를 전달 가능
-
+    private val onDeleteClick: (Transaction) -> Unit = {}  // 기본값 추가
 
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
