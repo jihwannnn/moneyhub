@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.creategroup.CreateActivity
+import com.example.moneyhub.activity.login.LogInActivity
 import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.adapter.GroupAdapter
 import com.example.moneyhub.databinding.ActivityMyPageBinding
@@ -54,6 +55,9 @@ class MyPageActivity : AppCompatActivity() {
         binding.btnLogOut.apply {
             root.setBackgroundResource(R.drawable.gray)
             btnText.text = "로그아웃"
+            root.setOnClickListener {
+                viewModel.signOut()
+            }
         }
 
         binding.btnCreateRoom.apply {
@@ -111,6 +115,14 @@ class MyPageActivity : AppCompatActivity() {
                     state.successType == MyPageViewModel.SuccessType.GROUP_JOINED -> {
                         // MyPageActivity 재시작
                         Toast.makeText(this@MyPageActivity, "그룹 참여가 완료되었습니다", Toast.LENGTH_SHORT).show()
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    state.successType == MyPageViewModel.SuccessType.SIGN_OUT -> {
+                        Toast.makeText(this@MyPageActivity, "로그아웃되었습니다", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@MyPageActivity, LogInActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }

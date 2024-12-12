@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moneyhub.common.UiState
 import com.example.moneyhub.data.repository.group.GroupRepository
 import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.Membership
@@ -24,8 +23,8 @@ class MembersViewModel @Inject constructor(
     private val groupRepository: GroupRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(MemberUiState())
+    val uiState: StateFlow<MemberUiState> = _uiState.asStateFlow()
 
     private val _members = MutableStateFlow<List<Membership>>(emptyList())
     val members: StateFlow<List<Membership>> = _members.asStateFlow()
@@ -104,7 +103,8 @@ class MembersViewModel @Inject constructor(
                             _uiState.update { it.copy(
                                 isLoading = false,
                                 isSuccess = true,
-                                error = null
+                                error = null,
+                                navigationType = NavigationType.REFRESH_PAGE
                             ) }
                         },
                         onFailure = { throwable ->
@@ -139,7 +139,8 @@ class MembersViewModel @Inject constructor(
                             _uiState.update { it.copy(
                                 isLoading = false,
                                 isSuccess = true,
-                                error = null
+                                error = null,
+                                navigationType = NavigationType.REFRESH_PAGE
                             ) }
                         },
                         onFailure = { throwable ->
@@ -169,7 +170,8 @@ class MembersViewModel @Inject constructor(
                             _uiState.update { it.copy(
                                 isLoading = false,
                                 isSuccess = true,
-                                error = null
+                                error = null,
+                                navigationType = NavigationType.TO_MYPAGE
                             ) }
                         },
                         onFailure = { throwable ->
@@ -189,9 +191,22 @@ class MembersViewModel @Inject constructor(
         }
     }
 
+
     fun copyGroupId(context: Context) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Group ID", _currentGroupId.value)
         clipboard.setPrimaryClip(clip)
+    }
+
+    data class MemberUiState(
+        val isLoading: Boolean = false,
+        val isSuccess: Boolean = false,
+        val error: String? = null,
+        val navigationType: NavigationType? = null
+    )
+
+    enum class NavigationType {
+        TO_MYPAGE,
+        REFRESH_PAGE
     }
 }

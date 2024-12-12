@@ -17,7 +17,6 @@ import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
 import com.example.moneyhub.model.Transaction
 import com.example.moneyhub.model.sessions.TransactionSession
-import com.example.moneyhub.utils.DateUtils
 import kotlinx.coroutines.launch
 import dagger.hilt.android.AndroidEntryPoint
 

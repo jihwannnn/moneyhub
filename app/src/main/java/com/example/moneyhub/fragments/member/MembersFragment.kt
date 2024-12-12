@@ -1,5 +1,6 @@
 package com.example.moneyhub.fragments.member
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneyhub.activity.mypage.MyPageActivity
 import com.example.moneyhub.adapter.MemberAdapter
 import com.example.moneyhub.databinding.FragmentMembersBinding
 import com.example.moneyhub.model.Role
@@ -78,11 +80,18 @@ class MembersFragment : Fragment() {
                     }
                     state.isSuccess -> {
                         Toast.makeText(context, "성공적으로 처리되었습니다.", Toast.LENGTH_SHORT).show()
-                        if (viewModel.currentUser.value?.role == Role.OWNER) {
-                            // 대표인 경우 처리
-                        } else {
-                            // 일반 멤버인 경우 처리
-                            activity?.finish() // 그룹 나가기 성공 시 화면 종료
+                        when (state.navigationType) {
+                            MembersViewModel.NavigationType.TO_MYPAGE -> {
+                                startActivity(Intent(requireContext(), MyPageActivity::class.java))
+                                requireActivity().finish()
+                            }
+                            MembersViewModel.NavigationType.REFRESH_PAGE -> {
+                                parentFragmentManager.beginTransaction()
+                                    .detach(this@MembersFragment)
+                                    .attach(this@MembersFragment)
+                                    .commit()
+                            }
+                            null -> {} // 아무 동작 하지 않음
                         }
                     }
                     state.error != null -> {

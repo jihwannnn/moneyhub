@@ -2,11 +2,14 @@ package com.example.moneyhub.activity.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moneyhub.common.UiState
+import com.example.moneyhub.data.repository.auth.AuthRepository
 import com.example.moneyhub.data.repository.group.GroupRepository
 import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.UserGroup
 import com.example.moneyhub.model.sessions.CurrentUserSession
+import com.example.moneyhub.model.sessions.PostSession
+import com.example.moneyhub.model.sessions.RegisterTransactionSession
+import com.example.moneyhub.model.sessions.TransactionSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val groupRepository: GroupRepository
+    private val groupRepository: GroupRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageUiState())
@@ -134,6 +138,38 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun signOut() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                authRepository.signOut().fold(
+                    onSuccess = {
+                        CurrentUserSession.clearCurrentUser()  // 로컬 세션 클리어
+                        PostSession.clearCurrentPost()
+                        RegisterTransactionSession.clearCurrentTransaction()
+                        TransactionSession.clearCurrentTransaction()
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            successType = SuccessType.SIGN_OUT,
+                            error = null
+                        ) }
+                    },
+                    onFailure = { throwable ->
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            error = throwable.message
+                        ) }
+                    }
+                )
+            } catch (e: Exception) {
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    error = e.message
+                ) }
+            }
+        }
+    }
+
     data class MyPageUiState(
         val isLoading: Boolean = false,
         val successType: SuccessType? = null,
@@ -142,6 +178,7 @@ class MyPageViewModel @Inject constructor(
 
     enum class SuccessType {
         GROUP_SELECTED,
-        GROUP_JOINED
+        GROUP_JOINED,
+        SIGN_OUT
     }
 }
