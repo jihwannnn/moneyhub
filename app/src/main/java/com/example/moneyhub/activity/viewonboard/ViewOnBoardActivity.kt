@@ -175,18 +175,13 @@ class ViewOnBoardActivity : AppCompatActivity() {
         }
     }
 
+
     private fun observeViewModel() {
         // UI 상태 관찰
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when {
-                    state.isLoading -> showLoading()
-                    state.isSuccess -> {
-                        if (isDeleting) {
-                            handleDeleteSuccess()
-                            isDeleting = false
-                        }
-                    }
+                    state.isSuccess -> handleDeleteSuccess()
                     state.error != null -> handleError(state.error)
                 }
             }
@@ -207,7 +202,7 @@ class ViewOnBoardActivity : AppCompatActivity() {
                 val isAuthor = post?.authorId == user?.id
 
                 binding.btnContainer.visibility =
-                        if (isAuthor) View.VISIBLE else View.GONE
+                    if (isAuthor) View.VISIBLE else View.GONE
 
                 // user 정보가 바뀌면 adapter도 업데이트 필요
                 commentAdapter = CommentRecyclerAdapter(
@@ -221,10 +216,6 @@ class ViewOnBoardActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoading() {
-        Toast.makeText(this, "처리 중...", Toast.LENGTH_SHORT).show()
-    }
-
     private fun handleDeleteSuccess() {
         Toast.makeText(this, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
         // BoardFragment로 돌아가기
@@ -233,5 +224,6 @@ class ViewOnBoardActivity : AppCompatActivity() {
 
     private fun handleError(error: String?) {
         Toast.makeText(this, error ?: "처리 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+        binding.progressBar.visibility = View.GONE
     }
 }
