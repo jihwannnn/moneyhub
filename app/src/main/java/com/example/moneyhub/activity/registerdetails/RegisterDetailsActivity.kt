@@ -5,6 +5,7 @@ import java.util.Locale
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.databinding.ActivityRegisterDetailsBinding
 import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import dagger.hilt.android.AndroidEntryPoint
@@ -192,6 +194,7 @@ class RegisterDetailsActivity : AppCompatActivity() {
                     state.isSuccess -> {
                         Toast.makeText(this@RegisterDetailsActivity,
                             "거래가 저장되었습니다", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@RegisterDetailsActivity, MainActivity::class.java))
                         finish()
                     }
                     state.error != null -> {
