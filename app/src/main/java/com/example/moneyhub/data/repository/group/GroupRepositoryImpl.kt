@@ -1,6 +1,7 @@
 package com.example.moneyhub.data.repository.group
 
 
+import com.example.moneyhub.model.Category
 import kotlinx.coroutines.tasks.await
 
 import com.google.firebase.firestore.FirebaseFirestore
@@ -86,6 +87,11 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
                 "groups" to mapOf(gid to name)
             )
 
+            val list =  listOf("회식비", "교통비", "물품비", "기타")
+            val category = Category(gid = gid, category = list)
+
+            val categoryRef = db.collection("categories").document(gid)
+
             // 트랜잭션으로 모든 작업 수행
             db.runTransaction { transaction ->
 
@@ -97,6 +103,8 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
 
                 // 사용자의 그룹 목록 업데이트
                 transaction.set(userGroupRef, userGroupUpdate, SetOptions.merge())
+
+                transaction.set(categoryRef, category.toMap())
             }.await()
 
             Result.success(Unit)

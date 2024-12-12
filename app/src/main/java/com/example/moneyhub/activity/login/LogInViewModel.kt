@@ -9,6 +9,7 @@ import com.example.moneyhub.common.UiState
 import com.example.moneyhub.data.repository.auth.AuthRepository
 import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.sessions.CurrentUserSession
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.Firebase
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.functions
@@ -80,7 +81,7 @@ class LoginViewModel @Inject constructor(
                 val sharedPrefs = context.getSharedPreferences("fcm_prefs", Context.MODE_PRIVATE)
                 val savedToken = sharedPrefs.getString("fcm_token", null)
 
-                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val newToken = task.result
 
@@ -96,7 +97,7 @@ class LoginViewModel @Inject constructor(
                         Log.w("FCM", "Token fetch failed", task.exception)
                         _fcmInitialized.value = false
                     }
-                }
+                })
             } catch (e: Exception) {
                 Log.e("FCM", "Failed to initialize FCM", e)
                 _fcmInitialized.value = false

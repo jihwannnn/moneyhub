@@ -171,13 +171,13 @@ class LogInActivity : AppCompatActivity() {
             when {
                 ContextCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.POST_NOTIFICATIONS
+                    Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     viewModel.initializeFcm(this)
                 }
 
                 shouldShowRequestPermissionRationale(
-                    android.Manifest.permission.POST_NOTIFICATIONS
+                    Manifest.permission.POST_NOTIFICATIONS
                 ) -> {
                     AlertDialog.Builder(this)
                         .setTitle("알림 권한 필요")
@@ -192,7 +192,7 @@ class LogInActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
         } else {

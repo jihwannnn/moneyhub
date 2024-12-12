@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -11,6 +12,7 @@ class MoneyHub : Application() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        FirebaseApp.initializeApp(this)
     }
 
     private fun createNotificationChannel() {
