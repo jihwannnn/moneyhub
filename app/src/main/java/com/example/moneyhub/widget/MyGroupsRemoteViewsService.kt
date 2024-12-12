@@ -54,6 +54,8 @@ class MyGroupsRemoteViewsFactory(
         // fillInIntent.putExtra("gid", groupList[position].first)
         rv.setOnClickFillInIntent(R.id.widgetItemRoot, fillInIntent)
 
+        Log.d("MyGroupsRemoteViewsFactory", "Setting fillInIntent for groupId: $groupId, groupName: $groupName")
+
         return rv
     }
 
