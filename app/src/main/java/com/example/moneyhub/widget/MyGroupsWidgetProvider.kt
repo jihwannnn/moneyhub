@@ -35,7 +35,7 @@ class MyGroupsWidgetProvider : AppWidgetProvider() {
                 context,
                 0,
                 clickIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             views.setPendingIntentTemplate(R.id.widgetGroupListView, pendingIntentTemplate)
 
@@ -45,7 +45,7 @@ class MyGroupsWidgetProvider : AppWidgetProvider() {
                 context,
                 0,
                 titleIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             views.setOnClickPendingIntent(R.id.tvWidgetTitle, pendingIntentTitle)
 
