@@ -69,6 +69,51 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
+    // 데이터베이스에서 거래 내역을 가져오는 함수
+    private fun loadTransactions(gid: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            try {
+                // 확인된(verified) 거래 내역 가져오기
+                transactionRepository.getTransactions(gid, true).fold(
+                    onSuccess = { transactions ->
+                        _histories.value = transactions.sortedByDescending { it.payDate }
+                        filterCurrentMonthHistories() // 여기서 한 번만 필터링
+                    },
+                    onFailure = { throwable ->
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            error = throwable.message
+                        ) }
+                    }
+                )
+
+                // 예산(unverified) 거래 내역 가져오기
+                transactionRepository.getTransactions(gid, false).fold(
+                    onSuccess = { transactions ->
+                        _budgets.value = transactions.sortedByDescending { it.payDate }
+                        _uiState.update { it.copy(isLoading = false) }
+                        filterCurrentMonthBudgets()
+                    },
+                    onFailure = { throwable ->
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            error = throwable.message
+                        ) }
+                    }
+                )
+
+                updateMonthlyTransactions(YearMonth.now())
+            } catch (e: Exception) {
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    error = e.message
+                ) }
+            }
+        }
+    }
+
     fun setCurrentYearMonth(yearMonth: YearMonth) {
         _currentYearMonth.value = yearMonth
     }
@@ -129,60 +174,11 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
-    // 데이터베이스에서 거래 내역을 가져오는 함수
-    private fun loadTransactions(gid: String) {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
 
-            try {
-                // 확인된(verified) 거래 내역 가져오기
-                transactionRepository.getTransactions(gid, true).fold(
-                    onSuccess = { transactions ->
-                        _histories.value = transactions.sortedByDescending { it.payDate }
-                        filterCurrentMonthHistories() // 여기서 한 번만 필터링
-                    },
-                    onFailure = { throwable ->
-                        _uiState.update { it.copy(
-                            isLoading = false,
-                            error = throwable.message
-                        ) }
-                    }
-                )
-
-                // 예산(unverified) 거래 내역 가져오기
-                transactionRepository.getTransactions(gid, false).fold(
-                    onSuccess = { transactions ->
-                        _budgets.value = transactions.sortedByDescending { it.payDate }
-                        _uiState.update { it.copy(isLoading = false) }
-                        filterCurrentMonthBudgets()
-                    },
-                    onFailure = { throwable ->
-                        _uiState.update { it.copy(
-                            isLoading = false,
-                            error = throwable.message
-                        ) }
-                    }
-                )
-
-                // 현재 월에 대한 초기 필터링 적용
-//                YearMonth.now(): 현재 년월을 가져옴 (예: 2024년 12월)
-//                updateMonthlyTransactions는 이 년월을 기준으로 해당 월에 해당하는 거래내역만 필터링
-//                즉, 앱이 처음 실행될 때 현재 월의 거래내역만 보이도록 초기 필터링
-
-                updateMonthlyTransactions(YearMonth.now())
-            } catch (e: Exception) {
-                _uiState.update { it.copy(
-                    isLoading = false,
-                    error = e.message
-                ) }
-            }
-        }
-    }
 
     fun deleteTransaction(gid: String, tid: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-
             try {
                 transactionRepository.deleteTransaction(gid, tid).fold(
                     onSuccess = {

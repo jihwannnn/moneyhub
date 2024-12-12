@@ -120,6 +120,7 @@ class CalendarFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.currentYearMonth.collect { yearMonth ->
+
                     // 변경된 YearMonth를 기반으로 캘린더 업데이트
                     val calendar = java.util.Calendar.getInstance()
                     calendar.set(yearMonth.year, yearMonth.monthValue - 1, 1) // 월은 0부터 시작
@@ -129,15 +130,10 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    // ViewModel의 데이터 변화를 관찰하는 함수
     private fun observeTransactions() {
-        // Fragment의 생명주기를 고려한 코루틴 스코프 실행
         viewLifecycleOwner.lifecycleScope.launch {
-            // Fragment가 STARTED 상태일 때만 데이터 수집
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // filteredHistories의 변화를 관찰
                 sharedViewModel.filteredHistories.collect { transactions ->
-                    // 월간 총계 업데이트
                     updateMonthlyTotals(transactions)
 
                     // 현재 캘린더뷰에서 선택된 날짜 가져오기
