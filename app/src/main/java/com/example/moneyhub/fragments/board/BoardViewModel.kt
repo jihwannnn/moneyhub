@@ -21,7 +21,7 @@ class BoardViewModel @Inject constructor(
 
     // UI state
     private val _uiState = MutableStateFlow(UiState())
-    val uiState = _uiState.asStateFlow()
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _postList = MutableStateFlow<List<Post>>(emptyList())
     val postList: StateFlow<List<Post>> = _postList.asStateFlow()
@@ -40,16 +40,21 @@ class BoardViewModel @Inject constructor(
 
     fun loadPosts() {
         viewModelScope.launch {
-            val userGroupId = _currentUser.value?.currentGid ?: return@launch
+            val userGroupId = _currentUser.value?.currentGid
+            if (userGroupId == null) {
+                _uiState.value = UiState(error = "사용자 그룹 정보를 찾을 수 없습니다.")
+                return@launch
+            }
+            _uiState.value = UiState(isLoading = true)
             repository.getPosts(userGroupId).fold(
                 onSuccess = { posts ->
                     _postList.value = posts
-                    _uiState.value = UiState(isSuccess = true) },
+                    _uiState.value = UiState(isSuccess = true)
+                },
                 onFailure = { exception ->
                     _uiState.value = UiState(error = exception.message)
                 }
             )
         }
     }
-
 }

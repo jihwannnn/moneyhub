@@ -70,6 +70,23 @@ class ViewOnBoardViewModel @Inject constructor(
         }
     }
 
+    // 게시글 수정 로직
+    fun editPost(updatedPost: Post) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            repository.updatePost(updatedPost).fold(
+                onSuccess = {
+                    _currentPost.value = updatedPost
+                    _uiState.update { it.copy(isLoading = false, isSuccess = true, error = null) }
+                },
+                onFailure = { throwable ->
+                    _uiState.update { it.copy(isLoading = false, error = throwable.message) }
+                }
+            )
+        }
+    }
+
     fun loadComments(post: Post) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }

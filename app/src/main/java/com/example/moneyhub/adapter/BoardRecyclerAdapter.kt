@@ -18,6 +18,7 @@ import java.time.Duration
 
 class BoardRecyclerAdapter(
     private var posts: List<Post>,
+    private val onItemClick: (Post) -> Unit
 ) : RecyclerView.Adapter<BoardRecyclerAdapter.ViewHolder>() {
 
     fun updatePosts(newPosts: List<Post>) {

@@ -1,6 +1,7 @@
 package com.example.moneyhub.activity.editonboard
 
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.moneyhub.R
 import com.example.moneyhub.databinding.ActivityEditOnBoardBinding
+import com.example.moneyhub.fragments.board.BoardFragment
 import com.example.moneyhub.model.Post
 import com.example.moneyhub.model.sessions.PostSession
 import dagger.hilt.android.AndroidEntryPoint
