@@ -16,6 +16,7 @@ import com.example.moneyhub.activity.viewtransactiondetails.ViewTransactionDetai
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import com.example.moneyhub.model.sessions.TransactionSession
 import kotlinx.coroutines.launch
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +56,7 @@ class HistoryFragment : Fragment() {
     // 거래내역 추가 버튼 설정
     private fun setupAddButton() {
         binding.btnAddHistory.setOnClickListener {
+            RegisterTransactionSession.setTransaction(Transaction(verified = true))
             val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
             startActivity(intent)
         }
@@ -66,7 +68,6 @@ class HistoryFragment : Fragment() {
 
         setupRecyclerView()
         observeViewModel()
-
     }
 
     private fun observeViewModel() {
@@ -130,5 +131,10 @@ class HistoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sharedViewModel.updating()
     }
 }

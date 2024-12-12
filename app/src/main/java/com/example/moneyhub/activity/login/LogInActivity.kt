@@ -42,6 +42,8 @@ class LogInActivity : AppCompatActivity() {
         observeViewModel()
     }
 
+
+
     private fun setupSystemBars() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.login) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

@@ -167,6 +167,9 @@ class MembersViewModel @Inject constructor(
                 _currentUser.value?.let { currentUser ->
                     groupRepository.leaveGroup(currentUser.currentGid, currentUser).fold(
                         onSuccess = {
+                            CurrentUserSession.setCurrentUser(currentUser.copy(
+                                currentGid = "",
+                                currentGname = ""))
                             _uiState.update { it.copy(
                                 isLoading = false,
                                 isSuccess = true,

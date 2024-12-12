@@ -161,6 +161,7 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
 
     override suspend fun deleteGroup(gid: String): Result<Unit> {
         return try {
+
             // 1. 사전에 모든 데이터 가져오기
             val membersSnapshot = db.collection("members_group")
                 .document(gid)

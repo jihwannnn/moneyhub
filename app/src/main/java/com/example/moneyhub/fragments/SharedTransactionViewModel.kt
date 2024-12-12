@@ -31,11 +31,9 @@ class SharedTransactionViewModel @Inject constructor(
 
     // 전체 거래 내역 목록을 저장하는 상태
     private val _histories = MutableStateFlow<List<Transaction>>(emptyList())
-    val histories: StateFlow<List<Transaction>> = _histories.asStateFlow()
 
     // 전체 예산 목록을 저장하는 상태
     private val _budgets = MutableStateFlow<List<Transaction>>(emptyList())
-    val budgets: StateFlow<List<Transaction>> = _budgets.asStateFlow()
 
     // 선택된 월에 해당하는 거래 내역만 필터링하여 저장하는 상태
     private val _filteredHistories = MutableStateFlow<List<Transaction>>(emptyList())
@@ -58,6 +56,14 @@ class SharedTransactionViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Main.immediate) {  // Main.immediate로 변경
 
             loadUser()
+        }
+    }
+
+    // 현재 사용자 정보를 로드하고 해당 사용자의 거래 내역을 가져오는 함수
+    private fun loadUser() {
+        _currentUser.value = CurrentUserSession.getCurrentUser()
+        _currentUser.value?.let { user ->
+            loadTransactions(user.currentGid)
         }
     }
 
@@ -96,13 +102,6 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
-    // 현재 사용자 정보를 로드하고 해당 사용자의 거래 내역을 가져오는 함수
-    private fun loadUser() {
-        _currentUser.value = CurrentUserSession.getCurrentUser()
-        _currentUser.value?.let { user ->
-            loadTransactions(user.currentGid)
-        }
-    }
 
     // 특정 월의 거래 내역만 필터링하는 함수
     fun updateMonthlyTransactions(yearMonth: YearMonth) {
@@ -178,25 +177,8 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
-    // 새로운 거래 내역을 추가하는 함수
-    fun addTransaction(transaction: Transaction) {
-        viewModelScope.launch {
-            _currentUser.value?.currentGid?.let { gid ->
-                _uiState.update { it.copy(isLoading = true) }
-
-                transactionRepository.addTransaction(gid, transaction).fold(
-                    onSuccess = {
-                        loadTransactions(gid)
-                        _uiState.update { it.copy(isSuccess = true) }
-                    },
-                    onFailure = { throwable ->
-                        _uiState.update { it.copy(
-                            isLoading = false,
-                            error = throwable.message
-                        ) }
-                    }
-                )
-            }
-        }
+    fun updating(){
+        loadUser()
     }
+
 }

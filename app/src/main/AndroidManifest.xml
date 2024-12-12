@@ -12,6 +12,7 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- 알람 -->
 
     <application
         android:name=".MoneyHub"
@@ -38,6 +39,13 @@
         <service android:name=".widget.MyGroupsRemoteViewsService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false"/>
+        <service
+            android:name=".service.FcmService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".activity.viewtransactiondetails.ViewTransactionDetailsActivity"
             android:exported="false" />

@@ -190,4 +190,9 @@ class CalendarFragment : Fragment() {
         @JvmStatic
         fun newInstance() = CalendarFragment()
     }
+
+    override fun onResume() {
+        super.onResume()
+        sharedViewModel.updating()
+    }
 }

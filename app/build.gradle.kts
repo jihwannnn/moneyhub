@@ -64,6 +64,8 @@ dependencies {
     implementation (libs.logging.interceptor)
 
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.firebase.functions.ktx)
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 
     implementation(libs.androidx.core.ktx)
