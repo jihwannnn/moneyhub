@@ -2,6 +2,7 @@ package com.example.moneyhub.widget
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.example.moneyhub.R
@@ -30,6 +31,7 @@ class MyGroupsRemoteViewsFactory(
         // groupList = loadUserGroupsFromLocalCache()
         // 예시
         groupList = loadUserGroupsFromLocalCache(context)
+        Log.d("MyGroupsRemoteViewsFactory", "Loaded groups: $groupList")
     }
 
     override fun onDestroy() {
@@ -40,13 +42,17 @@ class MyGroupsRemoteViewsFactory(
 
     override fun getViewAt(position: Int): RemoteViews {
         val rv = RemoteViews(context.packageName, R.layout.item_widget_group)
+        val groupId = groupList[position].first
         val groupName = groupList[position].second
         rv.setTextViewText(R.id.tvGroupNameWidget, groupName)
 
         // 항목 클릭 시 특정 액션 수행 (옵션)
-        val fillInIntent = Intent()
+        val fillInIntent = Intent().apply {
+            putExtra("gid", groupId)
+            putExtra("gname", groupName)
+        }
         // fillInIntent.putExtra("gid", groupList[position].first)
-        rv.setOnClickFillInIntent(R.id.tvGroupNameWidget, fillInIntent)
+        rv.setOnClickFillInIntent(R.id.widgetItemRoot, fillInIntent)
 
         return rv
     }

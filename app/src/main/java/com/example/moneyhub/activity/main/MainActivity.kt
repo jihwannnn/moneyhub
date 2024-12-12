@@ -35,8 +35,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var lastZ: Float = 0.0f
     private val shakeThreshold = 1500 // 흔들기 감지 임계값
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

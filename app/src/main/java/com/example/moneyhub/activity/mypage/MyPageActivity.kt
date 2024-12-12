@@ -13,6 +13,7 @@ import com.example.moneyhub.activity.creategroup.CreateActivity
 import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.adapter.GroupAdapter
 import com.example.moneyhub.databinding.ActivityMyPageBinding
+import com.example.moneyhub.model.sessions.CurrentUserSession
 import com.example.moneyhub.utils.LocalCacheUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -31,6 +32,13 @@ class MyPageActivity : AppCompatActivity() {
         setupButtons()
         setupRecyclerView()
         observeViewModel()
+
+        // 인텐트에서 gid와 gname 받기
+        val gid = intent.getStringExtra("gid")
+        val gname = intent.getStringExtra("gname")
+        if (gid != null && gname != null) {
+            viewModel.selectGroup(gid, gname)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -104,9 +112,10 @@ class MyPageActivity : AppCompatActivity() {
                         // Show loading if needed
                     }
                     state.successType == MyPageViewModel.SuccessType.GROUP_SELECTED -> {
-                        // MainActivity로 이동
-                        startActivity(Intent(this@MyPageActivity, MainActivity::class.java))
-                        finish()
+                        state.selectedGid?.let { gid ->
+                            // MainActivity로 gid 전달하지 않고 CurrentUserSession에서 gid 가져오기
+                            navigateToMainActivity()
+                        }
                     }
 
                     state.successType == MyPageViewModel.SuccessType.GROUP_JOINED -> {
@@ -123,6 +132,13 @@ class MyPageActivity : AppCompatActivity() {
         }
     }
 
+    private fun navigateToMainActivity() {
+        // MainActivity로 이동
+        val intent = Intent(this@MyPageActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     // 유저 그룹 데이터 갱신 시 호출
     fun saveUserGroupsToLocalCache(context: Context, groups: Map<String, String>) {
         val prefs = context.getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)
@@ -130,7 +146,6 @@ class MyPageActivity : AppCompatActivity() {
 
         // 간단히 JSON 문자열로 저장
         val json = org.json.JSONObject().apply {
-            put("uid", "currentUserId") // 필요하다면 현재 유저의 uid도 저장
             val groupsObj = org.json.JSONObject()
             for ((gid, gname) in groups) {
                 groupsObj.put(gid, gname)
