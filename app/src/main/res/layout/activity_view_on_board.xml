@@ -58,16 +58,44 @@
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:padding="16dp">
+
+                        <!-- Edit 및 Delete 버튼 컨테이너 -->
+                        <LinearLayout
+                            android:id="@+id/btnContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="8dp"
+                            android:visibility="gone"> <!-- 기본적으로 숨김 -->
+
+                            <ImageButton
+                                android:id="@+id/btnEdit"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_edit"
+                            android:contentDescription="Edit" />
+
+                            <ImageButton
+                                android:id="@+id/btnDelete"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_delete"
+                            android:contentDescription="Delete"
+                            android:layout_marginStart="8dp"/>
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/tvTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_toStartOf="@id/btnContainer"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -77,6 +105,7 @@
                             android:id="@+id/tvContent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_below="@id/tvTitle"
                             android:layout_marginTop="12dp"
                             android:lineSpacingExtra="4dp"
                             android:textColor="@color/gray_800"
@@ -87,6 +116,7 @@
                             android:id="@+id/imageCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_below="@id/tvContent"
                             android:layout_marginTop="16dp"
                             app:cardCornerRadius="8dp"
                             app:cardElevation="0dp">
@@ -96,10 +126,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:adjustViewBounds="true" />
-
                         </com.google.android.material.card.MaterialCardView>
-                    </LinearLayout>
-
+                    </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- 댓글 목록 -->

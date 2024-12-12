@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -17,10 +18,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.moneyhub.activity.editonboard.EditOnBoardActivity
 import com.example.moneyhub.activity.mypage.MyPageActivity
+import com.example.moneyhub.activity.postonboard.PostOnBoardActivity
 import com.example.moneyhub.adapter.CommentRecyclerAdapter
 import com.example.moneyhub.databinding.ActivityViewOnBoardBinding
 import com.example.moneyhub.model.Comment
+import com.example.moneyhub.model.Post
+import com.example.moneyhub.model.sessions.CurrentUserSession
 import com.example.moneyhub.model.sessions.PostSession
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -32,6 +37,7 @@ class ViewOnBoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewOnBoardBinding
     private val viewModel: ViewOnBoardViewModel by viewModels()
     private lateinit var commentAdapter: CommentRecyclerAdapter
+    private var isDeleting: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +47,6 @@ class ViewOnBoardActivity : AppCompatActivity() {
         binding = ActivityViewOnBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 기존의 findViewById(R.id.main) 대신 binding.root 사용
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -57,6 +62,19 @@ class ViewOnBoardActivity : AppCompatActivity() {
 
         val post = PostSession.getCurrentPost()
         viewModel.fetchPost(post)
+
+        binding.btnContainer.apply {
+            binding.btnEdit.setOnClickListener {
+                // EditOnBoardActivity로 이동
+                PostSession.setPost(post)
+                val intent = Intent(this@ViewOnBoardActivity, EditOnBoardActivity::class.java)
+                startActivity(intent)
+            }
+
+            binding.btnDelete.setOnClickListener {
+                showDeleteConfirmationDialog(post)
+            }
+        }
 
         binding.customHeaderInclude.imageViewMyPage.setOnClickListener{
                 val intent = Intent(this@ViewOnBoardActivity, MyPageActivity::class.java)
@@ -93,6 +111,20 @@ class ViewOnBoardActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDeleteConfirmationDialog(post: Post) {
+        AlertDialog.Builder(this)
+            .setTitle("게시글 삭제")
+            .setMessage("정말로 게시글을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { dialog, which ->
+                // 삭제 작업 시작을 표시
+                isDeleting = true
+                // ViewModel을 통해 게시글 삭제
+                viewModel.deletePost(post)
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val view = this.currentFocus ?: View(this)
@@ -127,6 +159,13 @@ class ViewOnBoardActivity : AppCompatActivity() {
                             .load(post.imageUrl)
                             .into(ivPhoto)
                     }
+
+                    // 게시글 작성자인지 확인하고 버튼 가시성 설정
+                    val currentUser = viewModel.currentUser.value
+                    val isAuthor = currentUser?.id == post.authorId
+
+                    binding.btnContainer.visibility =
+                        if (isAuthor) View.VISIBLE else View.GONE
                 } else {
                     // 게시글을 찾을 수 없을 경우 처리
                     binding.tvTitle.text = "게시글을 찾을 수 없습니다."
@@ -140,11 +179,15 @@ class ViewOnBoardActivity : AppCompatActivity() {
         // UI 상태 관찰
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
-                if (state.isLoading) {
-                    // 로딩 표시 가능
-                }
-                state.error?.let {
-                    Toast.makeText(this@ViewOnBoardActivity, it, Toast.LENGTH_SHORT).show()
+                when {
+                    state.isLoading -> showLoading()
+                    state.isSuccess -> {
+                        if (isDeleting) {
+                            handleDeleteSuccess()
+                            isDeleting = false
+                        }
+                    }
+                    state.error != null -> handleError(state.error)
                 }
             }
         }
@@ -159,6 +202,13 @@ class ViewOnBoardActivity : AppCompatActivity() {
         // currentUser 변화를 관찰하여 Edit/Delete 버튼 표시 여부 갱신
         lifecycleScope.launch {
             viewModel.currentUser.collect { user ->
+                // 게시글 작성자인지 확인
+                val post = viewModel.currentPost.value
+                val isAuthor = post?.authorId == user?.id
+
+                binding.btnContainer.visibility =
+                        if (isAuthor) View.VISIBLE else View.GONE
+
                 // user 정보가 바뀌면 adapter도 업데이트 필요
                 commentAdapter = CommentRecyclerAdapter(
                     comments = viewModel.commentList.value,
@@ -169,5 +219,19 @@ class ViewOnBoardActivity : AppCompatActivity() {
                 binding.recyclerViewComments.adapter = commentAdapter
             }
         }
+    }
+
+    private fun showLoading() {
+        Toast.makeText(this, "처리 중...", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleDeleteSuccess() {
+        Toast.makeText(this, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        // BoardFragment로 돌아가기
+        finish() // 현재 액티비티 종료
+    }
+
+    private fun handleError(error: String?) {
+        Toast.makeText(this, error ?: "처리 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
     }
 }
