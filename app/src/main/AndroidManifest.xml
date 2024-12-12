@@ -51,6 +51,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.viewonboard.ViewOnBoardActivity"
+            android:windowSoftInputMode="adjustPan|adjustUnspecified"
             android:exported="false"
             android:screenOrientation="sensorPortrait" />
         <activity
