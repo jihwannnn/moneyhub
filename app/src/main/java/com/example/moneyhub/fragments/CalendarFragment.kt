@@ -62,11 +62,11 @@ class CalendarFragment : Fragment() {
         val transactions = sharedViewModel.filteredHistories.value
         // 각 날짜의 수입/지출 총액 계산
         transactions.forEach { transaction ->
-            transaction.amount.let { amount ->
-                val currentPair = dailyTotals[DateUtils.millisToDate(transaction.payDate)] ?: Pair(0.0, 0.0)
-                dailyTotals[DateUtils.millisToDate(transaction.payDate)] = when {
-                    amount > 0 -> Pair(currentPair.first + amount, currentPair.second)
-                    else -> Pair(currentPair.first, currentPair.second - amount)
+            transaction.let {
+                val currentPair = dailyTotals[DateUtils.millisToDate(it.payDate)] ?: Pair(0.0, 0.0)
+                dailyTotals[DateUtils.millisToDate(it.payDate)] = when {
+                    it.type -> Pair(currentPair.first + it.amount, currentPair.second)
+                    else -> Pair(currentPair.first, currentPair.second + it.amount)
                 }
             }
         }
