@@ -1,11 +1,18 @@
 package com.example.moneyhub.activity.mypage
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneyhub.R
@@ -14,8 +21,6 @@ import com.example.moneyhub.activity.login.LogInActivity
 import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.adapter.GroupAdapter
 import com.example.moneyhub.databinding.ActivityMyPageBinding
-import com.example.moneyhub.model.sessions.CurrentUserSession
-import com.example.moneyhub.utils.LocalCacheUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,9 +35,11 @@ class MyPageActivity : AppCompatActivity() {
         binding = ActivityMyPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        askNotificationPermission()
         setupButtons()
         setupRecyclerView()
         observeViewModel()
+        observeFcmState()
 
         // 인텐트에서 gid와 gname 받기
         val gid = intent.getStringExtra("gid")
@@ -91,6 +98,56 @@ class MyPageActivity : AppCompatActivity() {
         }
     }
 
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    viewModel.initializeFcm(this)
+                }
+
+                shouldShowRequestPermissionRationale(
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("알림 권한 필요")
+                        .setMessage("중요한 거래내역 알림을 받기 위해서는 알림 권한이 필요합니다.")
+                        .setPositiveButton("권한 요청") { _, _ ->
+                            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                        .setNegativeButton("취소") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
+
+                else -> {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        } else {
+            viewModel.initializeFcm(this)
+        }
+    }
+
+    // Permission Launcher도 수정
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // 권한이 허용되면 FCM 초기화
+            viewModel.initializeFcm(this)
+        } else {
+            Toast.makeText(
+                this,
+                "알림을 받을 수 없습니다. 설정에서 권한을 허용해주세요.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     private fun observeViewModel() {
 
         lifecycleScope.launch {
@@ -139,6 +196,16 @@ class MyPageActivity : AppCompatActivity() {
                     state.error != null -> {
                         Toast.makeText(this@MyPageActivity, state.error, Toast.LENGTH_SHORT).show()
                     }
+                }
+            }
+        }
+    }
+
+    private fun observeFcmState() {
+        lifecycleScope.launch {
+            viewModel.fcmInitialized.collect { initialized ->
+                if (initialized) {
+                    Log.d("FCM", "FCM initialization successful")
                 }
             }
         }
