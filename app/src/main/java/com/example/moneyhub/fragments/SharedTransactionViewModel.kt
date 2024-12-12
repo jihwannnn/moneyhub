@@ -179,6 +179,36 @@ class SharedTransactionViewModel @Inject constructor(
         }
     }
 
+    fun deleteTransaction(gid: String, tid: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            try {
+                transactionRepository.deleteTransaction(gid, tid).fold(
+                    onSuccess = {
+                        loadTransactions(gid)  // 삭제 후 목록 새로고침
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            isSuccess = true,
+                            error = null
+                        ) }
+                    },
+                    onFailure = { throwable ->
+                        _uiState.update { it.copy(
+                            isLoading = false,
+                            error = throwable.message
+                        ) }
+                    }
+                )
+            } catch (e: Exception) {
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    error = e.message
+                ) }
+            }
+        }
+    }
+
     fun updating(){
         loadUser()
     }

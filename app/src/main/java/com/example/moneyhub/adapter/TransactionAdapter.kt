@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
 import com.example.moneyhub.model.Transaction
@@ -20,8 +21,11 @@ class TransactionAdapter(
     private val isForBudget: Boolean,
     private val isForCalendar: Boolean = false,  // 새로운 파라미터 추가, 기본값은 false
 
+
     // TransactionItem을 매개변수로 받는 함수 타입
-    private val onItemClick: (Transaction) -> Unit = {} // 클릭된 아이템의 정보를 전달 가능
+    private val onItemClick: (Transaction) -> Unit = {}, // 클릭된 아이템의 정보를 전달 가능
+    private val onDeleteClick: (Transaction) -> Unit = {}  // 기본값 추가
+
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     // 추가: 새로운 거래내역 목록으로 데이터를 업데이트하는 함수
@@ -37,6 +41,7 @@ class TransactionAdapter(
         val title: TextView = itemView.findViewById(R.id.item_title)
         val category: TextView = itemView.findViewById(R.id.item_category)
         val transaction: TextView = itemView.findViewById(R.id.item_transaction)
+        val deleteButton: ImageView = itemView.findViewById(R.id.btn_delete)
 
         init {
             itemView.setOnClickListener {
@@ -44,8 +49,28 @@ class TransactionAdapter(
                 // 변경: items -> transactions
                 onItemClick.invoke(transactions[position])  // 클릭된 아이템 전체를 전달
             }
+            deleteButton.setOnClickListener {
+                onDeleteClick?.let { delete ->
+                    showDeleteConfirmationDialog(transactions[position], delete)
+                }
+            }
         }
+
+
+    private fun showDeleteConfirmationDialog(transaction: Transaction, onDelete: (Transaction) -> Unit) {
+        AlertDialog.Builder(itemView.context)
+            .setTitle("거래 내역 삭제")
+            .setMessage("정말로 이 거래 내역을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { dialog, _ ->
+                onDelete(transaction)
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
+}
 
     // onCreateViewHolder: 새로운 뷰 홀더를 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -90,6 +115,14 @@ class TransactionAdapter(
             println("DEBUG: Transaction clicked: ${item.title}")
             onItemClick(item)
         }
+
+        // 삭제 버튼 표시 여부 설정
+        holder.deleteButton.visibility = if (!isForBudget && !isForCalendar && onDeleteClick != null) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
 
         // 날짜에 따른 배경색 설정
         if (isForCalendar) {
