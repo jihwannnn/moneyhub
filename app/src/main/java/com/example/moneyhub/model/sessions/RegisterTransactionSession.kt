@@ -11,7 +11,7 @@ object RegisterTransactionSession {
 
     fun getCurrentTransaction(): Transaction = currentTransaction ?: Transaction()
 
-    fun clearCurrentPost() {
+    fun clearCurrentTransaction() {
         currentTransaction = null
     }
 }

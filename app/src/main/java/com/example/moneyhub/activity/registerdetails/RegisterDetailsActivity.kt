@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.moneyhub.databinding.ActivityRegisterDetailsBinding
+import com.example.moneyhub.utils.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar

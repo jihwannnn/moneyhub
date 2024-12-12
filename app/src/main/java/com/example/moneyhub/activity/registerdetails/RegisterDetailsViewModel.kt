@@ -90,8 +90,7 @@ class RegisterDetailsViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
 
             _currentUser.value?.let { currentUser ->
-                val newTransaction = Transaction(
-                    tid = System.currentTimeMillis().toString(),
+                val transaction = _currentTransaction.value.copy(
                     gid = currentUser.currentGid,
                     title = title,
                     category = category,
@@ -99,20 +98,37 @@ class RegisterDetailsViewModel @Inject constructor(
                     amount = amount,
                     content = content,
                     payDate = payDate,
-                    verified = true,
                     authorId = currentUser.id,
-                    authorName = currentUser.name,
-                    createdAt = System.currentTimeMillis()
+                    authorName = currentUser.name
                 )
 
-                transactionRepository.addTransaction(currentUser.currentGid, newTransaction).fold(
-                    onSuccess = {
-                        _uiState.update { it.copy(isLoading = false, isSuccess = true, error = null) }
-                    },
-                    onFailure = { throwable ->
-                        _uiState.update { it.copy(isLoading = false, error = throwable.message) }
-                    }
-                )
+                if(transaction.tid.isEmpty()) {
+                    val nt = transaction.copy(
+                        createdAt = System.currentTimeMillis()
+                    )
+
+                    transactionRepository.addTransaction(currentUser.currentGid, nt).fold(
+                        onSuccess = {
+                            RegisterTransactionSession.clearCurrentTransaction()
+                            _uiState.update { it.copy(isLoading = false, isSuccess = true, error = null) }
+                        },
+                        onFailure = { throwable ->
+                            _uiState.update { it.copy(isLoading = false, error = throwable.message) }
+                        }
+                    )
+                }
+
+                else {
+                    transactionRepository.modifyTransaction(currentUser.currentGid, transaction).fold(
+                        onSuccess = {
+                            RegisterTransactionSession.clearCurrentTransaction()
+                            _uiState.update { it.copy(isLoading = false, isSuccess = true, error = null) }
+                        },
+                        onFailure = { throwable ->
+                            _uiState.update { it.copy(isLoading = false, error = throwable.message) }
+                        }
+                    )
+                }
             }
         }
     }

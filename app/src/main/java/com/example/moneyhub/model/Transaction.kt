@@ -9,7 +9,7 @@ data class Transaction(
     val type: Boolean = false,      // 수입(true)/지출(false)
     val amount: Long = 0L,       // 금액
     val content: String = "",       // 상세 내용
-    val payDate: Long = 0L,         // 결제일
+    val payDate: Long = System.currentTimeMillis(),// 결제일
     val verified: Boolean = false,   // 내역(true)/예산(false)
     val receiptUrl: String? = null,  // 영수증 이미지 URL
     val authorId: String = "",      // 작성자 ID
