@@ -110,6 +110,17 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
         user: CurrentUser,
     ): Result<Boolean> {
         return try {
+            // 이미 멤버인지 확인
+            val membershipRef = db.collection("members_group")
+                .document(gid)
+                .collection("members")
+                .document(user.id)
+
+            val existingMembership = membershipRef.get().await()
+            if (existingMembership.exists()) {
+                return Result.failure(Exception("이미 가입된 그룹입니다"))
+            }
+
             // 그룹 정보 가져오기
             val groupDoc = db.collection("groups").document(gid).get().await()
             val groupData = groupDoc.data ?: throw Exception("그룹을 찾을 수 없습니다.")
@@ -118,12 +129,6 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
             if (groupData["inviteCode"] != gid) {
                 return Result.success(false)
             }
-
-            // 멤버십 참조 생성
-            val membershipRef = db.collection("members_group")
-                .document(gid)
-                .collection("members")
-                .document(user.id)
 
             // 유저 그룹 참조
             val userGroupRef = db.collection("userGroups").document(user.id)
