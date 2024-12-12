@@ -87,6 +87,7 @@ class MyPageViewModel @Inject constructor(
                             _uiState.update { it.copy(
                                 isLoading = false,
                                 successType = SuccessType.GROUP_SELECTED,
+                                selectedGid = gid,
                                 error = null
                             ) }
                         },
@@ -173,6 +174,7 @@ class MyPageViewModel @Inject constructor(
     data class MyPageUiState(
         val isLoading: Boolean = false,
         val successType: SuccessType? = null,
+        val selectedGid: String? = null,
         val error: String? = null
     )
 

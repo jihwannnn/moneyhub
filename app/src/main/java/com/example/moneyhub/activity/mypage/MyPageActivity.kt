@@ -14,6 +14,8 @@ import com.example.moneyhub.activity.login.LogInActivity
 import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.adapter.GroupAdapter
 import com.example.moneyhub.databinding.ActivityMyPageBinding
+import com.example.moneyhub.model.sessions.CurrentUserSession
+import com.example.moneyhub.utils.LocalCacheUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -31,6 +33,13 @@ class MyPageActivity : AppCompatActivity() {
         setupButtons()
         setupRecyclerView()
         observeViewModel()
+
+        // 인텐트에서 gid와 gname 받기
+        val gid = intent.getStringExtra("gid")
+        val gname = intent.getStringExtra("gname")
+        if (gid != null && gname != null) {
+            viewModel.selectGroup(gid, gname)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -142,7 +151,6 @@ class MyPageActivity : AppCompatActivity() {
 
         // 간단히 JSON 문자열로 저장
         val json = org.json.JSONObject().apply {
-            put("uid", "currentUserId") // 필요하다면 현재 유저의 uid도 저장
             val groupsObj = org.json.JSONObject()
             for ((gid, gname) in groups) {
                 groupsObj.put(gid, gname)

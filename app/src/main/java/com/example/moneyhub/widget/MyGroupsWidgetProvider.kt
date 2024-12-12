@@ -8,6 +8,7 @@ import android.widget.RemoteViews
 import android.appwidget.AppWidgetProvider
 import android.appwidget.AppWidgetManager
 import com.example.moneyhub.R
+import com.example.moneyhub.activity.login.LogInActivity
 import com.example.moneyhub.activity.mypage.MyPageActivity
 
 class MyGroupsWidgetProvider : AppWidgetProvider() {
@@ -29,20 +30,24 @@ class MyGroupsWidgetProvider : AppWidgetProvider() {
             // views.setEmptyView(R.id.widgetGroupListView, R.id.tvEmptyView)
 
             // 리스트 아이템 클릭 시 실행될 인텐트 템플릿 설정
-            val clickIntent = Intent(context, MyPageActivity::class.java)
-            val pendingIntent1 = PendingIntent.getActivity(
+            val clickIntent = Intent(context, LogInActivity::class.java)
+            val pendingIntentTemplate = PendingIntent.getActivity(
                 context,
                 0,
                 clickIntent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
+            views.setPendingIntentTemplate(R.id.widgetGroupListView, pendingIntentTemplate)
 
             // 위젯을 터치하면 MyPageActivity로 이동하는 인텐트
-            val intent = Intent(context, MyPageActivity::class.java)
-            val pendingIntent2 = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-            views.setOnClickPendingIntent(R.id.tvWidgetTitle, pendingIntent2)
-            views.setPendingIntentTemplate(R.id.widgetGroupListView, pendingIntent1)
+            val titleIntent = Intent(context, LogInActivity::class.java)
+            val pendingIntentTitle = PendingIntent.getActivity(
+                context,
+                0,
+                titleIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            views.setOnClickPendingIntent(R.id.tvWidgetTitle, pendingIntentTitle)
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetGroupListView)

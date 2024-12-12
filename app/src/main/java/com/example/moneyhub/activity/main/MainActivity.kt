@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SensorEventListener {
+
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Initializing ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -182,3 +184,4 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // 센서 정확도 변경 시 처리
     }
 }
+
