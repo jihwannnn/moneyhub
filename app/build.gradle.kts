@@ -59,6 +59,7 @@ android {
 
 dependencies {
 
+
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.logging.interceptor)
@@ -67,6 +68,8 @@ dependencies {
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.functions.ktx)
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+
+    implementation("com.google.android.material:material:1.9.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

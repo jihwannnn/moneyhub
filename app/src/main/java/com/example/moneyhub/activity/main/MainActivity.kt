@@ -19,10 +19,13 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SensorEventListener {
-
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -33,34 +36,37 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var lastX: Float = 0.0f
     private var lastY: Float = 0.0f
     private var lastZ: Float = 0.0f
-    private val shakeThreshold = 1500 // 흔들기 감지 임계값
+    private val shakeThreshold = 1500
 
-
+    // 모달이 표시중인지 체크하는 플래그 추가
+    private var isDialogShowing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initializing ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //센서 매니저 초기화
+        setupSensor()
+        setupNavigation()
+        observeViewModel()
+    }
+
+    private fun setupSensor() {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    }
 
-
-        // custom_header_include에만 WindowInsets 적용
+    private fun setupNavigation() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.custom_header_include)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
 
-
-
-        // Ensure the NavController is properly set up
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
@@ -68,29 +74,52 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             mainViewModel.updateCurrentDestination(destination.id)
         }
 
-        mainViewModel.currentDestination.observe(this) {destinationId ->
-            binding.bottomNavigation.menu.apply {
-                findItem(R.id.HomeFragment).setIcon(
-                    if (destinationId == R.id.HomeFragment) R.drawable.icon_home_on else R.drawable.icon_home_off
-                )
-                findItem(R.id.BoardFragment).setIcon(
-                    if (destinationId == R.id.BoardFragment) R.drawable.icon_board_on else R.drawable.icon_board_off
-                )
-                findItem(R.id.AnalysisFragment).setIcon(
-                    if (destinationId == R.id.AnalysisFragment) R.drawable.icon_analysis_on else R.drawable.icon_analysis_off
-                )
-                findItem(R.id.MembersFragment).setIcon(
-                    if (destinationId == R.id.MembersFragment) R.drawable.icon_members_on else R.drawable.icon_members_off
-                )
+        binding.customHeaderInclude.imageViewMyPage.setOnClickListener {
+            startActivity(Intent(this, MyPageActivity::class.java))
+        }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            mainViewModel.uiState.collect { state ->
+                when {
+                    state.isSuccess -> {
+                        Toast.makeText(this@MainActivity, "그룹이 성공적으로 삭제되었습니다", Toast.LENGTH_SHORT)
+                            .show()
+                        // 그룹이 삭제되었으므로 MyPage로 이동
+                        startActivity(Intent(this@MainActivity, MyPageActivity::class.java))
+                        finish()
+                    }
+
+                    state.error != null -> {
+                        Toast.makeText(this@MainActivity, state.error, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
-        // clickEvent on mypage button at the header
-        binding.customHeaderInclude.imageViewMyPage.setOnClickListener {
-            val intent = Intent(this, MyPageActivity::class.java)
-            startActivity(intent)
+        mainViewModel.currentDestination.observe(this) { destinationId ->
+            updateNavigationIcons(destinationId)
         }
     }
+
+    private fun updateNavigationIcons(destinationId: Int) {
+        binding.bottomNavigation.menu.apply {
+            findItem(R.id.HomeFragment).setIcon(
+                if (destinationId == R.id.HomeFragment) R.drawable.icon_home_on else R.drawable.icon_home_off
+            )
+            findItem(R.id.BoardFragment).setIcon(
+                if (destinationId == R.id.BoardFragment) R.drawable.icon_board_on else R.drawable.icon_board_off
+            )
+            findItem(R.id.AnalysisFragment).setIcon(
+                if (destinationId == R.id.AnalysisFragment) R.drawable.icon_analysis_on else R.drawable.icon_analysis_off
+            )
+            findItem(R.id.MembersFragment).setIcon(
+                if (destinationId == R.id.MembersFragment) R.drawable.icon_members_on else R.drawable.icon_members_off
+            )
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         accelerometer?.let {
@@ -106,7 +135,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
             val currentTime = System.currentTimeMillis()
-            // 100ms마다 체크 (너무 자주 체크하지 않도록)
             if ((currentTime - lastUpdate) > 100) {
                 val diffTime = currentTime - lastUpdate
                 lastUpdate = currentTime
@@ -117,9 +145,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
                 val speed = abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000
 
-                if (speed > shakeThreshold) {
-                    // 흔들기 감지됨 - MyPage로 이동
-                    startActivity(Intent(this, MyPageActivity::class.java))
+                // 모달이 표시중이 아닐 때만 새로운 모달을 표시
+                if (speed > shakeThreshold && !isDialogShowing) {
+                    showDeleteConfirmationDialog()
                 }
 
                 lastX = x
@@ -128,8 +156,29 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
         }
     }
+
+    private fun showDeleteConfirmationDialog() {
+        isDialogShowing = true // 모달 표시 시작
+        AlertDialog.Builder(this)
+            .setTitle("그룹 삭제")
+            .setMessage("정말로 현재 그룹을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { dialog, _ ->
+                mainViewModel.deleteCurrentGroup()
+                dialog.dismiss()
+                isDialogShowing = false // 모달 종료
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+                isDialogShowing = false // 모달 종료
+            }
+            .setOnCancelListener {
+                isDialogShowing = false // 모달이 다른 방식으로 종료될 때도 플래그 초기화
+            }
+            .show()
+    }
+
+
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // 센서의 정확도가 변경될 때 호출되는 메서드
+        // 센서 정확도 변경 시 처리
     }
 }
-

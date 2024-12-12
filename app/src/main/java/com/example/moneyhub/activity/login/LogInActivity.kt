@@ -79,10 +79,7 @@ class LogInActivity : AppCompatActivity() {
             }
         }
 
-        // 아이디/비밀번호 찾기
-        binding.findCredentials.setOnClickListener {
-            TODO()
-        }
+
     }
 
     private fun observeViewModel() {

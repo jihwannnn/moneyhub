@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -8,92 +9,146 @@
             type="com.example.moneyhub.activity.postonboard.PostOnBoardViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.postonboard.PostOnBoardActivity">
+        android:orientation="vertical"
+        android:background="@color/white">
 
-        <include
-            android:id="@+id/custom_header_include"
-            layout="@layout/custom_header"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <!-- 제목 입력란 -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:maxLines="1"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/custom_header_include"/>
+            android:background="@color/white"
+            app:elevation="0dp">
 
-        <!-- 내용 입력란 -->
-        <TextView
-            android:id="@+id/tvContent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Write your content here"
-            android:inputType="textMultiLine"
-            android:minLines="5"
-            android:gravity="top"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"/>
+            <include
+                android:id="@+id/custom_header_include"
+                layout="@layout/custom_header" />
 
-        <!-- 사진 미리보기 -->
-        <ImageView
-            android:id="@+id/ivPhoto"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvContent"/>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- 댓글 리스트 -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewComments"
-            android:layout_width="0dp"
+        <!-- 스크롤 가능한 컨텐츠 영역 -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/ivPhoto"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/commentInputLayout"/>
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- 게시글 내용 카드 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/contentCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/tvTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            tools:text="게시글 제목" />
+
+                        <TextView
+                            android:id="@+id/tvContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:lineSpacingExtra="4dp"
+                            android:textColor="@color/gray_800"
+                            android:textSize="16sp"
+                            tools:text="게시글 내용" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/imageCard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="0dp">
+
+                            <ImageView
+                                android:id="@+id/ivPhoto"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:scaleType="centerCrop" />
+
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 댓글 목록 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewComments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <!-- 댓글 입력 영역 -->
-        <LinearLayout
-            android:id="@+id/commentInputLayout"
-            android:layout_width="0dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/commentInputCard"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:cardElevation="8dp">
 
-            <EditText
-                android:id="@+id/etComment"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/commentInputArea"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Add a comment..."
-                android:layout_weight="1"
-                android:imeOptions="actionSend"/>
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:background="@color/white">
 
-            <Button
-                android:id="@+id/btnAddComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Post"/>
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/etComment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/rounded_edit_text_background"
+                    android:hint="댓글을 입력하세요..."
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_500"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="등록"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp" />
 
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
 </layout>

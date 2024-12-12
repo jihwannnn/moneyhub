@@ -1,3 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-      <dimen name="fab_margin">16dp</dimen>
-   </resources>
+    <!-- Margins -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_size_title">20sp</dimen>
+    <dimen name="text_size_content">16sp</dimen>
+    <dimen name="text_size_comment">14sp</dimen>
+
+    <!-- Corners -->
+    <dimen name="corner_radius_small">8dp</dimen>
+    <dimen name="corner_radius_medium">12dp</dimen>
+    <dimen name="corner_radius_large">20dp</dimen>
+</resources>

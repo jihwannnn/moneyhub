@@ -2,6 +2,7 @@ package com.example.moneyhub.activity.viewonboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -13,16 +14,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.moneyhub.R
 import com.example.moneyhub.activity.mypage.MyPageActivity
-import com.example.moneyhub.activity.postonboard.PostOnBoardViewModel
 import com.example.moneyhub.adapter.CommentRecyclerAdapter
 import com.example.moneyhub.databinding.ActivityViewOnBoardBinding
 import com.example.moneyhub.model.Comment
 import com.example.moneyhub.model.sessions.PostSession
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class ViewOnBoardActivity : AppCompatActivity() {
@@ -31,15 +30,16 @@ class ViewOnBoardActivity : AppCompatActivity() {
     private val viewModel: ViewOnBoardViewModel by viewModels()
     private lateinit var commentAdapter: CommentRecyclerAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initializing view binding
         binding = ActivityViewOnBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        // 기존의 findViewById(R.id.main) 대신 binding.root 사용
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -74,6 +74,13 @@ class ViewOnBoardActivity : AppCompatActivity() {
         }
 
         binding.btnAddComment.setOnClickListener {
+            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            if (this.getCurrentFocus() != null) {
+                manager.hideSoftInputFromWindow(
+                    currentFocus!!.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
             val content = binding.etComment.text.toString()
             viewModel.addComment(content)
             binding.etComment.setText("")
