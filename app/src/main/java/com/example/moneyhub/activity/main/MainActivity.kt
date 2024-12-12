@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var lastX: Float = 0.0f
     private var lastY: Float = 0.0f
     private var lastZ: Float = 0.0f
-    private val shakeThreshold = 1500
+    private val shakeThreshold = 5000
 
     // 모달이 표시중인지 체크하는 플래그 추가
     private var isDialogShowing = false

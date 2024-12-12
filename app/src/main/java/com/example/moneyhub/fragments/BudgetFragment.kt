@@ -15,7 +15,9 @@ import com.example.moneyhub.activity.camera.CameraActivity
 import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentBudgetBinding
+import com.example.moneyhub.model.Role
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.model.sessions.CurrentUserSession
 import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import kotlinx.coroutines.launch
 
@@ -28,6 +30,7 @@ class BudgetFragment : Fragment() {
     private val binding get() = _binding!!  // !! 연산자로 null이 아님을 보장
 
     private lateinit var adapter: TransactionAdapter
+    val user = CurrentUserSession.getCurrentUser()
 
 
     override fun onCreateView(
@@ -50,10 +53,14 @@ class BudgetFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = TransactionAdapter(sharedViewModel.filteredBudgets.value, isForBudget = true) { transaction ->
-            val intent = Intent(requireContext(), CameraActivity::class.java).apply {
-                RegisterTransactionSession.setTransaction(transaction)
+
+
+            if(user.role != Role.REGULAR) {
+                val intent = Intent(requireContext(), CameraActivity::class.java).apply {
+                    RegisterTransactionSession.setTransaction(transaction)
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
         }
 
         binding.recyclerViewBudget.apply {
@@ -65,8 +72,10 @@ class BudgetFragment : Fragment() {
     // 거래내역 추가 버튼 설정
     private fun setupAddButton() {
         binding.btnAddBudget.setOnClickListener{
-            val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
-            startActivity(intent)
+            if(user.role != Role.REGULAR) {
+                val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 

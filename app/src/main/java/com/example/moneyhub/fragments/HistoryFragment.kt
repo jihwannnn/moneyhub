@@ -15,7 +15,9 @@ import com.example.moneyhub.activity.registerdetails.RegisterDetailsActivity
 import com.example.moneyhub.activity.viewtransactiondetails.ViewTransactionDetailsActivity
 import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentHistoryBinding
+import com.example.moneyhub.model.Role
 import com.example.moneyhub.model.Transaction
+import com.example.moneyhub.model.sessions.CurrentUserSession
 import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import com.example.moneyhub.model.sessions.TransactionSession
 import kotlinx.coroutines.launch
@@ -31,6 +33,7 @@ class HistoryFragment : Fragment() {
     private val binding get() = _binding!!  // !! 연산자로 null이 아님을 보장
 
     private lateinit var adapter: TransactionAdapter
+    val user = CurrentUserSession.getCurrentUser()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +60,10 @@ class HistoryFragment : Fragment() {
     private fun setupAddButton() {
         binding.btnAddHistory.setOnClickListener {
             RegisterTransactionSession.setTransaction(Transaction(verified = true))
-            val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
-            startActivity(intent)
+            if(user.role != Role.REGULAR) {
+                val intent = Intent(requireActivity(), RegisterDetailsActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 

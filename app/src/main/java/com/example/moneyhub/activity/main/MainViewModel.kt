@@ -50,7 +50,7 @@ class MainViewModel @Inject constructor(
                     throw Exception("No group selected")
                 }
 
-                groupRepository.deleteGroup(currentGroupId).fold(
+                groupRepository.deleteGroup(currentGroupId, currentUser).fold(
                     onSuccess = {
                         _uiState.update { it.copy(
                             isLoading = false,

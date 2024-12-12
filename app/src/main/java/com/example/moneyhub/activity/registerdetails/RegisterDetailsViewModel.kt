@@ -110,6 +110,7 @@ class RegisterDetailsViewModel @Inject constructor(
                     transactionRepository.addTransaction(currentUser.currentGid, nt).fold(
                         onSuccess = {
                             RegisterTransactionSession.clearCurrentTransaction()
+                            _currentTransaction.value = Transaction()
                             _uiState.update { it.copy(isLoading = false, isSuccess = true, error = null) }
                         },
                         onFailure = { throwable ->
@@ -122,6 +123,7 @@ class RegisterDetailsViewModel @Inject constructor(
                     transactionRepository.modifyTransaction(currentUser.currentGid, transaction).fold(
                         onSuccess = {
                             RegisterTransactionSession.clearCurrentTransaction()
+                            _currentTransaction.value = Transaction()
                             _uiState.update { it.copy(isLoading = false, isSuccess = true, error = null) }
                         },
                         onFailure = { throwable ->

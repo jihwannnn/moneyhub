@@ -109,8 +109,8 @@ class TransactionAdapter(
 
         // 금액 색상 설정 - null 처리 추가
         val textColor = when {
-            item.amount == null -> R.color.moneyGrey  // null일 경우 기본 색상 지정
-            item.amount < 0 -> R.color.moneyRed
+            item.type -> R.color.moneyGrey  // null일 경우 기본 색상 지정
+            !item.type -> R.color.moneyRed
             else -> R.color.moneyGreenThick
         }
         holder.transaction.setTextColor(holder.itemView.context.getColor(textColor))

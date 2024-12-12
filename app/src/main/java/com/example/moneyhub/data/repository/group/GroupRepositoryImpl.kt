@@ -159,8 +159,12 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
         }
     }
 
-    override suspend fun deleteGroup(gid: String): Result<Unit> {
+    override suspend fun deleteGroup(gid: String, user: CurrentUser): Result<Unit> {
         return try {
+
+            if (user.role != Role.OWNER) {
+                return Result.failure(Exception("에헤이"))
+            }
 
             // 1. 사전에 모든 데이터 가져오기
             val membersSnapshot = db.collection("members_group")
@@ -188,21 +192,22 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
                 commentsSnapshots[postDoc.id] = commentsSnapshot
             }
 
+
+            // 3.1. 각 멤버의 userGroups에서 그룹 제거
+            for (memberDoc in membersSnapshot.documents) {
+                val memberUid = memberDoc.getString("uid") ?: continue
+                val userGroupRef = db.collection("userGroups").document(memberUid)
+
+                val userGroupDoc = userGroupRef.get().await()
+                val currentGroups = (userGroupDoc.get("groups") as? Map<String, String>)?.toMutableMap()
+                    ?: mutableMapOf()
+
+                currentGroups.remove(gid)
+                userGroupRef.set(mapOf("uid" to memberUid, "groups" to currentGroups))
+            }
+
             // 3. 트랜잭션으로 모든 데이터 삭제
             db.runTransaction { transaction ->
-                // 3.1. 각 멤버의 userGroups에서 그룹 제거
-                for (memberDoc in membersSnapshot.documents) {
-                    val memberUid = memberDoc.getString("uid") ?: continue
-                    val userGroupRef = db.collection("userGroups").document(memberUid)
-
-                    val userGroupDoc = transaction.get(userGroupRef)
-                    val currentGroups = (userGroupDoc.get("groups") as? Map<String, String>)?.toMutableMap()
-                        ?: mutableMapOf()
-
-                    currentGroups.remove(gid)
-                    transaction.set(userGroupRef, mapOf("uid" to memberUid, "groups" to currentGroups))
-                }
-
                 // 3.2. 게시글과 댓글 삭제
                 for (postDoc in postsSnapshot.documents) {
                     // 미리 가져온 댓글들 삭제
