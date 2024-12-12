@@ -24,11 +24,11 @@ class PostOnBoardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostOnBoardBinding
     private val viewModel: PostOnBoardViewModel by viewModels()
-    private var imageUri = ""
+    private var selectedImageUri: Uri? = null
 
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            imageUri = uri?.toString() ?: ""
+            selectedImageUri = uri
             if (uri != null) {
                 binding.ivPreview.visibility = View.VISIBLE // 이미지 미리보기 보이기
                 Glide.with(this)
@@ -73,14 +73,14 @@ class PostOnBoardActivity : AppCompatActivity() {
 
             // 게시 버튼
             btnPost.setOnClickListener {
-                val title = etTitle.text.toString()
-                val content = etContent.text.toString()
+                val title = etTitle.text.toString().trim()
+                val content = etContent.text.toString().trim()
 
                 // Example authorId and authorName. Replace with actual user data.
                 viewModel.post(
                     title = title,
                     content = content,
-                    imageUri = imageUri
+                    imageUri = selectedImageUri
                 )
             }
 
