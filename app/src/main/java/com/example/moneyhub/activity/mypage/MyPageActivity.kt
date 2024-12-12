@@ -13,7 +13,6 @@ import com.example.moneyhub.activity.creategroup.CreateActivity
 import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.adapter.GroupAdapter
 import com.example.moneyhub.databinding.ActivityMyPageBinding
-import com.example.moneyhub.utils.LocalCacheUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -112,7 +111,8 @@ class MyPageActivity : AppCompatActivity() {
                     state.successType == MyPageViewModel.SuccessType.GROUP_JOINED -> {
                         // MyPageActivity 재시작
                         Toast.makeText(this@MyPageActivity, "그룹 참여가 완료되었습니다", Toast.LENGTH_SHORT).show()
-                        recreate()
+                        startActivity(intent)
+                        finish()
                     }
 
                     state.error != null -> {
