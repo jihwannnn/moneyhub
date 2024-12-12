@@ -21,7 +21,9 @@ class TransactionAdapter(
     private val isForCalendar: Boolean = false,  // 새로운 파라미터 추가, 기본값은 false
 
     // TransactionItem을 매개변수로 받는 함수 타입
-    private val onItemClick: (Transaction) -> Unit = {} // 클릭된 아이템의 정보를 전달 가능
+    private val onItemClick: (Transaction) -> Unit = {}, // 클릭된 아이템의 정보를 전달 가능
+
+
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     // 추가: 새로운 거래내역 목록으로 데이터를 업데이트하는 함수
