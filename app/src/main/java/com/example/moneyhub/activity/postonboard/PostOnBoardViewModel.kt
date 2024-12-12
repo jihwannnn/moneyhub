@@ -1,5 +1,6 @@
 package com.example.moneyhub.activity.postonboard
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneyhub.common.UiState
@@ -7,13 +8,17 @@ import com.example.moneyhub.data.repository.board.BoardRepository
 import com.example.moneyhub.model.CurrentUser
 import com.example.moneyhub.model.Post
 import com.example.moneyhub.model.sessions.CurrentUserSession
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import java.util.UUID
 import javax.inject.Inject
+import kotlin.coroutines.resumeWithException
 
 
 @HiltViewModel
@@ -28,9 +33,6 @@ class PostOnBoardViewModel @Inject constructor(
     private val _currentUser = MutableStateFlow<CurrentUser?>(null)
     val currentUser: StateFlow<CurrentUser?> = _currentUser.asStateFlow()
 
-    private val _currentPost = MutableStateFlow<Post?>(null)
-    val currentPost = _currentPost.asStateFlow()
-
     init {
         loadUser()
     }
@@ -41,7 +43,7 @@ class PostOnBoardViewModel @Inject constructor(
 
 
     // Post submission logic
-    fun post(title: String, content: String, imageUri: String) {
+    fun post(title: String, content: String, imageUri: Uri?) {
         if (!validateInputs(title, content)) return
 
         val user = _currentUser.value ?: run {
@@ -53,19 +55,25 @@ class PostOnBoardViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val post = Post(
-                pid = user.id,
-                gid = user.currentGid,
-                title = title,
-                content = content,
-                authorId = user.id,
-                authorName = user.name,
-                imageUrl = imageUri,
-                commentCount = 0,
-                createdAt = System.currentTimeMillis()
-            )
+            try {
+                val imageUrl = if (imageUri != null) {
+                    uploadImageToFirebase(imageUri)
+                } else {
+                    ""
+                }
 
-            try{
+                val post = Post(
+                    pid = UUID.randomUUID().toString(),
+                    gid = user.currentGid,
+                    title = title,
+                    content = content,
+                    authorId = user.id,
+                    authorName = user.name,
+                    imageUrl = imageUrl,
+                    commentCount = 0,
+                    createdAt = System.currentTimeMillis()
+                )
+
                 repository.createPost(post).fold(
                     onSuccess = {
                         _uiState.update { it.copy(
@@ -87,8 +95,6 @@ class PostOnBoardViewModel @Inject constructor(
                     error = e.message
                 ) }
             }
-
-
         }
     }
 
@@ -97,12 +103,29 @@ class PostOnBoardViewModel @Inject constructor(
             _uiState.update { it.copy(error = "제목을 입력해주세요" ) }
             false
         }
-
         content.isBlank() -> {
             _uiState.update { it.copy(error = "내용을 입력해주세요" ) }
             false
         }
-
         else -> true
+    }
+
+    private suspend fun uploadImageToFirebase(imageUri: Uri): String {
+        return suspendCancellableCoroutine { cont ->
+            val storageRef = FirebaseStorage.getInstance().reference
+            val imageRef = storageRef.child("images/${UUID.randomUUID()}.jpg")
+
+            imageRef.putFile(imageUri)
+                .addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { uri ->
+                        cont.resume(uri.toString(), null)
+                    }.addOnFailureListener { exception ->
+                        cont.resumeWithException(exception)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    cont.resumeWithException(exception)
+                }
+        }
     }
 }

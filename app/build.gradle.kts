@@ -99,6 +99,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation(libs.firebase.firestore)
 
+    // Firebase Storage
+    implementation ("com.google.firebase:firebase-storage-ktx")
+
 
 
 
