@@ -2,6 +2,7 @@ package com.example.moneyhub.activity.viewonboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -13,16 +14,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.moneyhub.R
 import com.example.moneyhub.activity.mypage.MyPageActivity
-import com.example.moneyhub.activity.postonboard.PostOnBoardViewModel
 import com.example.moneyhub.adapter.CommentRecyclerAdapter
 import com.example.moneyhub.databinding.ActivityViewOnBoardBinding
 import com.example.moneyhub.model.Comment
 import com.example.moneyhub.model.sessions.PostSession
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class ViewOnBoardActivity : AppCompatActivity() {
@@ -30,6 +29,7 @@ class ViewOnBoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewOnBoardBinding
     private val viewModel: ViewOnBoardViewModel by viewModels()
     private lateinit var commentAdapter: CommentRecyclerAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +47,7 @@ class ViewOnBoardActivity : AppCompatActivity() {
 
         setupUI()
         observePost()
+        observeViewModel()
     }
 
     private fun setupUI() {
@@ -73,6 +74,13 @@ class ViewOnBoardActivity : AppCompatActivity() {
         }
 
         binding.btnAddComment.setOnClickListener {
+            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            if (this.getCurrentFocus() != null) {
+                manager.hideSoftInputFromWindow(
+                    currentFocus!!.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
             val content = binding.etComment.text.toString()
             viewModel.addComment(content)
             binding.etComment.setText("")
