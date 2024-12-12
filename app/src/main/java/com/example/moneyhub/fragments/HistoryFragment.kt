@@ -91,14 +91,14 @@ class HistoryFragment : Fragment() {
                 val intent = Intent(requireContext(), ViewTransactionDetailsActivity::class.java)
                 startActivity(intent)
             },
-            onDeleteClick = { transaction ->
-                // 현재 유저가 REGULAR가 아닐 때만 삭제 가능
-                if (user.role != Role.REGULAR) {
+            // REGULAR가 아닐 때만 삭제 콜백 전달
+            onDeleteClick = if (user.role != Role.REGULAR) {
+                { transaction ->
                     sharedViewModel.currentUser.value?.currentGid?.let { gid ->
                         sharedViewModel.deleteTransaction(gid, transaction.tid)
                     }
                 }
-            }
+            } else null
         )
 
 

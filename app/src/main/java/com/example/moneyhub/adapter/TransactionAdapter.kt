@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyhub.R
 import com.example.moneyhub.model.Transaction
@@ -23,7 +24,7 @@ class TransactionAdapter(
 
     // TransactionItem을 매개변수로 받는 함수 타입
     private val onItemClick: (Transaction) -> Unit = {}, // 클릭된 아이템의 정보를 전달 가능
-    private val onDeleteClick: (Transaction) -> Unit = {}  // 기본값 추가
+    private val onDeleteClick: ((Transaction) -> Unit)? = null  // 기본값 추가
 
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
@@ -40,12 +41,27 @@ class TransactionAdapter(
         val title: TextView = itemView.findViewById(R.id.item_title)
         val category: TextView = itemView.findViewById(R.id.item_category)
         val transaction: TextView = itemView.findViewById(R.id.item_transaction)
+        val deleteButton: ImageView = itemView.findViewById(R.id.btn_delete)
 
         init {
             itemView.setOnClickListener {
                 // 거래 내역 아이템 리스트를 가져온다.
                 // 변경: items -> transactions
                 onItemClick.invoke(transactions[position])  // 클릭된 아이템 전체를 전달
+            }
+            deleteButton.setOnClickListener { view ->
+                val transaction = transactions[position]
+                AlertDialog.Builder(view.context)
+                    .setTitle("거래 내역 삭제")
+                    .setMessage("정말로 이 거래 내역을 삭제하시겠습니까?")
+                    .setPositiveButton("삭제") { dialog, _ ->
+                        onDeleteClick?.invoke(transaction)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("취소") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
         }
     }
@@ -92,6 +108,13 @@ class TransactionAdapter(
         holder.itemView.setOnClickListener {
             println("DEBUG: Transaction clicked: ${item.title}")
             onItemClick(item)
+        }
+
+        // 삭제 버튼 표시 여부 설정 (히스토리에서만 표시)
+        holder.deleteButton.visibility = if (!isForBudget && !isForCalendar && onDeleteClick != null) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
 
         // 날짜에 따른 배경색 설정
