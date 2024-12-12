@@ -48,10 +48,10 @@ class LoginViewModel @Inject constructor(
                             error = null
                         ) }
                     },
-                    onFailure = { throwable ->
+                    onFailure = {
                         _uiState.update { it.copy(
                             isLoading = false,
-                            error = throwable.message
+                            error = null
                         ) }
                     }
                 )

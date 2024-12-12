@@ -104,18 +104,18 @@ class BudgetFragment : Fragment() {
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.filteredBudgets.collect { transactions ->
-                    adapter.updateData(transactions)
-                    updateMonthlyTotals(transactions)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    sharedViewModel.filteredBudgets.collect { transactions ->
+                        adapter.updateData(transactions)
+                        updateMonthlyTotals(transactions)
+                    }
                 }
-            }
-        }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.currentYearMonth.collect { yearMonth ->
-                    sharedViewModel.updateMonthlyTransactions(yearMonth)
+                launch {
+                    sharedViewModel.currentYearMonth.collect { yearMonth ->
+                        sharedViewModel.updateMonthlyTransactions(yearMonth)
+                    }
                 }
             }
         }

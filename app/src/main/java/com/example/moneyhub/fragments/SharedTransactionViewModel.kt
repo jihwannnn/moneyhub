@@ -104,7 +104,7 @@ class SharedTransactionViewModel @Inject constructor(
                     }
                 )
 
-                updateMonthlyTransactions(YearMonth.now())
+                updateMonthlyTransactions(_currentYearMonth.value)
             } catch (e: Exception) {
                 _uiState.update { it.copy(
                     isLoading = false,

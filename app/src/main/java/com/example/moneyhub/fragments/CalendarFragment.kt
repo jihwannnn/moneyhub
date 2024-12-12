@@ -117,9 +117,38 @@ class CalendarFragment : Fragment() {
         binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
     }
 
+    private fun observeTransactions() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    sharedViewModel.filteredHistories.collect { transactions ->
+                        // 일별 수입/지출 총액 계산
+                        dailyTotals.clear()
+                        transactions.forEach { transaction ->
+                            val dateStr = DateUtils.millisToDate(transaction.payDate)
+                            val currentPair = dailyTotals[dateStr] ?: Pair(0L, 0L)
+                            dailyTotals[dateStr] = if (transaction.type) {
+                                Pair(currentPair.first + transaction.amount, currentPair.second)
+                            } else {
+                                Pair(currentPair.first, currentPair.second + transaction.amount)
+                            }
+                        }
+
+                        // 월간 총액 업데이트
+                        updateMonthlyTotals(transactions)
+
+                        // 현재 선택된 날짜의 거래 내역 업데이트
+                        val currentSelectedDate = DateUtils.millisToDate(binding.calendarView.date)
+                        updateSelectedDateView(currentSelectedDate)
+                    }
+                }
+            }
+        }
+    }
+
     private fun observeCurrentYearMonth() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.currentYearMonth.collect { yearMonth ->
                     // 캘린더 뷰의 표시 월 업데이트
                     val calendar = Calendar.getInstance().apply {
@@ -128,33 +157,6 @@ class CalendarFragment : Fragment() {
                         set(Calendar.DAY_OF_MONTH, 1)
                     }
                     binding.calendarView.date = calendar.timeInMillis
-                }
-            }
-        }
-    }
-
-    private fun observeTransactions() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.filteredHistories.collect { transactions ->
-                    // 일별 수입/지출 총액 계산
-                    dailyTotals.clear()
-                    transactions.forEach { transaction ->
-                        val dateStr = DateUtils.millisToDate(transaction.payDate)
-                        val currentPair = dailyTotals[dateStr] ?: Pair(0L, 0L)
-                        dailyTotals[dateStr] = if (transaction.type) {
-                            Pair(currentPair.first + transaction.amount, currentPair.second)
-                        } else {
-                            Pair(currentPair.first, currentPair.second + transaction.amount)
-                        }
-                    }
-
-                    // 월간 총액 업데이트
-                    updateMonthlyTotals(transactions)
-
-                    // 현재 선택된 날짜의 거래 내역 업데이트
-                    val currentSelectedDate = DateUtils.millisToDate(binding.calendarView.date)
-                    updateSelectedDateView(currentSelectedDate)
                 }
             }
         }
