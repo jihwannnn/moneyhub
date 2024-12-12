@@ -31,9 +31,11 @@ class SharedTransactionViewModel @Inject constructor(
 
     // 전체 거래 내역 목록을 저장하는 상태
     private val _histories = MutableStateFlow<List<Transaction>>(emptyList())
+    val histories = _histories.asStateFlow()
 
     // 전체 예산 목록을 저장하는 상태
     private val _budgets = MutableStateFlow<List<Transaction>>(emptyList())
+    val budgets = _budgets.asStateFlow()
 
     // 선택된 월에 해당하는 거래 내역만 필터링하여 저장하는 상태
     private val _filteredHistories = MutableStateFlow<List<Transaction>>(emptyList())

@@ -15,6 +15,7 @@ import com.example.moneyhub.R
 import com.example.moneyhub.adapter.HomePagerAdapter
 import com.example.moneyhub.databinding.FragmentHomeBinding
 import com.example.moneyhub.fragments.SharedTransactionViewModel
+import com.example.moneyhub.model.Transaction
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,55 +43,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupMonthNavigation()
         observeYearMonth()
-        observeCurrentUser()
+        observeViewModel()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun setupMonthNavigation() {
-        binding.imageViewPrevioiusMonthButton.setOnClickListener {
-            val newMonth = homeViewModel.currentYearMonth.value.minusMonths(1)
-            homeViewModel.moveToPreviousMonth()
-            sharedViewModel.setCurrentYearMonth(newMonth)   // ViewModel에 변경 사항 반영
-        }
-
-        binding.imageViewNextMonthButton.setOnClickListener {
-            val newMonth = homeViewModel.currentYearMonth.value.plusMonths(1)
-            homeViewModel.moveToNextMonth()
-            sharedViewModel.setCurrentYearMonth(newMonth)   // ViewModel에 변경 사항 반영
-        }
-    }
-
-    private fun observeYearMonth() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.currentYearMonth.collect { yearMonth ->
-                    binding.currentMonthText.text = "${yearMonth.month.name.take(3)} ${yearMonth.year}"
-
-                    homeViewModel.setCurrentYearMonth(yearMonth)
-                }
-            }
-
-            homeViewModel.currentYearMonth.collect { yearMonth ->
-                binding.currentMonthText.text = homeViewModel.getMonthDisplayText()
-                sharedViewModel.updateMonthlyTransactions(yearMonth)
-            }
-        }
-    }
-
-    private fun observeCurrentUser(){
-        viewLifecycleOwner.lifecycleScope.launch{
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                sharedViewModel.currentUser.collect{user ->
-                    user?.let{
-                        binding.customGroupbarYellowInclude.textViewGroupName.text = it.currentGname
-                    }
-                }
-            }
-        }
     }
 
     private fun setupViewPagerAndTabs() {
@@ -126,9 +84,75 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private fun setupMonthNavigation() {
+        binding.imageViewPrevioiusMonthButton.setOnClickListener {
+            val newMonth = homeViewModel.currentYearMonth.value.minusMonths(1)
+            homeViewModel.moveToPreviousMonth()
+            sharedViewModel.setCurrentYearMonth(newMonth)   // ViewModel에 변경 사항 반영
+        }
+
+        binding.imageViewNextMonthButton.setOnClickListener {
+            val newMonth = homeViewModel.currentYearMonth.value.plusMonths(1)
+            homeViewModel.moveToNextMonth()
+            sharedViewModel.setCurrentYearMonth(newMonth)   // ViewModel에 변경 사항 반영
+        }
+    }
+
     private fun setInitialTabState() {
         val initialTab = binding.tabLayout.getTabAt(binding.viewPager.currentItem)
         initialTab?.customView?.setBackgroundResource(R.drawable.tab_selected_background)
+    }
+
+    private fun updateBalance(transactions: List<Transaction>) {
+        var balance = 0L
+
+        // 모든 거래내역을 순회하면서 내역의 수입과 지출 합계 계산
+        transactions.forEach { transaction ->
+            if (transaction.type) {  // type이 true면 수입
+                balance += transaction.amount
+            } else {  // type이 false면 지출
+                balance -= transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
+            }
+        }
+
+        binding.textViewBalance.text = String.format(" ₩%,d", balance)
+    }
+
+    private fun observeYearMonth() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.currentYearMonth.collect { yearMonth ->
+                    binding.currentMonthText.text = "${yearMonth.month.name.take(3)} ${yearMonth.year}"
+
+                    homeViewModel.setCurrentYearMonth(yearMonth)
+                }
+            }
+
+            homeViewModel.currentYearMonth.collect { yearMonth ->
+                binding.currentMonthText.text = homeViewModel.getMonthDisplayText()
+                sharedViewModel.updateMonthlyTransactions(yearMonth)
+            }
+        }
+    }
+
+    private fun observeViewModel(){
+        viewLifecycleOwner.lifecycleScope.launch{
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                sharedViewModel.currentUser.collect{user ->
+                    user?.let{
+                        binding.customGroupbarYellowInclude.textViewGroupName.text = it.currentGname
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.histories.collect { transactions ->
+                    updateBalance(transactions)
+                }
+            }
+        }
     }
 
     private fun createTabView(position: Int): View {

@@ -75,24 +75,7 @@ class HistoryFragment : Fragment() {
         observeViewModel()
     }
 
-    private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.filteredHistories.collect { transactions ->
-                    adapter.updateData(transactions)
-                    updateMonthlyTotals(transactions)
-                }
-            }
-        }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                sharedViewModel.currentYearMonth.collect { yearMonth ->
-                    sharedViewModel.updateMonthlyTransactions(yearMonth)
-                }
-            }
-        }
-    }
 
     // RecyclerView 설정을 위한 함수
     private fun setupRecyclerView() {
@@ -130,6 +113,25 @@ class HistoryFragment : Fragment() {
         // 계산된 총액을 TextView에 표시
         binding.textViewIncome.text = String.format(" ₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
         binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.filteredHistories.collect { transactions ->
+                    adapter.updateData(transactions)
+                    updateMonthlyTotals(transactions)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.currentYearMonth.collect { yearMonth ->
+                    sharedViewModel.updateMonthlyTransactions(yearMonth)
+                }
+            }
+        }
     }
 
     // 메모리 누수 방지를 위한 binding null 처리
