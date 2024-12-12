@@ -68,6 +68,14 @@ class MyPageActivity : AppCompatActivity() {
         binding.btnSubmitLink.apply {
             root.setBackgroundResource(R.drawable.moneygrayblock)
             btnText.text = "참여"
+            root.setOnClickListener {
+                val groupId = binding.etMeetingLink.text.toString()
+                if (groupId.isNotEmpty()) {
+                    viewModel.joinGroup(groupId)
+                } else {
+                    Toast.makeText(this@MyPageActivity, "초대 코드를 입력해주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
