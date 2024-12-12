@@ -82,8 +82,10 @@ class MembersFragment : Fragment() {
                         Toast.makeText(context, "성공적으로 처리되었습니다.", Toast.LENGTH_SHORT).show()
                         when (state.navigationType) {
                             MembersViewModel.NavigationType.TO_MYPAGE -> {
-                                startActivity(Intent(requireContext(), MyPageActivity::class.java))
-                                requireActivity().finish()
+                                val intent = Intent(requireContext(), MyPageActivity::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
+                                startActivity(intent)
                             }
                             MembersViewModel.NavigationType.REFRESH_PAGE -> {
                                 parentFragmentManager.beginTransaction()

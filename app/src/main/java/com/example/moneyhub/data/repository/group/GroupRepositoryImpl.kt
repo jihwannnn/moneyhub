@@ -376,42 +376,34 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
 
     override suspend fun leaveGroup(gid: String, user: CurrentUser): Result<Unit> {
         return try {
-            // 멤버 문서 참조
-            val memberRef = db.collection("members_group")
-                .document(gid)
-                .collection("members")
-                .document(user.id)
-
-            // 현재 멤버 데이터 확인
-            val memberDoc = memberRef.get().await()
-            val currentRole = Role.fromName(memberDoc.getString("role") ?: "REGULAR")
-
-            // OWNER는 그룹을 떠날 수 없음
-            if (currentRole == Role.OWNER) {
-                return Result.failure(Exception("소유자는 그룹을 떠날 수 없습니다. 소유권을 이전하거나 그룹을 삭제해주세요."))
-            }
-
-            // 그룹 문서 참조
-            val groupRef = db.collection("groups").document(gid)
-
-            // 사용자의 그룹 목록 참조
-            val userGroupRef = db.collection("userGroups").document(user.id)
-
-            // 트랜잭션으로 처리
             db.runTransaction { transaction ->
-                // 그룹의 멤버 수 감소
+                // 1. 모든 읽기 작업을 먼저 수행
+                val memberRef = db.collection("members_group")
+                    .document(gid)
+                    .collection("members")
+                    .document(user.id)
+                val memberDoc = transaction.get(memberRef)
+
+                val groupRef = db.collection("groups").document(gid)
                 val groupDoc = transaction.get(groupRef)
-                val currentMemberCount = groupDoc.getLong("memberCount") ?: 1
-                transaction.update(groupRef, "memberCount", currentMemberCount - 1)
 
-                // 멤버십 삭제
-                transaction.delete(memberRef)
-
-                // 사용자의 그룹 목록에서 제거
+                val userGroupRef = db.collection("userGroups").document(user.id)
                 val userGroupDoc = transaction.get(userGroupRef)
+
+                // 2. 읽은 데이터 처리
+                val currentRole = Role.fromName(memberDoc.getString("role") ?: "REGULAR")
+                if (currentRole == Role.OWNER) {
+                    throw Exception("소유자는 그룹을 떠날 수 없습니다. 소유권을 이전하거나 그룹을 삭제해주세요.")
+                }
+
+                val currentMemberCount = groupDoc.getLong("memberCount") ?: 1
                 val currentGroups = (userGroupDoc.get("groups") as? Map<String, String>)?.toMutableMap()
                     ?: mutableMapOf()
                 currentGroups.remove(gid)
+
+                // 3. 모든 쓰기 작업 수행
+                transaction.update(groupRef, "memberCount", currentMemberCount - 1)
+                transaction.delete(memberRef)
                 transaction.update(userGroupRef, "groups", currentGroups)
             }.await()
 
