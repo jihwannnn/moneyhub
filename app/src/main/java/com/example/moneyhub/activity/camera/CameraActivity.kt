@@ -197,7 +197,6 @@ class CameraActivity : AppCompatActivity() {
             viewModel.finalTransaction.collect { transaction ->
                 transaction?.let {
                     binding.tvTransactionInfo.text = """
-                    거래 ID: ${it.tid}
                     날짜: ${DateUtils.millisToDate(it.payDate)} 
                     제목: ${it.title}
                     카테고리: ${it.category}
@@ -226,7 +225,6 @@ class CameraActivity : AppCompatActivity() {
             viewModel.originTransaction.collect { transaction ->
                 transaction.let {
                     binding.tvTransactionInfo.text = """
-                    거래 ID: ${it.tid}
                     날짜: ${DateUtils.millisToDate(it.payDate)} 
                     제목: ${it.title}
                     카테고리: ${it.category}

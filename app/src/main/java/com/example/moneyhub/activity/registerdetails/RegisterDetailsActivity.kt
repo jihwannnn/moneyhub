@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.moneyhub.databinding.ActivityRegisterDetailsBinding
+import com.example.moneyhub.model.sessions.RegisterTransactionSession
 import com.example.moneyhub.utils.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,8 +38,6 @@ class RegisterDetailsActivity : AppCompatActivity() {
     private fun setupViews() {
         setupDatePicker()
         setupRegisterButton()
-
-
     }
 
     private fun setupDatePicker() {
@@ -176,6 +175,7 @@ class RegisterDetailsActivity : AppCompatActivity() {
                     // Set date
                     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     dateSelectEdit.setText(sdf.format(transaction.payDate))
+                    dateSelectEdit.tag = transaction.payDate
 
                     // Set transaction type
                     radioIncome.isChecked = transaction.type
@@ -207,6 +207,7 @@ class RegisterDetailsActivity : AppCompatActivity() {
     // 안드로이드 기본 뒤로가기 버튼 처리
     override fun onBackPressed() {
         super.onBackPressed()
+        RegisterTransactionSession.clearCurrentTransaction()
         finish()  // 액티비티 종료
     }
 }

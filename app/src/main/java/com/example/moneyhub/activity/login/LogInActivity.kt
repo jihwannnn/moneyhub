@@ -1,20 +1,31 @@
 package com.example.moneyhub.activity.login
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import android.Manifest
 import com.example.moneyhub.R
 import com.example.moneyhub.activity.main.MainActivity
 import com.example.moneyhub.activity.mypage.MyPageActivity
 import com.example.moneyhub.activity.signup.SignUpActivity
 import com.example.moneyhub.databinding.ActivityLoginBinding
 import com.example.moneyhub.model.sessions.CurrentUserSession
+import com.google.firebase.Firebase
+import com.google.firebase.functions.functions
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,6 +41,8 @@ class LogInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        askNotificationPermission()
 
         // 인텐트에서 gid와 gname 받기
         val currentGid = gid
@@ -68,6 +81,7 @@ class LogInActivity : AppCompatActivity() {
         setupFormViews()
         setupButtons()
         observeViewModel()
+        observeFcmState()
     }
 
 
@@ -106,12 +120,92 @@ class LogInActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
 
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    viewModel.initializeFcm(this)
+                }
 
+                shouldShowRequestPermissionRationale(
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("알림 권한 필요")
+                        .setMessage("중요한 거래내역 알림을 받기 위해서는 알림 권한이 필요합니다.")
+                        .setPositiveButton("권한 요청") { _, _ ->
+                            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                        .setNegativeButton("취소") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
+
+                else -> {
+                    requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        } else {
+            viewModel.initializeFcm(this)
+        }
+    }
+
+    // Permission Launcher도 수정
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // 권한이 허용되면 FCM 초기화
+            initializeFcm()
+        } else {
+            Toast.makeText(
+                this,
+                "알림을 받을 수 없습니다. 설정에서 권한을 허용해주세요.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun initializeFcm() {
+        // 저장된 토큰 가져오기
+        val sharedPrefs = getSharedPreferences("fcm_prefs", Context.MODE_PRIVATE)
+        val savedToken = sharedPrefs.getString("fcm_token", null)
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val newToken = task.result
+
+                // 저장된 토큰과 새 토큰이 다르면 업데이트
+                if (savedToken != newToken) {
+                    // 토큰 저장
+                    sharedPrefs.edit().putString("fcm_token", newToken).apply()
+
+                    // 서버에 새 토큰 등록
+                    Firebase.functions
+                        .getHttpsCallable("updateFcmToken")
+                        .call(hashMapOf("token" to newToken))
+                        .addOnSuccessListener {
+                            Log.d("FCM", "Token updated: $newToken")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("FCM", "Failed to update token", e)
+                        }
+                } else {
+                    Log.d("FCM", "Token unchanged")
+                }
+            } else {
+                Log.w("FCM", "Token fetch failed", task.exception)
+            }
+        }
     }
 
     private fun observeViewModel() {
-
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when {
@@ -143,6 +237,16 @@ class LogInActivity : AppCompatActivity() {
                     state.error != null -> {
                         Toast.makeText(this@LogInActivity, state.error, Toast.LENGTH_SHORT).show()
                     }
+                }
+            }
+        }
+    }
+
+    private fun observeFcmState() {
+        lifecycleScope.launch {
+            viewModel.fcmInitialized.collect { initialized ->
+                if (initialized) {
+                    Log.d("FCM", "FCM initialization successful")
                 }
             }
         }
