@@ -5,9 +5,11 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object DateUtils {
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -23,7 +25,9 @@ object DateUtils {
 
     // 밀리초 -> 날짜
     fun millisToDate(timeMillis: Long): String {
-        return sdf.format(Date(timeMillis))
+        return Instant.ofEpochMilli(timeMillis)
+            .atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     }
 
     fun millisToLocalDateTime(timeMillis: Long): LocalDateTime {

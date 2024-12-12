@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -15,11 +16,8 @@ import com.example.moneyhub.adapter.TransactionAdapter
 import com.example.moneyhub.databinding.FragmentCalendarBinding
 import com.example.moneyhub.model.Transaction
 import com.example.moneyhub.utils.DateUtils
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.time.Year
 import java.time.YearMonth
 
 @AndroidEntryPoint // Hilt를 사용한 의존성 주입을 위한 어노테이션
@@ -28,38 +26,9 @@ class CalendarFragment : Fragment() {
     // Fragment들 간의 공유되는 Viewmodel을 activityModels()를 통해 가져옴
     private val sharedViewModel: SharedTransactionViewModel by activityViewModels()
 
-    private val db = FirebaseFirestore.getInstance()
     private lateinit var binding: FragmentCalendarBinding
     private lateinit var adapter: TransactionAdapter
 
-    // 캘린더 샘플 데이터
-    private val calendarData = listOf(
-        Transaction(
-            tid = "31",
-            title = "희진이 간식비",
-            category = "희진이 복지",
-            type = false, // 지출
-            amount = -7700L,
-            content = "",
-            payDate = System.currentTimeMillis(),
-            verified = true,
-            createdAt = System.currentTimeMillis()
-
-        ),
-
-        Transaction(
-            tid = "32",
-            title = "지환이 노래방",
-            category = "지환이 복지",
-            type = false, // 지출
-            amount = -10000L,
-            content = "",
-            payDate = System.currentTimeMillis(),
-            verified = true,
-            createdAt = System.currentTimeMillis()
-
-        ),
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,7 +49,7 @@ class CalendarFragment : Fragment() {
 
     // RecyclerView 초기화 및 설정
     private fun setupRecyclerView() {
-        adapter = TransactionAdapter(calendarData, true, true)
+        adapter = TransactionAdapter(emptyList(), true, true)
         binding.transactionList.apply {
             adapter = this@CalendarFragment.adapter
             layoutManager = LinearLayoutManager(context)
@@ -90,11 +59,12 @@ class CalendarFragment : Fragment() {
     private fun setupCalendarView() {
         val dailyTotals = mutableMapOf<String, Pair<Double, Double>>() // 날짜별 <수입, 지출> 맵
 
+        val transactions = sharedViewModel.filteredHistories.value
         // 각 날짜의 수입/지출 총액 계산
-        calendarData.forEach { transaction ->
+        transactions.forEach { transaction ->
             transaction.amount.let { amount ->
-                val currentPair = dailyTotals[transaction.payDate.toString()] ?: Pair(0.0, 0.0)
-                dailyTotals[transaction.payDate.toString()] = when {
+                val currentPair = dailyTotals[DateUtils.millisToDate(transaction.payDate)] ?: Pair(0.0, 0.0)
+                dailyTotals[DateUtils.millisToDate(transaction.payDate)] = when {
                     amount > 0 -> Pair(currentPair.first + amount, currentPair.second)
                     else -> Pair(currentPair.first, currentPair.second - amount)
                 }
@@ -110,14 +80,21 @@ class CalendarFragment : Fragment() {
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
 
             // 선택된 날짜의 거래 내역 필터링
-            val transactionsForDate = calendarData.filter { it.payDate.toString() == selectedDate }
+            val transactionsForDate = transactions.filter { DateUtils.millisToDate(it.payDate) == selectedDate }
             adapter = TransactionAdapter(transactionsForDate, true, true)
             binding.transactionList.adapter = adapter
 
             // 선택된 날짜의 수입/지출 표시
             val totals = dailyTotals[selectedDate] ?: Pair(0.0, 0.0)
-            binding.selectedDateIncome.text = if (totals.first > 0) "+${totals.first.toInt()}" else ""
-            binding.selectedDateExpense.text = if (totals.second > 0) "-${totals.second.toInt()}" else ""
+            binding.selectedDateIncome.apply {
+                text = if (totals.first > 0) "일일 수입: ${String.format("₩%,d", totals.first.toInt())}" else ""
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.moneyGreenThick))
+            }
+
+            binding.selectedDateExpense.apply {
+                text = if (totals.second > 0) "일일 지출: ${String.format("₩%,d", totals.second.toInt())}" else ""
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.moneyRed))
+            }
         }
     }
 
@@ -130,12 +107,12 @@ class CalendarFragment : Fragment() {
             if (transaction.type) {  // type이 true면 수입
                 monthlyIncome += transaction.amount
             } else {  // type이 false면 지출
-                monthlyExpense += -transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
+                monthlyExpense += transaction.amount  // 지출은 음수로 저장되어 있으므로 양수로 변환
             }
         }
 
         // 계산된 총액을 TextView에 표시
-        binding.textViewIncome.text = String.format(" ₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
+        binding.textViewIncome.text = String.format("₩%,d", monthlyIncome)  // 천단위 구분자(,) 포함
         binding.textViewExpense.text = String.format("₩%,d", monthlyExpense)
     }
 
@@ -180,6 +157,8 @@ class CalendarFragment : Fragment() {
 
                     // RecyclerView에 새 어댑터 설정
                     binding.transactionList.adapter = adapter
+
+                    setupCalendarView()
                 }
             }
         }
