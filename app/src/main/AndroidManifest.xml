@@ -12,7 +12,7 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- 알람 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".MoneyHub"
@@ -25,20 +25,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyHub"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activity.editonboard.EditOnBoardActivity"
+            android:exported="false" />
         <!-- AndroidManifest.xml -->
-        <receiver android:name=".widget.MyGroupsWidgetProvider"
+        <receiver
+            android:name=".widget.MyGroupsWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/my_groups_widget_info" />
         </receiver>
-        <service android:name=".widget.MyGroupsRemoteViewsService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false"/>
+
+        <service
+            android:name=".widget.MyGroupsRemoteViewsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
             android:name=".service.FcmService"
             android:exported="false">
@@ -46,14 +52,15 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".activity.viewtransactiondetails.ViewTransactionDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.viewonboard.ViewOnBoardActivity"
-            android:windowSoftInputMode="adjustPan|adjustUnspecified"
             android:exported="false"
-            android:screenOrientation="sensorPortrait" />
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustPan|adjustUnspecified" />
         <activity
             android:name=".activity.postonboard.PostOnBoardActivity"
             android:exported="false"
@@ -79,7 +86,7 @@
             android:name=".activity.login.LogInActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:screenOrientation="sensorPortrait" >
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -53,16 +54,32 @@ class ViewOnBoardViewModel @Inject constructor(
         }
     }
 
+    // 게시글 삭제 로직
+    fun deletePost(post: Post) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            repository.deletePost(post.gid, post.pid).fold(
+                onSuccess = {
+                    _uiState.update { it.copy(isLoading = false, isSuccess = true, error = null) }
+                },
+                onFailure = { throwable ->
+                    _uiState.update { it.copy(isLoading = false, error = throwable.message) }
+                }
+            )
+        }
+    }
+
     fun loadComments(post: Post) {
         viewModelScope.launch {
-            _uiState.value = UiState(isLoading = true)
+            _uiState.update { it.copy(isLoading = true) }
             repository.getComments(post.gid, post.pid).fold(
                 onSuccess = { comments ->
                     _commentList.value = comments
-                    _uiState.value = UiState(isSuccess = true)
+                    _uiState.update { it.copy(isLoading = false) }
                 },
                 onFailure = { e ->
-                    _uiState.value = UiState(error = e.message)
+                    _uiState.update { it.copy(isLoading = false, error = e.message) }
                 }
             )
         }
