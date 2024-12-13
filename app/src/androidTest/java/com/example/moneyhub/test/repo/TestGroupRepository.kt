@@ -52,7 +52,7 @@ class TestGroupRepository @Inject constructor() : GroupRepository {
         return Result.success(true)
     }
 
-    override suspend fun deleteGroup(gid: String): Result<Unit> {
+    override suspend fun deleteGroup(gid: String, user: CurrentUser): Result<Unit> {
         return Result.success(Unit)
     }
 

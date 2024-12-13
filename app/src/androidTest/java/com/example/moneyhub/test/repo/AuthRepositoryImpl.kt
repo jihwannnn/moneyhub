@@ -93,7 +93,7 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
                 )
                 Result.success(currentUser)
             } else {
-                Result.failure(Exception("자동 로그인 실패: 다시 로그인 해주세요"))
+                Result.failure(Exception())
             }
         } catch (e: Exception){
             Result.failure(e)

@@ -178,17 +178,41 @@ class AnalysisViewModel @Inject constructor(
         // 총 지출 계산
         val totalExpense = categoryAmounts.values.sum().toFloat()
 
+
         // 비율 계산 및 정렬
         _categoryData.value = categoryAmounts
-            .map { (category, amount) ->
-                CategoryAmount(
-                    name = category,
-                    amount = amount,
-                    percentage = if (totalExpense > 0) (amount / totalExpense) * 100 else 0f
-                )
-            }
+            .map { (category, amount) -> CategoryAmount(
+                name = category,
+                amount = amount,
+                percentage = if (totalExpense > 0) (amount / totalExpense) * 100 else 0f
+            ) }
             .sortedByDescending { it.amount }
+            .let { list ->
+                if (list.size <= 5) {
+                    list
+                } else {
+                    val (existingOther, mainCategories) = list.partition { it.name == "기타" }
+
+                    val topFive = mainCategories.take(5)
+                    val otherCategories = mainCategories.drop(5)
+
+                    val newOtherAmount = existingOther.firstOrNull()?.amount.orZero() +
+                            otherCategories.sumOf { it.amount }
+
+                    val newOtherPercentage = if (totalExpense > 0)
+                        (newOtherAmount / totalExpense) * 100
+                    else 0f
+
+                    topFive + CategoryAmount(
+                        name = "기타",
+                        amount = newOtherAmount,
+                        percentage = newOtherPercentage
+                    )
+                }
+            }
     }
+
+    private fun Long?.orZero(): Long = this ?: 0L
 
     private fun updateDailyData(transactions: List<Transaction>) {
         val currentYearMonth = YearMonth.now()

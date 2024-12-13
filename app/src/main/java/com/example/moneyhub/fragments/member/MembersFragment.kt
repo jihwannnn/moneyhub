@@ -76,7 +76,6 @@ class MembersFragment : Fragment() {
             viewModel.uiState.collect { state ->
                 when {
                     state.isLoading -> {
-                        Toast.makeText(context, "처리 중...", Toast.LENGTH_SHORT).show()
                     }
                     state.isSuccess -> {
                         Toast.makeText(context, "성공적으로 처리되었습니다.", Toast.LENGTH_SHORT).show()

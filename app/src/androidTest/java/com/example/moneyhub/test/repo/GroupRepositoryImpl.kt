@@ -1,6 +1,7 @@
 package com.example.moneyhub.test.repo
 
 
+import com.example.moneyhub.model.Category
 import kotlinx.coroutines.tasks.await
 
 import com.google.firebase.firestore.FirebaseFirestore
@@ -86,6 +87,11 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
                 "groups" to mapOf(gid to name)
             )
 
+            val list =  listOf("회식비", "교통비", "물품비", "기타")
+            val category = Category(gid = gid, category = list)
+
+            val categoryRef = db.collection("categories").document(gid)
+
             // 트랜잭션으로 모든 작업 수행
             db.runTransaction { transaction ->
 
@@ -97,6 +103,8 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
 
                 // 사용자의 그룹 목록 업데이트
                 transaction.set(userGroupRef, userGroupUpdate, SetOptions.merge())
+
+                transaction.set(categoryRef, category.toMap())
             }.await()
 
             Result.success(Unit)
@@ -110,6 +118,17 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
         user: CurrentUser,
     ): Result<Boolean> {
         return try {
+            // 이미 멤버인지 확인
+            val membershipRef = db.collection("members_group")
+                .document(gid)
+                .collection("members")
+                .document(user.id)
+
+            val existingMembership = membershipRef.get().await()
+            if (existingMembership.exists()) {
+                return Result.failure(Exception("이미 가입된 그룹입니다"))
+            }
+
             // 그룹 정보 가져오기
             val groupDoc = db.collection("groups").document(gid).get().await()
             val groupData = groupDoc.data ?: throw Exception("그룹을 찾을 수 없습니다.")
@@ -118,12 +137,6 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
             if (groupData["inviteCode"] != gid) {
                 return Result.success(false)
             }
-
-            // 멤버십 참조 생성
-            val membershipRef = db.collection("members_group")
-                .document(gid)
-                .collection("members")
-                .document(user.id)
 
             // 유저 그룹 참조
             val userGroupRef = db.collection("userGroups").document(user.id)
@@ -154,8 +167,13 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
         }
     }
 
-    override suspend fun deleteGroup(gid: String): Result<Unit> {
+    override suspend fun deleteGroup(gid: String, user: CurrentUser): Result<Unit> {
         return try {
+
+            if (user.role != Role.OWNER) {
+                return Result.failure(Exception("에헤이"))
+            }
+
             // 1. 사전에 모든 데이터 가져오기
             val membersSnapshot = db.collection("members_group")
                 .document(gid)
@@ -182,21 +200,22 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
                 commentsSnapshots[postDoc.id] = commentsSnapshot
             }
 
+
+            // 3.1. 각 멤버의 userGroups에서 그룹 제거
+            for (memberDoc in membersSnapshot.documents) {
+                val memberUid = memberDoc.getString("uid") ?: continue
+                val userGroupRef = db.collection("userGroups").document(memberUid)
+
+                val userGroupDoc = userGroupRef.get().await()
+                val currentGroups = (userGroupDoc.get("groups") as? Map<String, String>)?.toMutableMap()
+                    ?: mutableMapOf()
+
+                currentGroups.remove(gid)
+                userGroupRef.set(mapOf("uid" to memberUid, "groups" to currentGroups))
+            }
+
             // 3. 트랜잭션으로 모든 데이터 삭제
             db.runTransaction { transaction ->
-                // 3.1. 각 멤버의 userGroups에서 그룹 제거
-                for (memberDoc in membersSnapshot.documents) {
-                    val memberUid = memberDoc.getString("uid") ?: continue
-                    val userGroupRef = db.collection("userGroups").document(memberUid)
-
-                    val userGroupDoc = transaction.get(userGroupRef)
-                    val currentGroups = (userGroupDoc.get("groups") as? Map<String, String>)?.toMutableMap()
-                        ?: mutableMapOf()
-
-                    currentGroups.remove(gid)
-                    transaction.set(userGroupRef, mapOf("uid" to memberUid, "groups" to currentGroups))
-                }
-
                 // 3.2. 게시글과 댓글 삭제
                 for (postDoc in postsSnapshot.documents) {
                     // 미리 가져온 댓글들 삭제
@@ -371,42 +390,34 @@ class GroupRepositoryImpl @Inject constructor() : GroupRepository {
 
     override suspend fun leaveGroup(gid: String, user: CurrentUser): Result<Unit> {
         return try {
-            // 멤버 문서 참조
-            val memberRef = db.collection("members_group")
-                .document(gid)
-                .collection("members")
-                .document(user.id)
-
-            // 현재 멤버 데이터 확인
-            val memberDoc = memberRef.get().await()
-            val currentRole = Role.fromName(memberDoc.getString("role") ?: "REGULAR")
-
-            // OWNER는 그룹을 떠날 수 없음
-            if (currentRole == Role.OWNER) {
-                return Result.failure(Exception("소유자는 그룹을 떠날 수 없습니다. 소유권을 이전하거나 그룹을 삭제해주세요."))
-            }
-
-            // 그룹 문서 참조
-            val groupRef = db.collection("groups").document(gid)
-
-            // 사용자의 그룹 목록 참조
-            val userGroupRef = db.collection("userGroups").document(user.id)
-
-            // 트랜잭션으로 처리
             db.runTransaction { transaction ->
-                // 그룹의 멤버 수 감소
+                // 1. 모든 읽기 작업을 먼저 수행
+                val memberRef = db.collection("members_group")
+                    .document(gid)
+                    .collection("members")
+                    .document(user.id)
+                val memberDoc = transaction.get(memberRef)
+
+                val groupRef = db.collection("groups").document(gid)
                 val groupDoc = transaction.get(groupRef)
-                val currentMemberCount = groupDoc.getLong("memberCount") ?: 1
-                transaction.update(groupRef, "memberCount", currentMemberCount - 1)
 
-                // 멤버십 삭제
-                transaction.delete(memberRef)
-
-                // 사용자의 그룹 목록에서 제거
+                val userGroupRef = db.collection("userGroups").document(user.id)
                 val userGroupDoc = transaction.get(userGroupRef)
+
+                // 2. 읽은 데이터 처리
+                val currentRole = Role.fromName(memberDoc.getString("role") ?: "REGULAR")
+                if (currentRole == Role.OWNER) {
+                    throw Exception("소유자는 그룹을 떠날 수 없습니다. 소유권을 이전하거나 그룹을 삭제해주세요.")
+                }
+
+                val currentMemberCount = groupDoc.getLong("memberCount") ?: 1
                 val currentGroups = (userGroupDoc.get("groups") as? Map<String, String>)?.toMutableMap()
                     ?: mutableMapOf()
                 currentGroups.remove(gid)
+
+                // 3. 모든 쓰기 작업 수행
+                transaction.update(groupRef, "memberCount", currentMemberCount - 1)
+                transaction.delete(memberRef)
                 transaction.update(userGroupRef, "groups", currentGroups)
             }.await()
 

@@ -177,8 +177,12 @@ class SharedTransactionViewModel @Inject constructor(
 
 
 
-    fun updating(){
-        loadUser()
+    fun updating() {
+        val currentMonth = _currentYearMonth.value  // 현재 선택된 월 저장
+        _currentUser.value?.let { user ->
+            loadTransactions(user.currentGid)
+            updateMonthlyTransactions(currentMonth)  // 저장된 월로 업데이트
+        }
     }
 
     fun deleteTransaction(gid: String, tid: String) {

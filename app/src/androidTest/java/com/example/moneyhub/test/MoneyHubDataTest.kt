@@ -10,6 +10,7 @@ import com.example.moneyhub.model.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.Calendar
 
 @RunWith(AndroidJUnit4::class)
 class MoneyHubDataTest {
@@ -18,179 +19,224 @@ class MoneyHubDataTest {
     private val boardRepository = BoardRepositoryImpl()
     private val transactionRepository = TransactionRepositoryImpl()
 
-    private val users = listOf(
+    val currentUsers = listOf(
         CurrentUser(
-            id = "3XagH6OFsfVLB6P0LOEtivSkzIA3",
-            name = "Jihwan",
-            currentGid = "",
-            currentGname = "",
+            id = "C91y7ewYEuQulCowAWHFVCchvg12",
+            name = "황성민",
+            currentGid = "X04xos2gjtmbf8xzfMUR",
+            currentGname = "Student Council",
             role = Role.OWNER
         ),
         CurrentUser(
-            id = "lStMhr46JJVkX11oEw9JRQEhFZB3",
-            name = "Hee",
-            currentGid = "",
-            currentGname = "",
-            role = Role.MANAGER
+            id = "VWFp1gBD5DhqDtkcwkASVDZOM5S2",
+            name = "Jihwan",
+            currentGid = "k7aswVQHBPNnRdhvSvVl",
+            currentGname = "Basketball club",
+            role = Role.OWNER
         ),
         CurrentUser(
-            id = "a8Cnz09pUjdqm51iNx0PJzchIV33",
-            name = "황성민",
-            currentGid = "",
-            currentGname = "",
-            role = Role.MANAGER
-        ),
-        CurrentUser(
-            id = "c8hS1NDwToh47fObHLZS84lRbYL2",
-            name = "Min",
-            currentGid = "",
-            currentGname = "",
-            role = Role.REGULAR
+            id = "UgaiURq3E7WBVX4I9SmPBIbMITG2",
+            name = "Huijin",
+            currentGid = "wXaGFvTxwimWfWiwCg2e",
+            currentGname = "Board Game Club",
+            role = Role.OWNER
         )
     )
 
+
     @Test
-    fun createDummyData() = runBlocking {
+    fun addUsersToGroups() = runBlocking {
+        // 가입시킬 사용자들
+        val userIds = listOf(
+            "kRDZDiefIVUY9a2lfIn2cx2P3fA3",
+            "G5tKU9UFWDaYv4RG69DKq90lCFm2",
+            "e2TJiWlkEcQWpO3QU2w9BVkCesV2",
+            "yQzwqSZpdYSlML6odGkOcnVsh0j1",
+            "DdZ1A9rjUNXPJofAVyTQoPSR0Ge2",
+            "5R0ei2tOiMfMXMB7sW5TbtNdZyv1",
+            "dcdcKlx7pAUSznnncTQSZoRFBQs2",
+            "fUcz75fEjYRMa9DnSFa7wpeVsb92"
+        )
+
+        // 실제 그룹 ID들
+        val groupIds = listOf(
+            "X04xos2gjtmbf8xzfMUR",    // Student Council
+            "k7aswVQHBPNnRdhvSvVl",    // Basketball club
+            "wXaGFvTxwimWfWiwCg2e"     // Board Game Club
+        )
+
 
         try {
-            println("Starting dummy data creation...")
+            userIds.forEach { uid ->
+                println("Adding user $uid to groups...")
 
-             // 1. Create group with Jihwan as owner
-            println("Creating group...")
-            val createGroupResult = groupRepository.createGroup("test2", users[0])
-            requireNotNull(createGroupResult.getOrNull()) { "Group creation failed" }
-
-            // Get created group's ID from user's groups
-            val userGroupResult = groupRepository.getUserGroups(users[0].id)
-            val userGroup =
-                requireNotNull(userGroupResult.getOrNull()) { "Failed to get user groups" }
-            val groupId = userGroup.groups.entries.find { it.value == "test2" }?.key
-                ?: error("Could not find group with name 'test2'")
-
-            // 2. Add other members to the group
-            println("Adding members...")
-            users.drop(1).forEach { user ->
-                val joinResult = groupRepository.joinGroup(groupId, user)
-                require(joinResult.getOrNull() == true) { "Failed to add member: ${user.name}" }
-            }
-
-            println("Promoting members to managers...")
-            users.slice(1..2).forEach { user ->
-                // 먼저 각 유저의 멤버십 정보를 가져옴
-                val membershipResult = groupRepository.getUserMembership(groupId, user.id)
-                val membership = requireNotNull(membershipResult.getOrNull()) { "Failed to get membership for: ${user.name}" }
-
-                // 멤버십 정보를 바탕으로 매니저로 승급
-                val promoteResult = groupRepository.promoteMember(membership, users[0])  // users[0]는 OWNER(Jihwan)
-                requireNotNull(promoteResult.getOrNull()) { "Failed to promote member: ${user.name}" }
-                println("Successfully promoted ${user.name} to manager")
-            }
-
-            // 3. Create posts and comments for each user
-            println("Creating posts and comments...")
-            users.forEach { user ->
-                val post = Post(
-                    gid = groupId,
-                    title = "${user.name}'s Post",
-                    content = "This is a test post by ${user.name}",
-                    authorId = user.id,
-                    authorName = user.name
-                )
-                val postResult = boardRepository.createPost(post)
-                requireNotNull(postResult.getOrNull()) { "Failed to create post for ${user.name}" }
-
-                // Get posts to find the created post's ID
-                val postsResult = boardRepository.getPosts(groupId)
-                val posts = requireNotNull(postsResult.getOrNull()) { "Failed to get posts" }
-                val createdPost = posts.find { it.authorId == user.id }
-                    ?: error("Could not find created post")
-
-                val comment = Comment(
-                    gid = groupId,
-                    pid = createdPost.pid,
-                    content = "Self comment by ${user.name}",
-                    authorId = user.id,
-                    authorName = user.name
-                )
-                val commentResult = boardRepository.addComment(comment)
-                requireNotNull(commentResult.getOrNull()) { "Failed to create comment for ${user.name}" }
-            }
-
-            // 4. Create transactions for each user
-            println("Creating transactions...")
-
-            // 먼저 카테고리 생성
-            println("Creating categories...")
-            val categories = listOf("교통비", "식비", "여가비", "회식", "복지사업", "기타")
-            val category = Category(
-                gid = groupId,
-                category = categories
-            )
-            val categoryResult = transactionRepository.saveCategory(groupId, category)
-            requireNotNull(categoryResult.getOrNull()) { "Failed to create categories" }
-
-            val sampleTransactions = listOf(
-                Triple("9월 회식", "2024-09-15", "회식"),
-                Triple("10월 동아리 지원금", "2024-10-15", "복지사업"),
-                Triple("11월 체육대회 간식", "2024-11-15", "식비"),
-                Triple("12월 송년회", "2024-12-15", "여가비")
-            )
-
-            val amounts = listOf(50000L, 300000L, 70000L, 150000L)
-
-            var bl = true
-
-            users.filter { it.role != Role.REGULAR }.forEach { user ->
-                sampleTransactions.forEachIndexed { index, (title, date, category) ->
-
-                    // Verified transaction (실제 내역)
-                    val verifiedTransaction = Transaction(
-                        gid = groupId,
-                        title = title,
-                        category = category,
-                        type = bl,
-                        amount = amounts[index],
-                        content = "${user.name}이(가) 처리한 ${category} 관련 ${if(bl) "수입" else "지출"}",
-                        payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse(date).time,
-                        verified = true,
-                        authorId = user.id,
-                        authorName = user.name
+                groupIds.forEach { gid ->
+                    val user = CurrentUser(
+                        id = uid,
+                        name = "User_$uid".take(10),
+                        currentGid = "",
+                        currentGname = "",
+                        role = Role.REGULAR
                     )
-                    val verifiedResult = transactionRepository.addTransaction(groupId, verifiedTransaction)
-                    requireNotNull(verifiedResult.getOrNull()) { "Failed to create verified transaction for ${user.name}" }
 
-                    bl = !bl
-
-                    // Unverified transaction (예산)
-                    val unverifiedTransaction = Transaction(
-                        gid = groupId,
-                        title = "$title (예산)",
-                        category = category,
-                        type = bl,
-                        amount = amounts[index],
-                        content = "${category} 관련 예산 계획",
-                        payDate = java.text.SimpleDateFormat("yyyy-MM-dd").parse(date).time,
-                        verified = false,
-                        authorId = user.id,
-                        authorName = user.name
-                    )
-                    val unverifiedResult = transactionRepository.addTransaction(groupId, unverifiedTransaction)
-                    requireNotNull(unverifiedResult.getOrNull()) { "Failed to create unverified transaction for ${user.name}" }
-
-                    println("Successfully created transactions for ${user.name} - ${title}")
-
+                    val joinResult = groupRepository.joinGroup(gid, user)
+                    when {
+                        joinResult.isSuccess -> println("Successfully added user $uid to group $gid")
+                        joinResult.isFailure -> println("Failed to add user $uid to group $gid: ${joinResult.exceptionOrNull()?.message}")
+                    }
                 }
             }
 
-
-            println("Successfully created all dummy data!")
-            println("Group ID: $groupId")
+            println("Successfully added all users to all groups!")
 
         } catch (e: Exception) {
-            println("Error creating dummy data: ${e.message}")
+            println("Error adding users to groups: ${e.message}")
             e.printStackTrace()
             throw e
         }
+    }
+
+
+
+    @Test
+    fun createTransactionsForGroups() = runBlocking {
+
+        try {
+            // 그룹별 추가 카테고리 정의
+            val groupCategories = mapOf(
+                "X04xos2gjtmbf8xzfMUR" to listOf(
+                    "회의비", "행사비", "복지사업", "홍보비", "비품비",
+                    "학생회비", "지각비", "행사수익"  // 수입용 추가
+                ), // Student Council
+                "k7aswVQHBPNnRdhvSvVl" to listOf(
+                    "대회비", "장비비", "훈련비", "대관료", "단체복",
+                    "동아리비", "지각비", "대회상금"  // 수입용 추가
+                ), // Basketball club
+                "wXaGFvTxwimWfWiwCg2e" to listOf(
+                    "게임구매", "간식비", "대회상금", "임대료", "이벤트비",
+                    "동아리비", "지각비", "참가비"  // 수입용 추가
+                )  // Board Game Club
+            )
+
+            val defaultCategories = listOf("회식비", "교통비", "물품비", "기타")
+
+
+            // 각 그룹별로 처리
+            groupCategories.forEach { (gid, additionalCategories) ->
+                // 카테고리 저장
+                val allCategories = defaultCategories + additionalCategories
+                val category = Category(
+                    gid = gid,
+                    category = allCategories
+                )
+                transactionRepository.saveCategory(gid, category)
+                println("Saved categories for group $gid")
+
+                listOf(10, 11, 12).forEach { month ->
+                    // 지출 10개 생성
+                    repeat(10) {
+                        val randomDay = (1..28).random()
+                        val date = DateUtils.dateToMillis("2024-${month}-${randomDay}") ?: 0
+                        val randomCategory = allCategories.random()
+
+                        // 카테고리별 의미있는 금액 범위 설정
+                        val amount = when (randomCategory) {
+                            "회식비" -> (200000L..500000L).random()
+                            "교통비" -> (30000L..100000L).random()
+                            "물품비" -> (50000L..200000L).random()
+                            "회의비" -> (100000L..300000L).random()
+                            "행사비", "대회비" -> (500000L..2000000L).random()
+                            "복지사업" -> (1000000L..3000000L).random()
+                            "홍보비" -> (200000L..800000L).random()
+                            "비품비", "장비비" -> (100000L..500000L).random()
+                            "훈련비", "대관료" -> (300000L..700000L).random()
+                            "단체복" -> (400000L..800000L).random()
+                            "게임구매" -> (50000L..150000L).random()
+                            "간식비" -> (30000L..100000L).random()
+                            "임대료" -> (500000L..1000000L).random()
+                            "이벤트비" -> (200000L..600000L).random()
+                            else -> (50000L..200000L).random()
+                        }
+
+                        val transaction = Transaction(
+                            gid = gid,
+                            title = "${month}월 ${randomCategory} 지출",
+                            category = randomCategory,
+                            type = false, // 지출
+                            amount = amount,
+                            content = "${month}월 ${randomDay}일 ${randomCategory} 관련 지출",
+                            payDate = date,
+                            verified = true,
+                            authorId = currentUsers.find { it.currentGid == gid }?.id ?: "",
+                            authorName = currentUsers.find { it.currentGid == gid }?.name ?: ""
+                        )
+                        transactionRepository.addTransaction(gid, transaction)
+                    }
+
+                    repeat(5) {
+                        val randomDay = (1..28).random()
+                        val date = getDateMillis(2024, month, randomDay)
+                        val randomCategory = allCategories.random()
+
+                        val amount = when (randomCategory) {
+                            "학생회비", "동아리비" -> (30000L..50000L).random() * (10..20).random() // 인당 3-5만원 * 10-20명
+                            "지각비" -> (5000L..10000L).random() * (3..8).random() // 인당 5-10천원 * 3-8명
+                            "행사수익" -> (500000L..1500000L).random()
+                            "대회상금" -> (1000000L..3000000L).random()
+                            "참가비" -> (10000L..20000L).random() * (5..15).random() // 인당 1-2만원 * 5-15명
+                            else -> (500000L..1500000L).random()
+                        }
+
+                        val incomeTitle = when (randomCategory) {
+                            "학생회비", "동아리비" -> "${month}월 ${randomCategory} 납부"
+                            "지각비" -> "${month}월 ${randomDay}일 ${randomCategory} 납부"
+                            "행사수익" -> "${month}월 행사 수익금"
+                            "대회상금" -> "${month}월 대회 상금"
+                            "참가비" -> "${month}월 이벤트 참가비"
+                            else -> "${month}월 ${randomCategory} 수입"
+                        }
+
+                        val incomeContent = when (randomCategory) {
+                            "학생회비", "동아리비" -> "${month}월 ${randomCategory} 일괄 납부"
+                            "지각비" -> "${month}월 ${randomDay}일 지각자 벌금"
+                            "행사수익" -> "${month}월 행사 진행 수익금"
+                            "대회상금" -> "${month}월 대회 수상 상금"
+                            "참가비" -> "${month}월 이벤트 참가비 수입"
+                            else -> "${month}월 ${randomCategory} 관련 수입"
+                        }
+
+                        val transaction = Transaction(
+                            gid = gid,
+                            title = incomeTitle,
+                            category = randomCategory,
+                            type = true, // 수입
+                            amount = amount,
+                            content = incomeContent,
+                            payDate = date,
+                            verified = true,
+                            authorId = currentUsers.find { it.currentGid == gid }?.id ?: "",
+                            authorName = currentUsers.find { it.currentGid == gid }?.name ?: ""
+                        )
+                        transactionRepository.addTransaction(gid, transaction)
+                    }
+                }
+                println("Created transactions for group $gid")
+            }
+
+            println("Successfully created all transactions!")
+
+        } catch (e: Exception) {
+            println("Error creating transactions: ${e.message}")
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+    // 날짜를 밀리초로 변환하는 헬퍼 함수
+    private fun getDateMillis(year: Int, month: Int, day: Int): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month - 1, day)
+        return calendar.timeInMillis
     }
 }
 

@@ -17,7 +17,7 @@ interface GroupRepository {
     suspend fun joinGroup(gid: String, user: CurrentUser): Result<Boolean>
 
     // 그룹 삭제
-    suspend fun deleteGroup(gid: String): Result<Unit>
+    suspend fun deleteGroup(gid: String, user: CurrentUser): Result<Unit>
 
     // 특정 유저가 가입한 그룹 가져오기
     suspend fun getUserGroups(uid: String): Result<UserGroup>
